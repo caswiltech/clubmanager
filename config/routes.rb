@@ -1,4 +1,22 @@
 Cmg::Application.routes.draw do
+  
+  match 'clubs' => 'registrations#index', :as => :clubs, :via => :get
+  match 'clubs/:club_id' => 'registrations#show', :as => :club, :via => :get
+  match 'clubs/:club_id/new' => 'registrations#new', :as => :registration, :via => :get
+  match 'clubs/:club_id' => 'registrations#create', :as => :registration_create, :via => :post
+  match 'clubs/:club_id/success' => 'registrations#success', :as => :registration_success, :via => :post
+  # namespace :clubs, :controller => :registrations do
+  #   match 'new' => :new, :as => :registration
+  #   match 'create' => :create, :as => :registration_create
+  #   match 'success' => :success, :as => :registration_success
+  # end
+
+  
+  match ':club_id' => 'registrations#show', :via => :get
+
+  root :to => 'registrations#index', :via => :get
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

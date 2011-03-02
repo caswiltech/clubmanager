@@ -1,0 +1,54 @@
+<h1><%= @club.short_name %> &gt; New Registration</h1>
+
+<%= form_for :registration, :url => registration_create_path(@club.subdomain) do |form| %>
+  <h2>Participant's Information</h2>
+  <%= form.fields_for :player do |player| %>
+    <%= player.fields_for :person do |person| %>
+      <p>
+        <%= person.label :first_name, "First Name" %><br />
+        <%= person.text_field :first_name %>
+      </p>
+      <p>
+        <%= person.label :last_name, "Last Name" %><br />
+        <%= person.text_field :last_name %>
+      </p>
+      <p>
+        <%= person.label :street1, "Address" %><br />
+        <%= person.text_field :street1 %><br />
+        <%= person.text_field :street2 %>
+      </p>
+      <p>
+        <%= person.label :city, "City" %><br />
+        <%= person.text_field :city %>
+      </p>
+      <p>
+        <%= person.label :province, "Province" %><br />
+        <%= person.select :province, %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV } %>
+      </p>
+      <p>
+        <%= person.label :country, "Country" %><br />
+        <%= person.select :country, %w{ Canada USA } %>
+      </p>
+      <p>
+        <%= person.label :postal_code, "Postal Code" %><br />
+        <%= person.text_field :postal_code %>
+      </p>
+    <% end %>
+    <p>
+      <%= player.label :carecard, "CareCard or Medical Insurance #" %><br />
+      <%= player.text_field :carecard %>
+    </p>
+    <p>
+      <%= player.label :birthdate, "Birthdate" %><br />
+      <%= player.date_select :birthdate, :start_year => Date.today.years_ago(100).year, :end_year => Date.today.years_ago(1).year, :default => Date.civil(Date.today.years_ago(5).year, 1, 1) %>
+    </p>
+    <p>
+      <%= player.label :gender, "Gender" %><br />
+      <%= player.select :gender, %w{ Male Female } %>
+    </p>
+    
+
+  <% end %>
+  <%= form.submit 'Register' %>
+
+<% end %>

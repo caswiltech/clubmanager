@@ -1,0 +1,6 @@
+<h1><%= @club.long_name %></h1>
+<hr>
+<%= @club.short_name %><br />
+<%= @club.subdomain %><br />
+<%= @club.homepage_url %><br />
+<%= link_to "Register", registration_path(@club.subdomain) %>

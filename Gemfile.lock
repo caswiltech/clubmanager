@@ -1,3 +1,43 @@
+GIT
+  remote: git://github.com/adamcooper/active_layer.git
+  revision: 1ec503eee927d8367cc7521b0f05453e92f318b1
+  specs:
+    active_layer (0.0.10)
+      activemodel (~> 3.0.0)
+      activesupport (~> 3.0.0)
+
+GIT
+  remote: git://github.com/bansalakhil/validates_as_email_address.git
+  revision: 63f3a7bba9208cbdb6f1fa0b5a3daef007b1bb90
+  specs:
+    validates_as_email_address (0.2.4)
+
+GIT
+  remote: git://github.com/danielb2/awesome_print.git
+  revision: 11294ec164f3374fc5efe1dec01811262c85a16b
+  specs:
+    awesome_print (0.2.0)
+
+GIT
+  remote: git://github.com/mislav/will_paginate.git
+  revision: b1a5beeec9f56ecbe3594fcdca76d92b6767ce50
+  branch: rails3
+  specs:
+    will_paginate (3.0.pre3)
+
+GIT
+  remote: git://github.com/redinger/validation_reflection.git
+  revision: 97f2e85bf4e4ab764dc1cd912b82bcf87ef7e4b8
+  specs:
+    validation_reflection (1.0.0)
+
+GIT
+  remote: git://github.com/rgrove/sanitize.git
+  revision: 515e9d8cc4588acc8d7c2e491d1c96e7f7509051
+  specs:
+    sanitize (2.0.0)
+      nokogiri (~> 1.4.4)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -29,9 +69,22 @@ GEM
       activesupport (= 3.0.3)
     activesupport (3.0.3)
     arel (2.0.7)
+    attribute_normalizer (0.3.1)
+    aws-s3 (0.6.2)
+      builder
+      mime-types
+      xml-simple
     builder (2.1.2)
+    compass (0.10.6)
+      haml (>= 3.0.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    fastercsv (1.5.3)
+    formtastic (1.2.1)
+      actionpack (>= 2.3.7)
+      activesupport (>= 2.3.7)
+      i18n (>= 0.4.0)
+    haml (3.0.25)
     i18n (0.5.0)
     mail (2.2.14)
       activesupport (>= 2.3.6)
@@ -39,6 +92,11 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    mimetype-fu (0.1.2)
+    nokogiri (1.4.4)
+    paperclip (2.3.8)
+      activerecord
+      activesupport
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -60,14 +118,38 @@ GEM
       thor (~> 0.14.4)
     rake (0.8.7)
     sqlite3-ruby (1.3.2)
+    ssl_requirement (0.1.0)
+    state_machine (0.9.4)
     thor (0.14.6)
+    tiny_mce (0.1.4)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
+    validates_as_phone_number (0.7.5)
+    xml-simple (1.0.14)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_layer!
+  attribute_normalizer
+  awesome_print!
+  aws-s3
+  compass (= 0.10.6)
+  fastercsv (= 1.5.3)
+  formtastic (= 1.2.1)
+  haml (>= 3.0.25)
+  mimetype-fu
+  paperclip (~> 2.3.8)
   rails (= 3.0.3)
+  rake (>= 0.8.7)
+  sanitize!
   sqlite3-ruby
+  ssl_requirement (~> 0.1.0)
+  state_machine (= 0.9.4)
+  tiny_mce (= 0.1.4)
+  validates_as_email_address!
+  validates_as_phone_number (>= 0.7.5)
+  validation_reflection!
+  will_paginate!

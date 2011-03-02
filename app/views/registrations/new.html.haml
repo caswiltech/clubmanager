@@ -1,0 +1,161 @@
+= form_for @registration, :url => registration_create_path(@club.subdomain), :html => {:class => 'formtastic'} do |reg|
+  %h1 #{@club.short_name} Registration for #{@registration.season.name} 
+  %h2 Participant's Information
+  <fieldset class="inputs">
+  <ol>
+  = reg.fields_for :player do |player|
+    = player.fields_for :person do |person|
+      %li
+        = person.label :first_name, "First Name"
+        = person.text_field :first_name
+      %li
+        = person.label :last_name, "Last Name"
+        = person.text_field :last_name
+      %li
+        = person.label :street1, "Address"
+        = person.text_field :street1
+      %li
+        = person.label :city, "City"
+        = person.select :city, @cities
+      %li
+        = person.label :province, "Province"
+        = person.select :province, @provinces, :include_blank => false
+      %li
+        = person.label :postal_code, "Postal Code"
+        = person.text_field :postal_code, :input_html => {:size => 7}
+        = person.hidden_field :country
+      %li
+        = person.label :phone, "Home Phone"
+        = person.text_field :phone, :input_html => {:size => 14}
+        = person.hidden_field :phone_type
+    %li
+      = player.label :carecard, "CareCard"
+      = player.text_field :carecard, :input_html => {:size => 12}
+    %li
+      = player.label :birthdate, "Birthdate"
+      = player.date_select :birthdate, :start_year => Date.today.years_ago(100).year, :end_year => Date.today.years_ago(1).year, :default => Date.civil(Date.today.years_ago(5).year, 1, 1)
+    %li
+      = player.label :gender, "Gender"
+      = player.select :gender, %w{ Male Female }, :include_blank => false
+  %li
+    = reg.label :player_school, "School"
+    = reg.text_field :player_school
+  %li
+    = reg.label :player_previous_sports_experience, "Previous Sports Experience"
+    = reg.text_area :player_previous_sports_experience, :input_html => {:rows => 6, :cols => 50}
+  %h2 Parent Guardian's Information
+  = reg.fields_for :parent_guardian1 do |person|
+    %li
+      = person.label :first_name, "First Name"
+      = person.text_field :first_name
+    %li
+      = person.label :last_name, "Last Name"
+      = person.text_field :last_name
+    %li
+      = person.label :street1, "Address"
+      = person.text_field :street1
+    %li
+      = person.label :city, "City"
+      = person.select :city, @cities
+    %li
+      = person.label :province, "Province"
+      = person.select :province, @provinces, :include_blank => false
+    %li
+      = person.label :postal_code, "Postal Code"
+      = person.text_field :postal_code, :input_html => {:size => 7}
+      = person.hidden_field :country
+    %li
+      = person.label :phone, "Phone"
+      = person.text_field :phone, :input_html => {:size => 14}
+      = person.select :phone_type, @phone_types, :include_blank => false
+    %li
+      = person.label :alt_phone, "Alt. Phone"
+      = person.text_field :alt_phone, :input_html => {:size => 14}
+      = person.select :alt_phone_type, @phone_types, :include_blank => false
+    %li
+      = person.label :email, "Email"
+      = person.text_field :email, :input_html => {:size => 14}
+      = person.select :email_type, @email_types, :include_blank => false
+    %li
+      = person.label :alt_email, "Alt. Email"
+      = person.text_field :alt_email, :input_html => {:size => 14}
+      = person.select :alt_email_type, @email_types, :include_blank => false
+  %h2 Secondary Parent Guardian's Information
+  = reg.fields_for :parent_guardian2 do |person|
+    %li
+      = person.label :first_name, "First Name"
+      = person.text_field :first_name
+    %li
+      = person.label :last_name, "Last Name"
+      = person.text_field :last_name
+    %li
+      = person.label :street1, "Address"
+      = person.text_field :street1
+    %li
+      = person.label :city, "City"
+      = person.select :city, @cities
+    %li
+      = person.label :province, "Province"
+      = person.select :province, @provinces, :include_blank => false
+    %li
+      = person.label :postal_code, "Postal Code"
+      = person.text_field :postal_code, :input_html => {:size => 7}
+      = person.hidden_field :country
+    %li
+      = person.label :phone, "Phone"
+      = person.text_field :phone, :input_html => {:size => 14}
+      = person.select :phone_type, @phone_types, :include_blank => false
+    %li
+      = person.label :alt_phone, "Alt. Phone"
+      = person.text_field :alt_phone, :input_html => {:size => 14}
+      = person.select :alt_phone_type, @phone_types, :include_blank => false
+    %li
+      = person.label :email, "Email"
+      = person.text_field :email, :input_html => {:size => 14}
+      = person.select :email_type, @email_types, :include_blank => false
+    %li
+      = person.label :alt_email, "Alt. Email"
+      = person.text_field :alt_email, :input_html => {:size => 14}
+      = person.select :alt_email_type, @email_types, :include_blank => false
+  %HR
+  %li
+    = reg.label :promotion_source, "How did you hear about Hyacks Football?"
+    = reg.select :promotion_source, ["Active Living Guide Ad","Community Event","Newspaper Ad","Newspaper Article","Returning Player","Poster","Recommendation","School","Sign","Website","Word of mouth","Other"]
+  %li
+    = reg.label :waiver, "Waiver"
+    = reg.check_box :waiver, :checked => true
+    &nbsp; &nbsp; I/We hereby approve and consent to the player being registered to participate in the Royal City Hyacks Football Club football program and absolve and release the Royal City Hyacks Football Club, the City of New Westminster, School District No. 40 (New Westminster), Football BC and any of their affiliate associations, members or volunteers from any and all liability arising from any act or omission on their part resulting in injury, fatality or illness occurring as a consequence of said participation. I/We agree to abide by the Policies, Procedures and By-Laws of the Royal City Hyacks Football Club.
+    = reg.hidden_field :payment_method
+  </ol>
+  </fieldset>
+  <fieldset class="buttons">
+  = reg.submit 'Create Registration'
+  </fieldset>
+    
+-# = semantic_form_for @registration, :url => registration_create_path(@club.subdomain) do |form|
+-#   = form.inputs "Player Information" do
+-#     = form.semantic_fields_for :player_attributes do |player|
+-#       = player.semantic_fields_for :person_attributes do |person|
+-#         = person.input :first_name, :required => true, :label => "First Name"
+-#         = person.input :last_name, :required => true, :label => "Last Name"
+-#         = person.input :street1, :label => "Address"
+-#         = person.input :city
+-#         = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
+-#         = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }
+-#         = person.input :postal_code, :label => "Postal Code"
+-#         = person.input :phone, :as => :phone
+-#         = person.input :phone_type, :as => :hidden, :input_html => {:value => "Home"}
+-#       = player.input :carecard, :label => "CareCard #"
+-#       %li
+-#         = form.label 'player_birthdate', "Birthdate"
+-#         = player.date_select :birthdate, :start_year => Date.today.years_ago(100).year, :end_year => Date.today.years_ago(1).year, :default => Date.civil(Date.today.years_ago(5).year, 1, 1)
+-#       / = player.input :birthdate, :as => :date
+-#       = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }
+-#       = player.input :player_school, :label => "School"
+-#       = player.input :player_previous_sports_experience, :as => :text, :label => "Other Sports Experience", :input_html => {:rows => 6, :cols => 50}
+-#     = form.buttons do
+-#       = form.commit_button
+      
+      
+      
+      
