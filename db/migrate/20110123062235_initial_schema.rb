@@ -90,7 +90,7 @@ class InitialSchema < ActiveRecord::Migration
       t.string :name, :null => false
       t.text :description
       t.decimal :amount, :precision => 8, :scale => 2, :default => 0 
-      t.boolean :default, :default => 1
+      t.boolean :default, :default => true
       t.boolean :deleted
       t.timestamps
     end
