@@ -12,7 +12,13 @@ class RegistrationsController < ApplicationController
   end
   
   def new
-    @registration = Registration.new(:club => @club, :season => @club.seasons.first, :payment_method => 'Cheque', :player_attributes => {:person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults, :parent_guardian2_attributes => @person_defaults)
+    season_id = params[:season]
+    season = season_id.to_i.is_a?(Numeric) ? (@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil? ? nil : Season.find_by_id(@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)) : nil
+    if season.present?
+      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Cheque', :player_attributes => {:person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults, :parent_guardian2_attributes => @person_defaults)
+    else
+      redirect_to club_path(@club.subdomain)
+    end
   end
   
   def create

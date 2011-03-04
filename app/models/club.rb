@@ -6,6 +6,7 @@ class Club < ActiveRecord::Base
   has_many :user_roles, :dependent => :destroy
   has_many :seasons, :dependent => :destroy
   has_many :divisions, :dependent => :destroy
+  has_many :season_divisions, :through => :seasons
   has_many :teams, :dependent => :destroy
   has_many :registrations, :dependent => :destroy
   has_many :registration_datums, :dependent => :destroy

@@ -1,6 +1,14 @@
-<h1><%= @club.long_name %></h1>
+<h1><%= link_to @club.long_name, @club.homepage_url %></h1>
 <hr>
-<%= @club.short_name %><br />
-<%= @club.subdomain %><br />
-<%= @club.homepage_url %><br />
-<%= link_to "Register", registration_path(@club.subdomain) %>
+
+<%- seasons = @club.seasons.accepting_registrations_now
+if seasons.empty? -%>
+<%= @club.short_name -%> is not accepting any registrations at this time.
+<% else %>
+Registrations are currently being accepted for the following seasons:
+<ul>
+<%- seasons.each do |season| -%>
+  <li><%= link_to season.name, registration_path(@club.subdomain, :season => season.id) %></li>
+<%- end -%>
+</ul>  
+<% end -%>
