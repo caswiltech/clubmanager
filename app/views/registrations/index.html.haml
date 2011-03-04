@@ -1,2 +1,7 @@
+%h1 Welcome to ClubManager
+
+The following clubs are using ClubManager for their player registration needs:
+%ul
 - @clubs.each do |club|
-  = link_to club.short_name, club_path(club.subdomain)
+  %li
+    = link_to "#{club.long_name} (#{club.city}, #{club.province})", club_path(club.subdomain)

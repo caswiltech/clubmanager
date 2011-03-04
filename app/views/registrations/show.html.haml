@@ -1,0 +1,11 @@
+%h1= link_to @club.long_name, @club.homepage_url
+%hr
+
+- seasons = @club.seasons.accepting_registrations_now
+- if seasons.empty?
+  = "#{@club.short_name} is not accepting any registrations at this time."
+- else
+  Registrations are currently being accepted for the following seasons:
+  %ul
+  - seasons.each do |season|
+    %li= link_to season.name, registration_path(@club.subdomain, :season => season.id)
