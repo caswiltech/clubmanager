@@ -117,19 +117,13 @@
       = person.label :alt_email, "Alt. Email"
       = person.text_field :alt_email, :input_html => {:size => 14}
       = person.select :alt_email_type, @email_types, :include_blank => false
-  %HR
-  %li
-    = reg.label :promotion_source, "How did you hear about Hyacks Football?"
-    = reg.select :promotion_source, ["Active Living Guide Ad","Community Event","Newspaper Ad","Newspaper Article","Returning Player","Poster","Recommendation","School","Sign","Website","Word of mouth","Other"]
-  %li
-    = reg.label :waiver, "Waiver"
-    = reg.check_box :waiver, :checked => true
-    &nbsp; &nbsp; I/We hereby approve and consent to the player being registered to participate in the Royal City Hyacks Football Club football program and absolve and release the Royal City Hyacks Football Club, the City of New Westminster, School District No. 40 (New Westminster), Football BC and any of their affiliate associations, members or volunteers from any and all liability arising from any act or omission on their part resulting in injury, fatality or illness occurring as a consequence of said participation. I/We agree to abide by the Policies, Procedures and By-Laws of the Royal City Hyacks Football Club.
+  %hr
     = reg.hidden_field :payment_method
+    = reg.hidden_field :season_id
   </ol>
   </fieldset>
   <fieldset class="buttons">
-  = reg.submit 'Create Registration'
+  = reg.submit 'Proceed to Step 2'
   </fieldset>
     
 -# = semantic_form_for @registration, :url => registration_create_path(@club.subdomain) do |form|

@@ -4,12 +4,27 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id' => 'registrations#show', :as => :club, :via => :get
   match 'clubs/:club_id/new' => 'registrations#new', :as => :registration, :via => :get
   match 'clubs/:club_id' => 'registrations#create', :as => :registration_create, :via => :post
-  match 'clubs/:club_id/success' => 'registrations#success', :as => :registration_success, :via => :post
+  match 'clubs/:club_id/payment' => 'registrations#payment', :as => :registration_payment, :via => :get
+  match 'clubs/:club_id/finalize' => 'registrations#finalize', :as => :registration_finalize, :via => :put
   # namespace :clubs, :controller => :registrations do
   #   match 'new' => :new, :as => :registration
   #   match 'create' => :create, :as => :registration_create
   #   match 'success' => :success, :as => :registration_success
   # end
+  # resources :products, :only => [:index, :show] do
+  #     member do
+  #       get :download
+  #       get :summary
+  #       post :rate
+  #       get :manifest
+  #       get :tax
+  #       post :buy_now
+  #     end
+  #     collection do
+  #       get :summaries
+  #       post :sync
+  #     end
+  
 
   
   match ':club_id' => 'registrations#show', :via => :get

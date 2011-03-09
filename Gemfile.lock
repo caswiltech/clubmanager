@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/adamcooper/active_layer.git
+  revision: 1ec503eee927d8367cc7521b0f05453e92f318b1
+  specs:
+    active_layer (0.0.10)
+      activemodel (~> 3.0.0)
+      activesupport (~> 3.0.0)
+
+GIT
   remote: git://github.com/danielb2/awesome_print.git
   revision: 11294ec164f3374fc5efe1dec01811262c85a16b
   specs:
@@ -42,6 +50,7 @@ GEM
       activesupport (= 3.0.4)
     activesupport (3.0.4)
     arel (2.0.9)
+    attribute_normalizer (0.3.1)
     aws-s3 (0.6.2)
       builder
       mime-types
@@ -100,6 +109,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_layer!
+  attribute_normalizer
   awesome_print!
   aws-s3
   fastercsv (= 1.5.3)

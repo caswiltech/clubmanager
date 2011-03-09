@@ -12,7 +12,7 @@ class InitialSchema < ActiveRecord::Migration
       t.string :city
       t.string :province, :limit => 3
       t.string :country
-      t.string :postalcode
+      t.string :postal_code
       t.string :phone
       t.string :homepage_url
       t.boolean :deleted
@@ -160,6 +160,7 @@ class InitialSchema < ActiveRecord::Migration
       t.text :player_previous_sports_experience
       t.string :payment_method
       t.string :promotion_source
+      t.text :comments
       t.boolean :medical_form_received
       t.boolean :deleted
       t.timestamps
@@ -204,6 +205,11 @@ class InitialSchema < ActiveRecord::Migration
       t.string :response_value
       t.boolean :adminonly
     end
+    
+    # create_table :credit_card_payments do |t|
+    #   t.integer :registration_id
+    #   
+    # end
   end
 
   def self.down

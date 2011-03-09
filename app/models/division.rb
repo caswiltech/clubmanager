@@ -6,4 +6,14 @@ class Division < ActiveRecord::Base
   has_many :payment_packages, :through => :season_divisions
   has_many :registrations, :through => :season_divisions
   has_many :registration_questions
+
+  def self.for_season_and_birthdate(season, birthdate, publicly_visible = false)
+    season_divisions = SeasonDivision.for_season_and_birthdate(season,birthdate)
+    season_divisions = season_divisions.publicly_visible if publicly_visible
+    unless season_divisions.empty?
+      season_divisions.first.division
+    else
+      nil
+    end
+  end
 end

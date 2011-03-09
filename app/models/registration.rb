@@ -4,7 +4,6 @@ class Registration < ActiveRecord::Base
   belongs_to :season
   belongs_to :division
   belongs_to :team
-  # has_many :people, :through => :registrations_people
   belongs_to :parent_guardian1, :class_name => "Person"
   belongs_to :parent_guardian2, :class_name => "Person"
 
@@ -14,5 +13,5 @@ class Registration < ActiveRecord::Base
   
   attr_accessor :waiver
   
-  validate :waiver, :acceptance => true, :on => :create
+  validate :waiver, :acceptance => true, :on => :finalize
 end

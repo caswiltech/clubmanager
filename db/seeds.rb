@@ -65,76 +65,66 @@ u16 = Division.create(
 )
 flag = Division.create(
   :club => rchfc,
-  :name => "Flag",
+  :name => "Flag Football",
   :minimum_age => 5,
   :maximum_age => 7
 )
 atom = Division.create(
   :club => rchfc,
-  :name => "Atom",
+  :name => "Atom Football",
   :minimum_age => 8,
   :maximum_age => 9
 )
 peewee = Division.create(
   :club => rchfc,
-  :name => "Peewee",
+  :name => "Peewee Football",
   :minimum_age => 10,
   :maximum_age => 11
 )
 jb = Division.create(
   :club => rchfc,
-  :name => "Junior Bantam",
+  :name => "Junior Bantam Football",
   :minimum_age => 12,
   :maximum_age => 13
 )
-cheeratom = Division.create(
+cheer_div = Division.create(
   :club => rchfc,
-  :name => "Atom",
+  :name => "Junior Cheerleading",
   :minimum_age => 6,
-  :maximum_age => 9
+  :maximum_age => 13
 )
-cheerpw = Division.create(
-  :club => rchfc,
-  :name => "Peewee",
-  :minimum_age => 10,
-  :maximum_age => 12
-)
-springsd = SeasonDivision.create(
+springsdu12 = SeasonDivision.create(
   :season => spring,
   :division => u12
 )
-springsd = SeasonDivision.create(
+springsdu14 = SeasonDivision.create(
   :season => spring,
   :division => u14
 )
-springsd = SeasonDivision.create(
+springsdu16 = SeasonDivision.create(
   :season => spring,
   :division => u16,
   :hidden => true
 )
-summersd = SeasonDivision.create(
+summersdflag = SeasonDivision.create(
   :season => summer,
   :division => flag
 )
-summersd = SeasonDivision.create(
+summersdatom = SeasonDivision.create(
   :season => summer,
   :division => atom
 )
-summersd = SeasonDivision.create(
+summersdpeewee = SeasonDivision.create(
   :season => summer,
   :division => peewee
 )
-summersd = SeasonDivision.create(
+summersdjb = SeasonDivision.create(
   :season => summer,
   :division => jb
 )
-summersd = SeasonDivision.create(
+cheersd = SeasonDivision.create(
   :season => cheer,
-  :division => cheeratom
-)
-summersd = SeasonDivision.create(
-  :season => cheer,
-  :division => cheerpw
+  :division => cheer_div
 )
 role = PersonRole.create(
   :club => rchfc,
@@ -145,4 +135,52 @@ role = PersonRole.create(
   :club => rchfc,
   :role_name => "Emergency Contact",
   :role_abbreviation => "EC"
+)
+pp = PaymentPackage.create(
+  :club => rchfc,
+  :season_division => springsdu12,
+  :name => "U12 Spring Flag 2011",
+  :amount => 100.00
+)
+pp = PaymentPackage.create(
+  :club => rchfc,
+  :season_division => springsdu14,
+  :name => "U14 Spring Flag 2011",
+  :amount => 100.00
+)
+pp = PaymentPackage.create(
+  :club => rchfc,
+  :season_division => springsdu16,
+  :name => "U16 Spring Flag 2011",
+  :amount => 100.00
+)
+pp = PaymentPackage.create(
+  :club => rchfc,
+  :season_division => summersdflag,
+  :name => "Flag 2011",
+  :amount => 100.00
+)
+pp = PaymentPackage.create(
+  :club => rchfc,
+  :season_division => summersdatom,
+  :name => "Atom 2011",
+  :amount => 150.00
+)
+pp = PaymentPackage.create(
+  :club => rchfc,
+  :season_division => summersdpeewee,
+  :name => "Peewee 2011",
+  :amount => 200.00
+)
+pp = PaymentPackage.create(
+  :club => rchfc,
+  :season_division => summersdjb,
+  :name => "Junior Bantam 2011",
+  :amount => 250.00
+)
+pp = PaymentPackage.create(
+  :club => rchfc,
+  :season_division => cheersd,
+  :name => "Junior Cheerleading 2011",
+  :amount => 150.00
 )

@@ -2,8 +2,8 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.4'
 
-# gem 'active_layer', :git => 'git://github.com/adamcooper/active_layer.git'
-# gem 'attribute_normalizer'
+gem 'active_layer', :git => 'git://github.com/adamcooper/active_layer.git'
+gem 'attribute_normalizer'
 gem 'awesome_print', :git => 'git://github.com/danielb2/awesome_print.git', :require => 'ap'
 gem 'aws-s3', :require => 'aws/s3'
 # gem 'compass', "0.10.6"
