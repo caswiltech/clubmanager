@@ -14,7 +14,7 @@ rchfc = Club.create(:long_name => "Royal City Hyacks Football Club",
   :city => "New Westminster",
   :province => "BC",
   :country => "Canada",
-  :postalcode => "V3L3C5",
+  :postal_code => "V3L3C5",
   :phone => "604-868-7926",
   :homepage_url => "http://www.hyackfootball.com/rchfc/"
 )
