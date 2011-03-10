@@ -52,6 +52,7 @@ class RegistrationsController < ApplicationController
     @registration = Registration.find_by_id(reg_params[:id])
     @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
     if @registration.update_attributes(reg_params)
+      RegistrationMailer.deliver_public_registration(@registration)
       render :action => :finalize
     else
       render :action => :step2
