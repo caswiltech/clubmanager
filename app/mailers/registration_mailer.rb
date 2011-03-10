@@ -18,7 +18,7 @@ class RegistrationMailer < ActionMailer::Base
       :bcc => mail_bcc,
       :from => mail_from,
       :subject => mail_subject,
-      :sent_on => mail_sent_on,
+      :sent_on => mail_sent_on
     )
   end
 end
