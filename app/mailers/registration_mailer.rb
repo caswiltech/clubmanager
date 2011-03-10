@@ -12,13 +12,11 @@ class RegistrationMailer < ActionMailer::Base
     mail_from = "#{registration.club.reg_notify_email}"
     mail_bcc = mail_from
     mail_subject = "#{registration.club.short_name} #{registration.season.name} Registration for #{registration.player.person.first_name} #{registration.player.person.last_name}"
-    mail_sent_on = Time.now
     mail(
       :to => mail_to,
       :bcc => mail_bcc,
       :from => mail_from,
-      :subject => mail_subject,
-      :sent_on => mail_sent_on
+      :subject => mail_subject
     )
   end
 end
