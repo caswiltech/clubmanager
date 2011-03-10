@@ -205,11 +205,6 @@ class InitialSchema < ActiveRecord::Migration
       t.string :response_value
       t.boolean :adminonly
     end
-    
-    # create_table :credit_card_payments do |t|
-    #   t.integer :registration_id
-    #   
-    # end
   end
 
   def self.down

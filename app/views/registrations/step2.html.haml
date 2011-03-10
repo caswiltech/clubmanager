@@ -1,0 +1,18 @@
+%h1 #{@club.short_name} Registration for #{@registration.season.name} 
+%p #{@registration.player.person.first_name} is eligible to participate in the #{@registration.division.name} division this season. Please complete the remainder of this registration form so that the registration is complete.
+
+= semantic_form_for @registration, :url => registration_finalize_path(@club.subdomain) do |payment|
+  = payment.inputs do
+    = payment.input :id, :as => :hidden
+    = payment.input :payment_method, :as => :radio, :collection => ["Cheque","Financial Assistance","Credit Card"], :label => "The registration fee for #{@registration.division.name} is #{number_to_currency(@pp.amount)}. Please choose a payment option from the following:"
+    = payment.input :promotion_source, :as => :select, :collection => ["Returning Player","Active Living Guide Ad","Community Event","Newspaper Ad","Newspaper Article","Poster","Recommendation","School","Sign","Website","Word of mouth","Other"], :label => "How did you hear about Hyacks Football?", :include_blank => false
+    %li
+      = payment.label :waiver, "Waiver"
+      = payment.check_box :waiver, :checked => true
+    %p
+      I/We hereby approve and consent to the person being registered to participate in this Royal City Hyacks Football Club program and absolve and release the Royal City Hyacks Football Club, the City of New Westminster, School District No. 40 (New Westminster), Football BC and any of their affiliate associations, members or volunteers from any and all liability arising from any act or omission on their part resulting in injury, fatality or illness occurring as a consequence of said participation. I/We agree to abide by the Policies, Procedures and By-Laws of the Royal City Hyacks Football Club.
+    %br/
+    = payment.input :comments, :as => :text, :label => "Feel free to provide us with any comments that you have about the upcoming season."
+  = payment.buttons do
+    = payment.commit_button :label => "Create Registration"
+  

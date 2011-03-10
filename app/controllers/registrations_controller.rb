@@ -90,6 +90,7 @@ class RegistrationsController < ApplicationController
     @person_defaults = {:city => "New Westminster", :province => "BC", :country => "Canada"}
     @player_person_defaults = @person_defaults.merge({:phone_type => "Home"})
   
+    @schools = ["Connaught Heights Elementary", "F.W. Howay Elementary", "Glenbrook Middle School", "Herbert Spencer Elementary", "Hume Park Elementary", "John Robson Elementary", "Lord Kelvin Elementary", "Lord Tweedsmuir Elementary", "Queen Elizabeth Elementary", "Queensborough Middle School", "Richard McBride Elementary", "New Westminster Secondary", "Community Education", "Home Learners Program", "Other - Preschool", "Other - Private", "Other - Public"]
     @phone_types = ["Home", "Work", "Cell", "Other"]
     @email_types = ["Home", "Work", "Personal", "Other"]
   end

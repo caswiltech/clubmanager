@@ -1,0 +1,37 @@
+%h1 #{@club.short_name} Registration for #{@registration.season.name} 
+%p Thanks for registering #{@registration.player.person.first_name} to participate in our #{@registration.division.name} division. Please carefully read and follow the directions below on completing the registration process:
+
+
+- if @registration.payment_method == "Financial Assistance"
+  %p
+    We will be in contact with you shortly to start the process of arranging for financial assistance to help cover the cost of this registration.
+- elsif @registration.payment_method == "Credit Card"
+  - paypal_button_id = ""
+  - case @registration.season.name
+  - when "2011 Spring Flag"
+    - paypal_button_id = "BQDFWD8YQ7PE8"
+  - when "2011 Summer/Fall Football"
+    - case @registration.division.name
+    - when"Flag Football"
+      - paypal_button_id = "X9PYD3VHKCV4L"
+    - when"Atom Football"
+      - paypal_button_id = " C3QWDNM3NEAD4"
+    - when"Peewee Football"
+      - paypal_button_id = "RP6P6YH9WRP96"
+    - when"Junior Bantam Football"
+      - paypal_button_id = "AD2HVGZEZ8M52"
+  - when "2011 Cheerleading"
+    - paypal_button_id = "7WGWAXL7VNYDL"
+
+  %p
+    To pay for this registration via credit card, please click on the payment button below. You will be redirected to the PayPal website where you can securely pay for this registration. Note that you do <strong>not</strong> have to create a PayPal account to use the online credit card option.
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="#{paypal_button_id}"><input type="image" src="https://www.paypal.com/en_US/i/btn/btn_paynow_SM.gif" border="0" name="submit" alt="Pay Now via PayPal"><img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1"></form>    
+- else
+  %p
+    Your cheque for #{number_to_currency(@pp.amount)} can be sent to #{@registration.club.long_name} at:
+    %blockquote
+      #{@registration.club.long_name}
+      %br/
+      #{@registration.club.street1}  
+      %br/
+      #{@registration.club.city}, #{@registration.club.province}  #{@registration.club.postal_code} 

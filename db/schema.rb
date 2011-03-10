@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(:version => 20110123062235) do
     t.string   "city"
     t.string   "province",         :limit => 3
     t.string   "country"
-    t.string   "postalcode"
+    t.string   "postal_code"
     t.string   "phone"
     t.string   "homepage_url"
     t.boolean  "deleted"
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(:version => 20110123062235) do
     t.text     "player_previous_sports_experience"
     t.string   "payment_method"
     t.string   "promotion_source"
+    t.text     "comments"
     t.boolean  "medical_form_received"
     t.boolean  "deleted"
     t.datetime "created_at"

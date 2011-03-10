@@ -39,7 +39,7 @@
       = player.select :gender, %w{ Male Female }, :include_blank => false
   %li
     = reg.label :player_school, "School"
-    = reg.text_field :player_school
+    = reg.select :player_school, @schools, :include_blank => false
   %li
     = reg.label :player_previous_sports_experience, "Previous Sports Experience"
     = reg.text_area :player_previous_sports_experience, :input_html => {:rows => 6, :cols => 50}
