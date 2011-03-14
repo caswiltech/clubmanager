@@ -55,6 +55,9 @@ class RegistrationsController < ApplicationController
       RegistrationMailer.deliver_public_registration(@registration)
       render :action => :finalize
     else
+      Rails::logger.info "\n\n#{'x'*50}\n\n"
+      Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
+      Rails::logger.info "\n\n#{'x'*50}\n\n"
       render :action => :step2
     end
   end
