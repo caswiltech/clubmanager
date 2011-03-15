@@ -4,8 +4,8 @@ class RegistrationMailer < ActionMailer::Base
   def public_registration(registration)
     @registration = registration
     mail_to = []
-    mail_to << "#{registration.parent_guardian1.first_name} #{registration.parent_guardian1.last_name} <#{registration.parent_guardian1.email}>" unless registration.parent_guardian1.email.nil?
-    mail_to << "#{registration.parent_guardian2.first_name} #{registration.parent_guardian2.last_name} <#{registration.parent_guardian2.email}>" unless registration.parent_guardian2.email.nil?
+    mail_to << "#{registration.parent_guardian1.first_name} #{registration.parent_guardian1.last_name} <#{registration.parent_guardian1.email}>" unless registration.parent_guardian1.email.empty?
+    mail_to << "#{registration.parent_guardian2.first_name} #{registration.parent_guardian2.last_name} <#{registration.parent_guardian2.email}>" unless registration.parent_guardian2.email.empty?
     if mail_to.empty?
       mail_to << "#{registration.club.reg_notify_email}"
     end
