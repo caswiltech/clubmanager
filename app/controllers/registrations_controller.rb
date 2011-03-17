@@ -3,7 +3,6 @@ class RegistrationsController < ApplicationController
   before_filter :find_club, :except => [:index]
   before_filter :form_vars, :only => [:new]
 
-
   def index
     @clubs = Club.all
   end
@@ -24,21 +23,80 @@ class RegistrationsController < ApplicationController
 
   def create
     reg_params = params[:registration]
+    # let's cleanup the params for parent guardian1
+    pg1_params = reg_params.delete(:parent_guardian1_attributes)
+    street = pg1_params[:street1]
+    if street.empty?
+      pg1_params.delete(:street1)
+      pg1_params.delete(:street2)
+      pg1_params.delete(:city)
+      pg1_params.delete(:province)
+      pg1_params.delete(:country)
+    end
+    phone = pg1_params[:phone]
+    if phone.empty?
+      pg1_params.delete(:phone)
+      pg1_params.delete(:phone_type)
+    end      
+    alt_phone = pg1_params[:alt_phone]
+    if alt_phone.empty?
+      pg1_params.delete(:alt_phone)
+      pg1_params.delete(:alt_phone_type)
+    end      
+    email = pg1_params[:email]
+    if email.empty?
+      pg1_params.delete(:email)
+      pg1_params.delete(:email_type)
+    end      
+    alt_email = pg1_params[:alt_email]
+    if alt_email.empty?
+      pg1_params.delete(:alt_email)
+      pg1_params.delete(:alt_email_type)
+    end
+    reg_params[:parent_guardian1_attributes] = pg1_params
+        
+    # let's remove the params for the second parent-guardian if they're not specified
+    pg2_params = reg_params.delete(:parent_guardian2_attributes)
+    if pg2_params[:last_name].present? && pg2_params[:last_name].present?
+      street = pg2_params[:street1]
+      if street.empty?
+        pg2_params.delete(:street1)
+        pg2_params.delete(:street2)
+        pg2_params.delete(:city)
+        pg2_params.delete(:province)
+        pg2_params.delete(:country)
+      end
+      phone = pg2_params[:phone]
+      if phone.empty?
+        pg2_params.delete(:phone)
+        pg2_params.delete(:phone_type)
+      end      
+      alt_phone = pg2_params[:alt_phone]
+      if alt_phone.empty?
+        pg2_params.delete(:alt_phone)
+        pg2_params.delete(:alt_phone_type)
+      end      
+      email = pg2_params[:email]
+      if email.empty?
+        pg2_params.delete(:email)
+        pg2_params.delete(:email_type)
+      end      
+      alt_email = pg2_params[:alt_email]
+      if alt_email.empty?
+        pg2_params.delete(:alt_email)
+        pg2_params.delete(:alt_email_type)
+      end
+      reg_params[:parent_guardian2_attributes] = pg2_params
+    end
   
     @registration = @club.registrations.new(reg_params)
     division = Division.for_season_and_birthdate(@registration.season, @registration.player.birthdate)
     @registration.division = division unless division.nil?
     if division.present? && @registration.save
-      Rails::logger.info "\n\n#{@registration.ai}\n\n"
-      # proceed to payment choice page  
       @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)    
       render :action => :step2
-    
-      # redirect_to club_path(@club.subdomain)
     else
-      Rails::logger.info "\n\n#{'x'*50}\n\n"
       Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
-      Rails::logger.info "\n\n#{'x'*50}\n\n"
       form_vars
       @message = "Unfortunately, some errors occurred. Please see the form below, correct them and re-submit the information."
       @message = "Unfortunately, no team was found matching this player's age for the desired season. If necessary, please correct the player's birthdate." if division.nil?
@@ -49,43 +107,24 @@ class RegistrationsController < ApplicationController
 
   def finalize
     reg_params = params[:registration]
+    comments = reg_params[:comments]
+    reg_params.delete(:comments) if comments.empty?  
     @registration = Registration.find_by_id(reg_params[:id])
     @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
     if @registration.update_attributes(reg_params)
       RegistrationMailer.deliver_public_registration(@registration)
       render :action => :finalize
     else
-      Rails::logger.info "\n\n#{'x'*50}\n\n"
       Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
-      Rails::logger.info "\n\n#{'x'*50}\n\n"
       render :action => :step2
     end
   end
-
-  def payment
-    reg_id = params[:reg]
-    @registration = Registration.find_by_id(reg_id)
-    @cc_years = []
-    10.times do |i|
-      @cc_years << "#{Date.today.year + i}"
-    end
-
-  end
-
-  def process_payment
-  
-  end
-
 
   private
 
   def find_club
     club_id = params[:club_id]
     @club ||= club_id.nil? ? nil : (Club.where(:subdomain => club_id).present? ? Club.where(:subdomain => club_id).first : (Club.where(:id => club_id).present? ? Club.where(:id => club_id).first : nil))
-  end
-
-  def find_reg
-  
   end
 
   def form_vars
