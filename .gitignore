@@ -1,4 +1,6 @@
 .bundle
+.gitignore
 db/*.sqlite3
 log/*.log
 tmp/**/*
+./cmg_dev

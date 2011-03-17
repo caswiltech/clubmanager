@@ -17,10 +17,10 @@ How you heard about this <%= @registration.club.short_name %> program:
 Payment Method:
 <%= @registration.payment_method %>
 
-Comments:
+<%= unless @registration.comments.nil? ->Comments:
 <%= @registration.comments %>
 
-Please note that you will be added to our mailing list and will receive updates as the season approaches.
+<% end -%>Please note that you will be added to our mailing list and will receive updates as the season approaches.
 
 Feel free to contact us with any questions or comments that you might have.
 
