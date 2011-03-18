@@ -17,7 +17,7 @@ How you heard about this <%= @registration.club.short_name %> program:
 Payment Method:
 <%= @registration.payment_method %>
 
-<%= unless @registration.comments.nil? ->Comments:
+<%= unless @registration.comments.nil? -%>Comments:
 <%= @registration.comments %>
 
 <% end -%>Please note that you will be added to our mailing list and will receive updates as the season approaches.
