@@ -1,0 +1,25 @@
+%h1 #{@club.short_name} Registrations
+
+%table
+  %tr
+    %th Name
+    %th Division
+    %th Payment Method
+    %th Date
+    %th ID
+  - divisions = Array.new(@club.divisions.count,0)
+  - @registrations.each do |r|
+    - divisions[r.division.id.to_i - 1] = divisions[r.division.id.to_i - 1] + 1
+    %tr
+      %td= "#{r.player.person.first_name} #{r.player.person.last_name}"
+      %td= r.division.name
+      %td= r.payment_method
+      %td= r.created_at
+      %td= r.id
+%hr
+- for i in 0..(divisions.size - 1)
+  - d = @club.divisions.where(:id => (i + 1)).first
+  = d.name
+  = ":"
+  = divisions[i]
+  %br/

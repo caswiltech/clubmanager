@@ -119,6 +119,10 @@ class RegistrationsController < ApplicationController
       render :action => :step2
     end
   end
+  
+  def regreport
+    @registrations = @club.registrations.order("id desc")
+  end
 
   private
 

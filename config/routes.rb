@@ -6,6 +6,7 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id' => 'registrations#create', :as => :registration_create, :via => :post
   match 'clubs/:club_id/payment' => 'registrations#payment', :as => :registration_payment, :via => :get
   match 'clubs/:club_id/finalize' => 'registrations#finalize', :as => :registration_finalize, :via => :put
+  match 'clubs/:club_id/regreport' => 'registrations#regreport', :via => :get
   # namespace :clubs, :controller => :registrations do
   #   match 'new' => :new, :as => :registration
   #   match 'create' => :create, :as => :registration_create
