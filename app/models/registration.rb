@@ -14,6 +14,6 @@ class Registration < ActiveRecord::Base
   attr_accessor :waiver
   
   validates :waiver, :acceptance => {:message => "This waiver must be accepted in order to finalize the registration"}, :on => :update
-  validates :promotion_source, :presence => {:message => "Please select an option as your input on how you came to know about our program is vital to our continued promotional efforts"}
+  validates :promotion_source, :presence => {:message => "Please select an option as your input on how you came to know about our program is vital to our continued promotional efforts"}, :on => :update
   
 end
