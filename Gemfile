@@ -10,16 +10,17 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'fastercsv', '1.5.3'
 gem 'formtastic', "1.2.1"
 gem 'haml', '>= 3.0.25'
-# gem 'mimetype-fu', :require => 'mimetype_fu'
+gem 'mimetype-fu', :require => 'mimetype_fu'
 gem "paperclip", "~> 2.3.8"
 gem 'rake', ">= 0.8.7"
 gem 'sanitize', :git => 'git://github.com/rgrove/sanitize.git' # '~> 1.2.0'
 gem 'ssl_requirement', '~> 0.1.0'
 # gem 'state_machine', '0.9.4'
 # gem 'tiny_mce', '0.1.4'
-# gem 'validates_as_email_address', :git => "git://github.com/bansalakhil/validates_as_email_address.git"
-# gem 'validates_as_phone_number', '>=0.7.5'
-# gem 'validation_reflection', :git => "git://github.com/redinger/validation_reflection.git"
+gem 'validates_timeliness', '~> 3.0.2'
+gem 'validates_as_email_address', :git => "git://github.com/bansalakhil/validates_as_email_address.git"
+gem 'validates_as_phone_number', '>=0.7.5'
+gem 'validation_reflection', :git => "git://github.com/redinger/validation_reflection.git"
 # gem 'will_paginate', :git => 'git://github.com/mislav/will_paginate.git', :branch => 'rails3'
 
 

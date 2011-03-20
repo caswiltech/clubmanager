@@ -9,9 +9,11 @@ class Registration < ActiveRecord::Base
 
   accepts_nested_attributes_for :player
   accepts_nested_attributes_for :parent_guardian1
-  accepts_nested_attributes_for :parent_guardian2
+  accepts_nested_attributes_for :parent_guardian2#, :reject_if => proc { |attrs| attrs['first_name'].blank? && attrs['last_name'].blank? }
   
   attr_accessor :waiver
   
-  validate :waiver, :acceptance => true, :on => :finalize
+  validates :waiver, :acceptance => {:message => "This waiver must be accepted in order to finalize the registration"}, :on => :update
+  validates :promotion_source, :presence => {:message => "Please select an option as your input on how you came to know about our program is vital to our continued promotional efforts"}
+  
 end

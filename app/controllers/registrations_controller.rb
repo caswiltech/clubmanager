@@ -12,83 +12,25 @@ class RegistrationsController < ApplicationController
   end
 
   def new
+    # @registration = Registration.last
     season_id = params[:season]
     season = season_id.to_i.is_a?(Numeric) ? (@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil? ? nil : Season.find_by_id(@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)) : nil
     if season.present?
-      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults, :parent_guardian2_attributes => @person_defaults)
+      Rails::logger.info "\n\n#{'x'*50}\n\n#{@registration.ai}\n\n"
+      
+      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults, :parent_guardian2_attributes => @person_defaults)
     else
       redirect_to club_path(@club.subdomain)
     end
   end
 
-  def create
+  def create    
     reg_params = params[:registration]
+    Rails::logger.info "\n\n#{'x'*50}\n\n"
+    Rails::logger.info "create method\n\nparams:\n#{reg_params.ai}\n\n"
+    
     # let's cleanup the params for parent guardian1
-    pg1_params = reg_params.delete(:parent_guardian1_attributes)
-    street = pg1_params[:street1]
-    if street.empty?
-      pg1_params.delete(:street1)
-      pg1_params.delete(:street2)
-      pg1_params.delete(:city)
-      pg1_params.delete(:province)
-      pg1_params.delete(:country)
-    end
-    phone = pg1_params[:phone]
-    if phone.empty?
-      pg1_params.delete(:phone)
-      pg1_params.delete(:phone_type)
-    end      
-    alt_phone = pg1_params[:alt_phone]
-    if alt_phone.empty?
-      pg1_params.delete(:alt_phone)
-      pg1_params.delete(:alt_phone_type)
-    end      
-    email = pg1_params[:email]
-    if email.empty?
-      pg1_params.delete(:email)
-      pg1_params.delete(:email_type)
-    end      
-    alt_email = pg1_params[:alt_email]
-    if alt_email.empty?
-      pg1_params.delete(:alt_email)
-      pg1_params.delete(:alt_email_type)
-    end
-    reg_params[:parent_guardian1_attributes] = pg1_params
-        
-    # let's remove the params for the second parent-guardian if they're not specified
-    pg2_params = reg_params.delete(:parent_guardian2_attributes)
-    if pg2_params[:last_name].present? && pg2_params[:last_name].present?
-      street = pg2_params[:street1]
-      if street.empty?
-        pg2_params.delete(:street1)
-        pg2_params.delete(:street2)
-        pg2_params.delete(:city)
-        pg2_params.delete(:province)
-        pg2_params.delete(:country)
-      end
-      phone = pg2_params[:phone]
-      if phone.empty?
-        pg2_params.delete(:phone)
-        pg2_params.delete(:phone_type)
-      end      
-      alt_phone = pg2_params[:alt_phone]
-      if alt_phone.empty?
-        pg2_params.delete(:alt_phone)
-        pg2_params.delete(:alt_phone_type)
-      end      
-      email = pg2_params[:email]
-      if email.empty?
-        pg2_params.delete(:email)
-        pg2_params.delete(:email_type)
-      end      
-      alt_email = pg2_params[:alt_email]
-      if alt_email.empty?
-        pg2_params.delete(:alt_email)
-        pg2_params.delete(:alt_email_type)
-      end
-      reg_params[:parent_guardian2_attributes] = pg2_params
-    end
-  
+            
     @registration = @club.registrations.new(reg_params)
     division = Division.for_season_and_birthdate(@registration.season, @registration.player.birthdate)
     @registration.division = division unless division.nil?
@@ -98,8 +40,8 @@ class RegistrationsController < ApplicationController
     else
       Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
       form_vars
-      @message = "Unfortunately, some errors occurred. Please see the form below, correct them and re-submit the information."
-      @message = "Unfortunately, no team was found matching this player's age for the desired season. If necessary, please correct the player's birthdate." if division.nil?
+      @message = "Unfortunately some errors occurred. Please see the form below, correct the errors and re-submit the information."
+      @message = "Unfortunately no team was found matching this player's age for the desired season. If necessary, please correct the player's birthdate." if division.nil?
       flash.now[:error] = @message
       render :action => "new"
     end

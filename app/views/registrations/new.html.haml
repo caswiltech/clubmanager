@@ -1,155 +1,64 @@
-= form_for @registration, :url => registration_create_path(@club.subdomain), :html => {:class => 'formtastic'} do |reg|
-  %h1 #{@club.short_name} Registration for #{@registration.season.name} 
-  %h2 Participant's Information
-  <fieldset class="inputs">
-  <ol>
-  = reg.fields_for :player do |player|
-    = player.fields_for :person do |person|
-      %li
-        = person.label :first_name, "First Name"
-        = person.text_field :first_name
-      %li
-        = person.label :last_name, "Last Name"
-        = person.text_field :last_name
-      %li
-        = person.label :street1, "Address"
-        = person.text_field :street1
-      %li
-        = person.label :city, "City"
-        = person.select :city, @cities
-      %li
-        = person.label :province, "Province"
-        = person.select :province, @provinces, :include_blank => false
-      %li
-        = person.label :postal_code, "Postal Code"
-        = person.text_field :postal_code, :input_html => {:size => 7}
-        = person.hidden_field :country
-      %li
-        = person.label :phone, "Home Phone"
-        = person.text_field :phone, :input_html => {:size => 14}
-        = person.hidden_field :phone_type
-    %li
-      = player.label :carecard, "CareCard"
-      = player.text_field :carecard, :input_html => {:size => 12}
-    %li
-      = player.label :birthdate, "Birthdate"
-      = player.date_select :birthdate, :start_year => Date.today.years_ago(100).year, :end_year => Date.today.years_ago(1).year, :default => Date.civil(Date.today.years_ago(5).year, 1, 1)
-    %li
-      = player.label :gender, "Gender"
-      = player.select :gender, %w{ Male Female }, :include_blank => false
-  %li
-    = reg.label :player_school, "School"
-    = reg.select :player_school, @schools, :include_blank => false
-  %li
-    = reg.label :player_previous_sports_experience, "Previous Sports Experience"
-    = reg.text_area :player_previous_sports_experience, :input_html => {:rows => 6, :cols => 50}
-  %h2 Parent Guardian's Information
-  = reg.fields_for :parent_guardian1 do |person|
-    %li
-      = person.label :first_name, "First Name"
-      = person.text_field :first_name
-    %li
-      = person.label :last_name, "Last Name"
-      = person.text_field :last_name
-    %li
-      = person.label :street1, "Address"
-      = person.text_field :street1
-    %li
-      = person.label :city, "City"
-      = person.select :city, @cities
-    %li
-      = person.label :province, "Province"
-      = person.select :province, @provinces, :include_blank => false
-    %li
-      = person.label :postal_code, "Postal Code"
-      = person.text_field :postal_code, :input_html => {:size => 7}
-      = person.hidden_field :country
-    %li
-      = person.label :phone, "Phone"
-      = person.text_field :phone, :input_html => {:size => 14}
-      = person.select :phone_type, @phone_types, :include_blank => false
-    %li
-      = person.label :alt_phone, "Alt. Phone"
-      = person.text_field :alt_phone, :input_html => {:size => 14}
-      = person.select :alt_phone_type, @phone_types, :include_blank => false
-    %li
-      = person.label :email, "Email"
-      = person.text_field :email, :input_html => {:size => 14}
-      = person.select :email_type, @email_types, :include_blank => false
-    %li
-      = person.label :alt_email, "Alt. Email"
-      = person.text_field :alt_email, :input_html => {:size => 14}
-      = person.select :alt_email_type, @email_types, :include_blank => false
-  %h2 Secondary Parent Guardian's Information
-  = reg.fields_for :parent_guardian2 do |person|
-    %li
-      = person.label :first_name, "First Name"
-      = person.text_field :first_name
-    %li
-      = person.label :last_name, "Last Name"
-      = person.text_field :last_name
-    %li
-      = person.label :street1, "Address"
-      = person.text_field :street1
-    %li
-      = person.label :city, "City"
-      = person.select :city, @cities
-    %li
-      = person.label :province, "Province"
-      = person.select :province, @provinces, :include_blank => false
-    %li
-      = person.label :postal_code, "Postal Code"
-      = person.text_field :postal_code, :input_html => {:size => 7}
-      = person.hidden_field :country
-    %li
-      = person.label :phone, "Phone"
-      = person.text_field :phone, :input_html => {:size => 14}
-      = person.select :phone_type, @phone_types, :include_blank => false
-    %li
-      = person.label :alt_phone, "Alt. Phone"
-      = person.text_field :alt_phone, :input_html => {:size => 14}
-      = person.select :alt_phone_type, @phone_types, :include_blank => false
-    %li
-      = person.label :email, "Email"
-      = person.text_field :email, :input_html => {:size => 14}
-      = person.select :email_type, @email_types, :include_blank => false
-    %li
-      = person.label :alt_email, "Alt. Email"
-      = person.text_field :alt_email, :input_html => {:size => 14}
-      = person.select :alt_email_type, @email_types, :include_blank => false
+%h1 #{@club.short_name} Registration for #{@registration.season.name} 
+= semantic_form_for @registration, :url => registration_create_path(@club.subdomain) do |reg|
   %hr
-    = reg.hidden_field :payment_method
-    = reg.hidden_field :season_id
-  </ol>
-  </fieldset>
-  <fieldset class="buttons">
-  = reg.submit 'Proceed to Step 2'
-  </fieldset>
-    
--# = semantic_form_for @registration, :url => registration_create_path(@club.subdomain) do |form|
--#   = form.inputs "Player Information" do
--#     = form.semantic_fields_for :player_attributes do |player|
--#       = player.semantic_fields_for :person_attributes do |person|
--#         = person.input :first_name, :required => true, :label => "First Name"
--#         = person.input :last_name, :required => true, :label => "Last Name"
--#         = person.input :street1, :label => "Address"
--#         = person.input :city
--#         = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
--#         = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }
--#         = person.input :postal_code, :label => "Postal Code"
--#         = person.input :phone, :as => :phone
--#         = person.input :phone_type, :as => :hidden, :input_html => {:value => "Home"}
--#       = player.input :carecard, :label => "CareCard #"
--#       %li
--#         = form.label 'player_birthdate', "Birthdate"
--#         = player.date_select :birthdate, :start_year => Date.today.years_ago(100).year, :end_year => Date.today.years_ago(1).year, :default => Date.civil(Date.today.years_ago(5).year, 1, 1)
--#       / = player.input :birthdate, :as => :date
--#       = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }
--#       = player.input :player_school, :label => "School"
--#       = player.input :player_previous_sports_experience, :as => :text, :label => "Other Sports Experience", :input_html => {:rows => 6, :cols => 50}
--#     = form.buttons do
--#       = form.commit_button
-      
-      
-      
-      
+  = reg.inputs "Player Information" do
+    %hr
+    = reg.semantic_fields_for :player do |player|
+      = player.semantic_fields_for :person do |person|
+        = person.input :first_name, :label => "First Name"#, :required => true
+        = person.input :last_name, :label => "Last Name"
+        = person.input :street1, :label => "Address"
+        = person.input :city, :as => :select, :include_blank => false, :collection => @cities
+        = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
+        = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }
+        = person.input :postal_code, :label => "Postal Code"
+        = person.input :phone, :as => :phone
+        = person.input :phone_type, :as => :hidden, :input_html => {:value => "Home"}
+      = player.input :carecard, :label => "CareCard #"
+      = player.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(20).year, :end_year => Date.today.years_ago(5).year
+      = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }
+    = reg.input :player_school, :label => "School",:collection => @schools, :include_blank => false
+    = reg.input :player_previous_sports_experience, :as => :text, :label => "Other Sports Experience", :input_html => {:rows => 6, :cols => 50}
+    = reg.input :season_id, :as => :hidden#, :input_html => {:value => @registration.season_id}
+    = reg.input :payment_method, :as => :hidden
+  %hr
+  = reg.inputs "Parent Guardian Information" do
+    %hr
+    = reg.semantic_fields_for :parent_guardian1 do |person|
+      = person.input :first_name, :label => "First Name"#, :required => true
+      = person.input :last_name, :label => "Last Name"
+      = person.input :street1, :label => "Address"
+      = person.input :city, :as => :select, :include_blank => false, :collection => @cities
+      = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
+      = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }
+      = person.input :postal_code, :label => "Postal Code"
+      = person.input :phone, :as => :phone
+      = person.input :phone_type, :as => :select, :collection => @phone_types, :include_blank => false, :label => "Phone Type"
+      = person.input :alt_phone, :as => :phone, :label => "Alternate Phone"
+      = person.input :alt_phone_type, :as => :select, :collection => @phone_types, :include_blank => false, :label => "Alternate Phone Type"
+      = person.input :email, :as => :email
+      = person.input :email_type, :as => :select, :collection => @email_types, :include_blank => false, :label => "Email Type"
+      = person.input :alt_email, :as => :email, :label => "Alternate Email"
+      = person.input :alt_email_type, :as => :select, :collection => @email_types, :include_blank => false, :label => "Alternate Email Type"
+  %hr
+  = reg.inputs "Secondary Parent Guardian Information" do
+    %hr
+    = reg.semantic_fields_for :parent_guardian2 do |person|
+      = person.input :first_name, :label => "First Name"#, :required => true
+      = person.input :last_name, :label => "Last Name"
+      = person.input :street1, :label => "Address"
+      = person.input :city, :as => :select, :include_blank => false, :collection => @cities
+      = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
+      = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }
+      = person.input :postal_code, :label => "Postal Code"
+      = person.input :phone, :as => :phone
+      = person.input :phone_type, :as => :select, :collection => @phone_types, :include_blank => false, :label => "Phone Type"
+      = person.input :alt_phone, :as => :phone, :label => "Alternate Phone"
+      = person.input :alt_phone_type, :as => :select, :collection => @phone_types, :include_blank => false, :label => "Alternate Phone Type"
+      = person.input :email, :as => :email
+      = person.input :email_type, :as => :select, :collection => @email_types, :include_blank => false, :label => "Email Type"
+      = person.input :alt_email, :as => :email, :label => "Alternate Email"
+      = person.input :alt_email_type, :as => :select, :collection => @email_types, :include_blank => false, :label => "Alternate Email Type"
+  %hr
+  = reg.buttons do
+    = reg.commit_button :label => "Proceed to Step 2"

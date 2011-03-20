@@ -1,5 +1,7 @@
 Cmg::Application.routes.draw do
   
+  resources :samples
+
   match 'clubs' => 'registrations#index', :as => :clubs, :via => :get
   match 'clubs/:club_id' => 'registrations#show', :as => :club, :via => :get
   match 'clubs/:club_id/new' => 'registrations#new', :as => :registration, :via => :get

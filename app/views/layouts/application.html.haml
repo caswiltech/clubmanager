@@ -1,0 +1,11 @@
+%html
+  %head
+    %title ClubManager
+    = stylesheet_link_tag 'formtastic', 'formtastic_changes'
+    = csrf_meta_tag
+  %body
+    - if flash[:notice]
+      %div.notice= flash[:notice]
+    - if flash[:error]
+      %div.error= flash[:error]
+    = yield

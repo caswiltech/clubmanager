@@ -17,9 +17,13 @@
       %td= r.created_at
       %td= r.id
 %hr
+- total = 0
 - for i in 0..(divisions.size - 1)
   - d = @club.divisions.where(:id => (i + 1)).first
   = d.name
   = ":"
   = divisions[i]
   %br/
+  - total += divisions[i]
+Total: 
+= total
