@@ -12,12 +12,9 @@ class RegistrationsController < ApplicationController
   end
 
   def new
-    # @registration = Registration.last
     season_id = params[:season]
     season = season_id.to_i.is_a?(Numeric) ? (@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil? ? nil : Season.find_by_id(@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)) : nil
     if season.present?
-      Rails::logger.info "\n\n#{'x'*50}\n\n#{@registration.ai}\n\n"
-      
       @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults, :parent_guardian2_attributes => @person_defaults)
     else
       redirect_to club_path(@club.subdomain)
@@ -26,11 +23,6 @@ class RegistrationsController < ApplicationController
 
   def create    
     reg_params = params[:registration]
-    Rails::logger.info "\n\n#{'x'*50}\n\n"
-    Rails::logger.info "create method\n\nparams:\n#{reg_params.ai}\n\n"
-    
-    # let's cleanup the params for parent guardian1
-            
     @registration = @club.registrations.new(reg_params)
     division = Division.for_season_and_birthdate(@registration.season, @registration.player.birthdate)
     @registration.division = division unless division.nil?
