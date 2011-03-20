@@ -18,6 +18,7 @@ class Person < ActiveRecord::Base
       self.city = nil
       self.province = nil
       self.country = nil
+      self.postal_code = nil
     end
     if self.phone.blank?
       self.phone = nil

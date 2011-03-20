@@ -15,7 +15,8 @@ class RegistrationsController < ApplicationController
     season_id = params[:season]
     season = season_id.to_i.is_a?(Numeric) ? (@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil? ? nil : Season.find_by_id(@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)) : nil
     if season.present?
-      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults, :parent_guardian2_attributes => @person_defaults)
+      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults)
+      @registration.parent_guardian2 = Person.new(@person_defaults)
     else
       redirect_to club_path(@club.subdomain)
     end
@@ -30,6 +31,7 @@ class RegistrationsController < ApplicationController
       @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)    
       render :action => :step2
     else
+      @registration.parent_guardian2 = Person.new(reg_params[:parent_guardian2_attributes])
       Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
       form_vars
       @message = "Unfortunately some errors occurred. Please see the form below, correct the errors and re-submit the information."

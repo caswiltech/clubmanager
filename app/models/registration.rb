@@ -9,7 +9,7 @@ class Registration < ActiveRecord::Base
 
   accepts_nested_attributes_for :player
   accepts_nested_attributes_for :parent_guardian1
-  accepts_nested_attributes_for :parent_guardian2#, :reject_if => proc { |attrs| attrs['first_name'].blank? && attrs['last_name'].blank? }
+  accepts_nested_attributes_for :parent_guardian2, :reject_if => proc { |attrs| attrs['first_name'].blank? && attrs['last_name'].blank? }
   
   attr_accessor :waiver
   

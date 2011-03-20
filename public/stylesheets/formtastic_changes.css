@@ -18,6 +18,6 @@ form.formtastic legend span { font-size:1.5em; font-weight:bold; padding-bottom:
 form.formtastic fieldset > ol > li.required label { font-weight:bold; }
 form.formtastic fieldset > ol > li.error label { font-weight:bold; color:red;}
 
-form.formtastic fieldset > ol > li.boolean label { padding-left:0; width:auto; }
+form.formtastic fieldset > ol > li.boolean label { padding-left:0; width:auto; font-weight:bold; }
 form.formtastic fieldset > ol > li.boolean p.inline-hints { color:#000; margin:2em 0 0 0; }
 form.formtastic fieldset > ol > li.boolean p.inline-errors { color:#cc0000; margin:0.5em 0 0 0; font-weight:bold; font-style:italic; font-size: 1.25em;}
