@@ -24,20 +24,29 @@ class RegistrationsController < ApplicationController
 
   def create    
     reg_params = params[:registration]
+    
     @registration = @club.registrations.new(reg_params)
     division = Division.for_season_and_birthdate(@registration.season, @registration.player.birthdate)
-    @registration.division = division unless division.nil?
-    if division.present? && @registration.save
-      @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)    
-      render :action => :step2
-    else
+    unless division.present?
       @registration.parent_guardian2 = Person.new(reg_params[:parent_guardian2_attributes])
-      Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
       form_vars
-      @message = "Unfortunately some errors occurred. Please see the form below, correct the errors and re-submit the information."
-      @message = "Unfortunately no team was found matching this player's age for the desired season. If necessary, please correct the player's birthdate." if division.nil?
+      @message = "Unfortunately no team was found matching this player's age for the desired season. If necessary, please correct the player's birthdate."
       flash.now[:error] = @message
       render :action => "new"
+    else
+      @registration.division = division
+      layer = Layers::PublicRegistration.new(@registration)
+      unless layer.save
+        @registration.parent_guardian2 = Person.new(reg_params[:parent_guardian2_attributes])
+        Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
+        form_vars
+        @message = "Unfortunately some errors occurred. Please see the form below, correct the errors and re-submit the information."
+        flash.now[:error] = @message
+        render :action => "new"      
+      else
+        @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)    
+        render :action => :step2
+      end
     end
   end
 

@@ -4,7 +4,7 @@ module Layers
 
     all_attributes_accessible!
 
-    validates :waiver, :acceptance => true, :on => :finalize
+    validates :waiver, :acceptance => true, :on => :update
 
     validates_with Validations::Player, :attributes => :player
     validates_with Validations::Person, :attributes => :parent_guardian1

@@ -5,18 +5,18 @@
     %hr
     = reg.semantic_fields_for :player do |player|
       = player.semantic_fields_for :person do |person|
-        = person.input :first_name, :label => "First Name"#, :required => true
-        = person.input :last_name, :label => "Last Name"
-        = person.input :street1, :label => "Address"
-        = person.input :city, :as => :select, :include_blank => false, :collection => @cities
-        = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
-        = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }
-        = person.input :postal_code, :label => "Postal Code"
-        = person.input :phone, :as => :phone
+        = person.input :first_name, :label => "First Name", :required => true
+        = person.input :last_name, :label => "Last Name", :required => true
+        = person.input :street1, :label => "Address", :required => true
+        = person.input :city, :as => :select, :include_blank => false, :collection => @cities, :required => true
+        = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }, :required => true
+        = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }, :required => true
+        = person.input :postal_code, :label => "Postal Code", :required => true
+        = person.input :phone, :as => :phone, :label => "Home Phone", :required => true
         = person.input :phone_type, :as => :hidden, :input_html => {:value => "Home"}
-      = player.input :carecard, :label => "CareCard #"
-      = player.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(20).year, :end_year => Date.today.years_ago(5).year
-      = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }
+      = player.input :carecard, :label => "CareCard #", :required => true
+      = player.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(20).year, :end_year => Date.today.years_ago(5).year, :required => true
+      = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }, :required => true
     = reg.input :player_school, :label => "School",:collection => @schools, :include_blank => false
     = reg.input :player_previous_sports_experience, :as => :text, :label => "Other Sports Experience", :input_html => {:rows => 6, :cols => 50}
     = reg.input :season_id, :as => :hidden#, :input_html => {:value => @registration.season_id}
@@ -25,8 +25,8 @@
   = reg.inputs "Parent Guardian Information" do
     %hr
     = reg.semantic_fields_for :parent_guardian1 do |person|
-      = person.input :first_name, :label => "First Name"#, :required => true
-      = person.input :last_name, :label => "Last Name"
+      = person.input :first_name, :label => "First Name", :required => true
+      = person.input :last_name, :label => "Last Name", :required => true
       = person.input :street1, :label => "Address"
       = person.input :city, :as => :select, :include_blank => false, :collection => @cities
       = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
