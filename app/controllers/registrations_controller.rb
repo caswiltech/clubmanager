@@ -53,7 +53,7 @@ class RegistrationsController < ApplicationController
   def finalize
     reg_params = params[:registration]
     comments = reg_params[:comments]
-    reg_params.delete(:comments) if comments.empty?  
+    reg_params.delete(:comments) if comments.blank?  
     @registration = Registration.find_by_id(reg_params[:id])
     @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
     if @registration.update_attributes(reg_params)
