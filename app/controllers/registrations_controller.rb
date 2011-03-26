@@ -57,7 +57,11 @@ class RegistrationsController < ApplicationController
     @registration = Registration.find_by_id(reg_params[:id])
     @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
     if @registration.update_attributes(reg_params)
-      RegistrationMailer.deliver_public_registration(@registration)
+      begin
+        RegistrationMailer.deliver_public_registration(@registration)
+      rescue
+        # not going to do anything right now - we'll just log errors
+      end
       render :action => :finalize
     else
       Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
