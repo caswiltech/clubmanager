@@ -7,5 +7,9 @@
 - else
   Registrations are currently being accepted for the following seasons:
   %ul
-  - seasons.each do |season|
-    %li= link_to season.name, registration_path(@club.subdomain, :season => season.id)
+    - seasons.each do |season|
+      %li
+        %strong= link_to season.name, registration_path(@club.subdomain, :season => season.id)
+        - unless season.description.blank?
+          %br/
+          = season.description
