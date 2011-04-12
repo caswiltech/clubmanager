@@ -25,7 +25,7 @@
       %td= r.player.person.street1
       %td= r.player.person.city
       %td= r.player.person.phone
-      %td= r.parent_guardian1.email
+      %td= (r.parent_guardian1.nil? ? "" : r.parent_guardian1.email)
       
 %hr
 - total = 0
