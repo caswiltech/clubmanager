@@ -7,6 +7,11 @@
     %th Payment Method
     %th Date
     %th ID
+    %th Birthdate
+    %th Address
+    %th City
+    %th Phone
+    %th Email
   - divisions = Array.new(@club.divisions.count,0)
   - @registrations.each do |r|
     - divisions[r.division.id.to_i - 1] = divisions[r.division.id.to_i - 1] + 1
@@ -16,6 +21,12 @@
       %td= r.payment_method
       %td= r.created_at
       %td= r.id
+      %td= r.player.birthdate
+      %td= r.player.person.address
+      %td= r.player.person.city
+      %td= r.player.person.phone
+      %td= r.parent_guardian1.email
+      
 %hr
 - total = 0
 - for i in 0..(divisions.size - 1)
