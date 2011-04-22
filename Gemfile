@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '>= 3.0.4'
+gem 'rails', '3.0.7'
 
 gem 'active_layer', :git => 'git://github.com/adamcooper/active_layer.git'
 gem 'attribute_normalizer'
