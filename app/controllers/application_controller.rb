@@ -1,5 +1,13 @@
 class ApplicationController < ActionController::Base
   include SslRequirement
+
+  helper :all # include all helpers, all the time
+  protect_from_forgery # See ActionController::RequestForgeryProtection for details
+
+  # Scrub sensitive parameters from your log
+  # filter_parameter_logging :password
+  
+  session :session_key => '_cmg_session_id'
   
   def ssl_required?
     ENV['RAILS_ENV'] == 'development' ? false : true
@@ -26,4 +34,15 @@ class ApplicationController < ActionController::Base
 
     render :layout => false
   end
+
+  private
+  
+  def authorize
+    unless User.find_by_id(session[:user_id])
+      session[:original_uri] = request.request_uri
+      flash[:notice] = "Please login to access ClubManager"
+      redirect_to(:controller => "login", :action => "login")
+    end
+  end
+
 end

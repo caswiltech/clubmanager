@@ -15,8 +15,7 @@ class RegistrationsController < ApplicationController
     season_id = params[:season]
     season = season_id.to_i.is_a?(Numeric) ? (@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil? ? nil : Season.find_by_id(@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)) : nil
     if season.present?
-      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults)
-      @registration.parent_guardian2 = Person.new(@person_defaults)
+      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :registrations_people_attributes => [{:person_attributes => @person_defaults, :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true},{:person_attributes => @person_defaults, :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false}])
     else
       redirect_to club_url(@club.subdomain)
     end

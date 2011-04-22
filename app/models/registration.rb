@@ -4,12 +4,11 @@ class Registration < ActiveRecord::Base
   belongs_to :season
   belongs_to :division
   belongs_to :team
-  belongs_to :parent_guardian1, :class_name => "Person"
-  belongs_to :parent_guardian2, :class_name => "Person"
+  has_many :registrations_people
 
+  accepts_nested_attributes_for :registrations_people
   accepts_nested_attributes_for :player
-  accepts_nested_attributes_for :parent_guardian1
-  accepts_nested_attributes_for :parent_guardian2, :reject_if => proc { |attrs| attrs['first_name'].blank? && attrs['last_name'].blank? }
+  # accepts_nested_attributes_for :parent_guardian2, :reject_if => proc { |attrs| attrs['first_name'].blank? && attrs['last_name'].blank? }
   
   attr_accessor :waiver
   

@@ -7,8 +7,7 @@ module Layers
     validates :waiver, :acceptance => true, :on => :update
 
     validates_with Validations::Player, :attributes => :player
-    validates_with Validations::Person, :attributes => :parent_guardian1
-    validates_with Validations::Person, :attributes => :parent_guardian2
+    validates_with Validations::RegistrationPerson, :attributes => :registrations_people
     
   end
 end

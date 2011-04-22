@@ -1,6 +1,10 @@
 Cmg::Application.routes.draw do
   
-  # resources :samples
+  get "sessions/new"
+
+  get "sessions/create"
+
+  get "sessions/destroy"
 
   match 'clubs' => 'registrations#index', :as => :clubs, :via => :get
   match 'clubs/:club_id' => 'registrations#show', :as => :club, :via => :get
@@ -13,7 +17,13 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id/delete_reg' => 'registrations#delete_reg', :as => :delete_reg, :via => :get
   match 'clubs/:club_id/mail_list' => 'registrations#mail_list', :as => :mail_list, :via => :get
   
-  # namespace :clubs, :controller => :registrations do
+  namespace :admin do
+    resources :users
+    resources :registrations
+    resources :seasons
+    resources :divisions
+    resources :teams
+  end
   #   match 'new' => :new, :as => :registration
   #   match 'create' => :create, :as => :registration_create
   #   match 'success' => :success, :as => :registration_success

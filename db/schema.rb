@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110609221228) do
+ActiveRecord::Schema.define(:version => 20110331034747) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -178,16 +178,16 @@ ActiveRecord::Schema.define(:version => 20110609221228) do
   end
 
   create_table "seasons", :force => true do |t|
-    t.integer   "club_id"
-    t.string    "name",            :null => false
-    t.boolean   "default"
-    t.date      "start_season_on"
-    t.date      "end_season_on"
-    t.date      "start_reg_on"
-    t.date      "end_reg_on"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.text      "description"
+    t.integer  "club_id"
+    t.string   "name",            :null => false
+    t.boolean  "default"
+    t.date     "start_season_on"
+    t.date     "end_season_on"
+    t.date     "start_reg_on"
+    t.date     "end_reg_on"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "description"
   end
 
   create_table "sessions", :force => true do |t|
