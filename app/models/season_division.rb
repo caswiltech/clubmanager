@@ -9,6 +9,6 @@ class SeasonDivision < ActiveRecord::Base
     where("season_divisions.season_id = ? AND divisions.maximum_age >= ? AND divisions.minimum_age <= ?", season.id, player_age, player_age)
   }
   
-  scope :publicly_visible, where(:hidden => false)
+  # scope :publicly_visible, where(:hidden => false)
 
 end
