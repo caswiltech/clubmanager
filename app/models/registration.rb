@@ -5,6 +5,10 @@ class Registration < ActiveRecord::Base
   belongs_to :division
   belongs_to :team
   has_many :registrations_people
+  belongs_to :parent_guardian1
+  belongs_to :parent_guardian2
+  accepts_nested_attributes_for :parent_guardian1
+  accepts_nested_attributes_for :parent_guardian2
 
   accepts_nested_attributes_for :registrations_people
   accepts_nested_attributes_for :player
@@ -13,6 +17,6 @@ class Registration < ActiveRecord::Base
   attr_accessor :waiver
   
   validates :waiver, :acceptance => {:message => "This waiver must be accepted in order to finalize the registration"}, :on => :update
-  validates :promotion_source, :presence => {:message => "Please select an option as your input on how you came to know about our program is vital to our continued promotional efforts"}, :on => :update
+  validates :promotion_source, :presence => {:message => "Please select an option as your input on how you came to know about our program is vital to our future promotional efforts"}, :on => :update
   
 end
