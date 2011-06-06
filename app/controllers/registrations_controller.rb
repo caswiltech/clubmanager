@@ -92,6 +92,11 @@ class RegistrationsController < ApplicationController
     
     redirect_to regreport_url(@club.subdomain)
   end
+  
+  def regreport_csv
+    @registrations = @club.registrations.order("id asc")
+    render_csv("#{@club.subdomain}-regreport-#{Time.now.strftime("%Y%m%d")}")
+  end
 
   private
 

@@ -9,7 +9,9 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id/payment' => 'registrations#payment', :as => :registration_payment, :via => :get
   match 'clubs/:club_id/finalize' => 'registrations#finalize', :as => :registration_finalize, :via => :put
   match 'clubs/:club_id/regreport' => 'registrations#regreport', :as => :regreport, :via => :get
+  match 'clubs/:club_id/regreport_csv' => 'registrations#regreport_csv', :as => :regreport_csv, :via => :get
   match 'clubs/:club_id/delete_reg' => 'registrations#delete_reg', :as => :delete_reg, :via => :get
+  
   # namespace :clubs, :controller => :registrations do
   #   match 'new' => :new, :as => :registration
   #   match 'create' => :create, :as => :registration_create

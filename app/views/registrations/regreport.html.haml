@@ -1,5 +1,7 @@
 %h1 #{@club.short_name} Registrations
 
+= link_to("CSV File", regreport_csv_path(@club.subdomain))
+
 %table
   %tr
     %th Name
