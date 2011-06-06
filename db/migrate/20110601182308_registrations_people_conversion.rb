@@ -13,8 +13,8 @@ class RegistrationsPeopleConversion < ActiveRecord::Migration
       end
     end
     
-    # remove_column :registrations, :parent_guardian1
-    #     remove_column :registrations, :parent_guardian2
+    remove_column :registrations, :parent_guardian1
+    remove_column :registrations, :parent_guardian2
   end
 
   def self.down

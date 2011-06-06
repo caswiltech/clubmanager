@@ -20,4 +20,8 @@ class Registration < ActiveRecord::Base
   validates :waiver, :acceptance => {:message => "This waiver must be accepted in order to finalize the registration"}, :on => :update
   validates :promotion_source, :presence => {:message => "Please select an option as your input on how you came to know about our program is vital to our future promotional efforts"}, :on => :update
   
+  def registration_questions=
+    RegistrationQuestion.questions_for_registration(self)
+  end
+  
 end
