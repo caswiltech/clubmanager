@@ -1,6 +1,6 @@
 Cmg::Application.routes.draw do
   
-  resources :samples
+  # resources :samples
 
   match 'clubs' => 'registrations#index', :as => :clubs, :via => :get
   match 'clubs/:club_id' => 'registrations#show', :as => :club, :via => :get
@@ -8,7 +8,8 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id' => 'registrations#create', :as => :registration_create, :via => :post
   match 'clubs/:club_id/payment' => 'registrations#payment', :as => :registration_payment, :via => :get
   match 'clubs/:club_id/finalize' => 'registrations#finalize', :as => :registration_finalize, :via => :put
-  match 'clubs/:club_id/regreport' => 'registrations#regreport', :via => :get
+  match 'clubs/:club_id/regreport' => 'registrations#regreport', :as => :regreport, :via => :get
+  match 'clubs/:club_id/delete_reg' => 'registrations#delete_reg', :as => :delete_reg, :via => :get
   # namespace :clubs, :controller => :registrations do
   #   match 'new' => :new, :as => :registration
   #   match 'create' => :create, :as => :registration_create

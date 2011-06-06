@@ -12,6 +12,7 @@
     %th City
     %th Phone
     %th Email
+    %th Actions
   - divisions = Array.new(@club.divisions.count,0)
   - @registrations.each do |r|
     - divisions[r.division.id.to_i - 1] = divisions[r.division.id.to_i - 1] + 1
@@ -26,6 +27,7 @@
       %td= r.player.person.city
       %td= r.player.person.phone
       %td= (r.parent_guardian1.nil? ? "" : r.parent_guardian1.email)
+      %td= link_to("Delete", delete_reg_path(@club.subdomain, :reg => r.id), :confirm => "Are you sure you want to permanently delete this registration? (ID: #{r.id}, Name: #{r.player.person.first_name} #{r.player.person.last_name})")
       
 %hr
 - total = 0

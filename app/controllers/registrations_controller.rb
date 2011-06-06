@@ -18,7 +18,7 @@ class RegistrationsController < ApplicationController
       @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults)
       @registration.parent_guardian2 = Person.new(@person_defaults)
     else
-      redirect_to club_path(@club.subdomain)
+      redirect_to club_url(@club.subdomain)
     end
   end
 
@@ -54,7 +54,7 @@ class RegistrationsController < ApplicationController
     reg_params = params[:registration]
     comments = reg_params[:comments]
     reg_params.delete(:comments) if comments.blank?  
-    @registration = Registration.find_by_id(reg_params[:id])
+    @registration = @club.registrations.find_by_id(reg_params[:id])
     @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
     if @registration.update_attributes(reg_params)
       begin
@@ -71,6 +71,26 @@ class RegistrationsController < ApplicationController
   
   def regreport
     @registrations = @club.registrations.order("id desc")
+  end
+  
+  def delete_reg
+    reg_id = params[:reg]
+
+    Rails::logger.info "\n\n#{'x'*50}\n\n"
+    Rails::logger.info "\n\nrequest to delete registration #{reg_id} received!\n\n"
+  
+    reg = @club.registrations.find(reg_id)
+
+    Rails::logger.info "\n\nregistration #{reg.id} found, so let's destroy it and all associated person records.\n\n"
+
+    reg.parent_guardian1.destroy unless reg.parent_guardian1.nil?
+    reg.parent_guardian2.destroy unless reg.parent_guardian2.nil?
+    #reg.registration_people.destroy_all
+    reg.player.person.destroy
+    reg.player.destroy
+    reg.destroy
+    
+    redirect_to regreport_url(@club.subdomain)
   end
 
   private
