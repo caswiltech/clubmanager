@@ -94,7 +94,7 @@ class RegistrationsController < ApplicationController
   end
   
   def regreport_csv
-    @registrations = @club.registrations.order("id asc")
+    @csv_registrations = @club.registrations.order("id asc")
     render_csv("#{@club.subdomain}-regreport-#{Time.now.strftime("%Y%m%d")}")
   end
 

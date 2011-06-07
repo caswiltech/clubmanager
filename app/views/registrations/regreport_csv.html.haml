@@ -1,6 +1,6 @@
 = "Reg.ID,Season,Division,Reg.Date,CareCard,Gender,Birthdate,Player.FirstName,Player.LastName,Player.Address,Player.City,Player.PostalCode,Player.Phone,Player.PhoneType,Player.AltPhone,Player.AltPhoneType,Player.Email,Player.EmailType,Player.AltEmail,Player.AltEmailType,PG1.FirstName,PG1.LastName,PG1.Address,PG1.City,PG1.PostalCode,PG1.Phone,PG1.PhoneType,PG1.AltPhone,PG1.AltPhoneType,PG1.Email,PG1.EmailType,PG1.AltEmail,PG1.AltEmailType,PG2.FirstName,PG2.LastName,PG2.Address,PG2.City,PG2.PostalCode,PG2.Phone,PG2.PhoneType,PG2.AltPhone,PG2.AltPhoneType,PG2.Email,PG2.EmailType,PG2.AltEmail,PG2.AltEmailType,School,Experience,PromotionSource,PaymentMethod,Comments"
 - contents = FasterCSV.generate do |csv|
-  - @registrations.each do |r|
+  - @csv_registrations.each do |r|
     - row = [ r.id, r.season.name, r.division.name, r.created_at.strftime("%Y-%m-%d"), r.player.carecard, r.player.gender, r.player.birthdate.strftime("%Y-%m-%d") ]
     - unless r.player.person.nil?
       - row.concat [ r.player.person.first_name, r.player.person.last_name, r.player.person.street1, r.player.person.city, r.player.person.postal_code, r.player.person.phone, r.player.person.phone_type, r.player.person.alt_phone, r.player.person.alt_phone_type, r.player.person.email, r.player.person.email_type, r.player.person.alt_email, r.player.person.alt_email_type ]
