@@ -14,7 +14,7 @@
       - row.concat [ r.parent_guardian2.first_name, r.parent_guardian2.last_name, r.parent_guardian2.street1, r.parent_guardian2.city, r.parent_guardian2.postal_code, r.parent_guardian2.phone, r.parent_guardian2.phone_type, r.parent_guardian2.alt_phone, r.parent_guardian2.alt_phone_type, r.parent_guardian2.email, r.parent_guardian2.email_type, r.parent_guardian2.alt_email, r.parent_guardian2.alt_email_type ]
     - else
       - row.concat [" "," "," "," "," "," "," "," "," "," "," "," "," "]
-    - row.concat [ r.player_school, r.player_previous_sports_experience, r.promotion_source, r.payment_method, r.comments ]
+    - row.concat %w{r.player_school r.player_previous_sports_experience r.promotion_source r.payment_method r.comments}
     - csv << row
 = contents
 
