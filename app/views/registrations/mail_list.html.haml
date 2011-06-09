@@ -1,3 +1,5 @@
+%h1= "#{@registrations.first.division.name} Mailing List Addresses"
+
 - @registrations.each do |r|
   - unless r.parent_guardian1.nil?
     - unless r.parent_guardian1.email.blank?
