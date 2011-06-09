@@ -1,6 +1,6 @@
 %h1 #{@club.short_name} Registrations
 
-= link_to("CSV File", regreport_csv_path(@club.subdomain))
+%p= link_to("CSV File", regreport_csv_path(@club.subdomain))
 
 %table
   %tr
@@ -38,6 +38,7 @@
   = d.name
   = ":"
   = divisions[i]
+  = link_to(" Mailing List Addresses", mail_list_path(@club.subdomain, :division => d.id))
   %br/
   - total += divisions[i]
 Total: 

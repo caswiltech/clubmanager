@@ -97,6 +97,10 @@ class RegistrationsController < ApplicationController
     @csv_registrations = @club.registrations.order("id asc")
     render_csv("#{@club.subdomain}-regreport-#{Time.now.strftime("%Y%m%d")}")
   end
+  
+  def mail_list
+    @registrations = @club.registrations.where("division_id = ?", params[:division].to_i)
+  end
 
   private
 
