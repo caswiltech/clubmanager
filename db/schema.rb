@@ -10,37 +10,37 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110123062235) do
+ActiveRecord::Schema.define(:version => 20110609221228) do
 
   create_table "club_logos", :force => true do |t|
-    t.integer  "club_id"
-    t.string   "name"
-    t.integer  "logotype",          :default => 0
-    t.boolean  "show_inline",       :default => true
-    t.string   "logo_file_name"
-    t.string   "logo_content_type"
-    t.integer  "logo_file_size"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "club_id"
+    t.string    "name"
+    t.integer   "logotype",          :default => 0
+    t.boolean   "show_inline",       :default => true
+    t.string    "logo_file_name"
+    t.string    "logo_content_type"
+    t.integer   "logo_file_size"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "clubs", :force => true do |t|
-    t.string   "long_name",                     :null => false
-    t.string   "short_name",                    :null => false
-    t.string   "subdomain",                     :null => false
-    t.string   "contact_email",                 :null => false
-    t.string   "reg_notify_email",              :null => false
-    t.string   "street1"
-    t.string   "street2"
-    t.string   "city"
-    t.string   "province",         :limit => 3
-    t.string   "country"
-    t.string   "postal_code"
-    t.string   "phone"
-    t.string   "homepage_url"
-    t.boolean  "deleted"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "long_name",                     :null => false
+    t.string    "short_name",                    :null => false
+    t.string    "subdomain",                     :null => false
+    t.string    "contact_email",                 :null => false
+    t.string    "reg_notify_email",              :null => false
+    t.string    "street1"
+    t.string    "street2"
+    t.string    "city"
+    t.string    "province",         :limit => 3
+    t.string    "country"
+    t.string    "postal_code"
+    t.string    "phone"
+    t.string    "homepage_url"
+    t.boolean   "deleted"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "clubs_users", :id => false, :force => true do |t|
@@ -52,47 +52,47 @@ ActiveRecord::Schema.define(:version => 20110123062235) do
   add_index "clubs_users", ["user_id"], :name => "index_clubs_users_on_user_id", :unique => true
 
   create_table "divisions", :force => true do |t|
-    t.integer  "club_id"
-    t.string   "name",        :null => false
-    t.text     "description"
-    t.integer  "minimum_age", :null => false
-    t.integer  "maximum_age", :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "club_id"
+    t.string    "name",        :null => false
+    t.text      "description"
+    t.integer   "minimum_age", :null => false
+    t.integer   "maximum_age", :null => false
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "payment_packages", :force => true do |t|
-    t.integer  "club_id"
-    t.integer  "season_division_id"
-    t.string   "name",                                                               :null => false
-    t.text     "description"
-    t.decimal  "amount",             :precision => 8, :scale => 2, :default => 0.0
-    t.boolean  "default",                                          :default => true
-    t.boolean  "deleted"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "club_id"
+    t.integer   "season_division_id"
+    t.string    "name",                                 :null => false
+    t.text      "description"
+    t.decimal   "amount",             :default => 0.0
+    t.boolean   "default",            :default => true
+    t.boolean   "deleted"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "people", :force => true do |t|
-    t.integer  "club_id"
-    t.string   "first_name",                  :null => false
-    t.string   "last_name",                   :null => false
-    t.string   "street1"
-    t.string   "street2"
-    t.string   "city"
-    t.string   "province",       :limit => 3
-    t.string   "country"
-    t.string   "postal_code"
-    t.string   "phone"
-    t.string   "phone_type"
-    t.string   "alt_phone"
-    t.string   "alt_phone_type"
-    t.string   "email"
-    t.string   "email_type"
-    t.string   "alt_email"
-    t.string   "alt_email_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "club_id"
+    t.string    "first_name",                  :null => false
+    t.string    "last_name",                   :null => false
+    t.string    "street1"
+    t.string    "street2"
+    t.string    "city"
+    t.string    "province",       :limit => 3
+    t.string    "country"
+    t.string    "postal_code"
+    t.string    "phone"
+    t.string    "phone_type"
+    t.string    "alt_phone"
+    t.string    "alt_phone_type"
+    t.string    "email"
+    t.string    "email_type"
+    t.string    "alt_email"
+    t.string    "alt_email_type"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "person_roles", :force => true do |t|
@@ -102,14 +102,14 @@ ActiveRecord::Schema.define(:version => 20110123062235) do
   end
 
   create_table "players", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "legal_first_name"
-    t.string   "legal_last_name"
-    t.string   "carecard"
-    t.date     "birthdate",        :null => false
-    t.string   "gender"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "person_id"
+    t.string    "legal_first_name"
+    t.string    "legal_last_name"
+    t.string    "carecard"
+    t.date      "birthdate",        :null => false
+    t.string    "gender"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "registration_datums", :force => true do |t|
@@ -146,22 +146,22 @@ ActiveRecord::Schema.define(:version => 20110123062235) do
   end
 
   create_table "registrations", :force => true do |t|
-    t.integer  "club_id"
-    t.integer  "season_id"
-    t.integer  "division_id"
-    t.integer  "team_id"
-    t.integer  "player_id"
-    t.integer  "parent_guardian1_id"
-    t.integer  "parent_guardian2_id"
-    t.string   "player_school"
-    t.text     "player_previous_sports_experience"
-    t.string   "payment_method"
-    t.string   "promotion_source"
-    t.text     "comments"
-    t.boolean  "medical_form_received"
-    t.boolean  "deleted"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "club_id"
+    t.integer   "season_id"
+    t.integer   "division_id"
+    t.integer   "team_id"
+    t.integer   "player_id"
+    t.integer   "parent_guardian1_id"
+    t.integer   "parent_guardian2_id"
+    t.string    "player_school"
+    t.text      "player_previous_sports_experience"
+    t.string    "payment_method"
+    t.string    "promotion_source"
+    t.text      "comments"
+    t.boolean   "medical_form_received"
+    t.boolean   "deleted"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "registrations_people", :force => true do |t|
@@ -178,56 +178,57 @@ ActiveRecord::Schema.define(:version => 20110123062235) do
   end
 
   create_table "seasons", :force => true do |t|
-    t.integer  "club_id"
-    t.string   "name",            :null => false
-    t.boolean  "default"
-    t.date     "start_season_on"
-    t.date     "end_season_on"
-    t.date     "start_reg_on"
-    t.date     "end_reg_on"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "club_id"
+    t.string    "name",            :null => false
+    t.boolean   "default"
+    t.date      "start_season_on"
+    t.date      "end_season_on"
+    t.date      "start_reg_on"
+    t.date      "end_reg_on"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.text      "description"
   end
 
   create_table "sessions", :force => true do |t|
-    t.string   "session_id", :null => false
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "session_id", :null => false
+    t.text      "data"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "teams", :force => true do |t|
-    t.integer  "club_id"
-    t.integer  "season_division_id"
-    t.string   "name"
-    t.text     "description"
-    t.boolean  "deleted"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "club_id"
+    t.integer   "season_division_id"
+    t.string    "name"
+    t.text      "description"
+    t.boolean   "deleted"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "user_roles", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "role"
-    t.integer  "adminable_id"
-    t.string   "adminable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "user_id"
+    t.string    "role"
+    t.integer   "adminable_id"
+    t.string    "adminable_type"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "users", :force => true do |t|
-    t.string   "first_name",         :null => false
-    t.string   "last_name",          :null => false
-    t.string   "email"
-    t.string   "description"
-    t.string   "username",           :null => false
-    t.string   "encrypted_password"
-    t.string   "salt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "first_name",         :null => false
+    t.string    "last_name",          :null => false
+    t.string    "email"
+    t.string    "description"
+    t.string    "username",           :null => false
+    t.string    "encrypted_password"
+    t.string    "salt"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
 end

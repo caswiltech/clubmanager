@@ -6,7 +6,19 @@ class Person < ActiveRecord::Base
   
   # validates :first_name, :last_name, :presence => true
   
+  before_create :cleanup_names
   before_save :cleanup_fields
+
+  def cleanup_names
+    self.first_name = self.first_name.split('-').map{|x| x.split.map{|x| x.titleize.gsub(/ /,'').split('\'').map{|x| x.titleize.gsub(/ /,'')}.join('\'')}.join(' ')}.join('-') unless self.first_name.blank?
+    self.last_name = self.last_name.split('-').map{|x| x.split.map{|x| x.titleize.gsub(/ /,'').split('\'').map{|x| x.titleize.gsub(/ /,'')}.join('\'')}.join(' ')}.join('-') unless self.last_name.blank?
+    self.street1 = self.street1.split('-').map{|x| x.split.map{|x| x.titleize.gsub(/ /,'').split('\'').map{|x| x.titleize.gsub(/ /,'')}.join('\'')}.join(' ')}.join('-') unless self.street1.blank?
+    self.postal_code = self.postal_code.upcase.gsub(/ /,'') unless self.postal_code.blank?
+    self.phone = self.phone.gsub(/\D+/,'').gsub(/([0-9]{0,3})([0-9]{3})([0-9]{4})$/,"\\1#{'-'}\\2#{'-'}\\3") unless self.phone.blank?
+    self.alt_phone = self.alt_phone.gsub(/\D+/,'').gsub(/([0-9]{0,3})([0-9]{3})([0-9]{4})$/,"\\1#{'-'}\\2#{'-'}\\3") unless self.alt_phone.blank?
+    self.email = self.email.downcase unless self.email.blank?
+    self.alt_email = self.alt_email.downcase unless self.alt_email.blank?
+  end
   
   def cleanup_fields
     if self.street2.blank?
