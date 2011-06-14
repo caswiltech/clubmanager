@@ -23,3 +23,4 @@ class RegistrationsPeopleConversion < ActiveRecord::Migration
     RegistrationsPerson.destroy_all
   end
 end
+
