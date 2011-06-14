@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110601182308) do
+ActiveRecord::Schema.define(:version => 20110609221228) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -146,22 +146,22 @@ ActiveRecord::Schema.define(:version => 20110601182308) do
   end
 
   create_table "registrations", :force => true do |t|
-    t.integer   "club_id"
-    t.integer   "season_id"
-    t.integer   "division_id"
-    t.integer   "team_id"
-    t.integer   "player_id"
-    t.integer   "parent_guardian1_id"
-    t.integer   "parent_guardian2_id"
-    t.string    "player_school"
-    t.text      "player_previous_sports_experience"
-    t.string    "payment_method"
-    t.string    "promotion_source"
-    t.text      "comments"
-    t.boolean   "medical_form_received"
-    t.boolean   "deleted"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
+    t.integer  "club_id"
+    t.integer  "season_id"
+    t.integer  "division_id"
+    t.integer  "team_id"
+    t.integer  "player_id"
+    t.integer  "parent_guardian1_id"
+    t.integer  "parent_guardian2_id"
+    t.string   "player_school"
+    t.text     "player_previous_sports_experience"
+    t.string   "payment_method"
+    t.string   "promotion_source"
+    t.text     "comments"
+    t.boolean  "medical_form_received"
+    t.boolean  "deleted"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "registrations_people", :force => true do |t|
@@ -178,16 +178,16 @@ ActiveRecord::Schema.define(:version => 20110601182308) do
   end
 
   create_table "seasons", :force => true do |t|
-    t.integer  "club_id"
-    t.string   "name",            :null => false
-    t.boolean  "default"
-    t.date     "start_season_on"
-    t.date     "end_season_on"
-    t.date     "start_reg_on"
-    t.date     "end_reg_on"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "description"
+    t.integer   "club_id"
+    t.string    "name",            :null => false
+    t.boolean   "default"
+    t.date      "start_season_on"
+    t.date      "end_season_on"
+    t.date      "start_reg_on"
+    t.date      "end_reg_on"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.text      "description"
   end
 
   create_table "sessions", :force => true do |t|
