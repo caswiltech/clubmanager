@@ -3,5 +3,5 @@ class RegistrationsPerson < ActiveRecord::Base
   belongs_to :registration
   belongs_to :person
   
-  accepts_nested_attributes_for :person
+  accepts_nested_attributes_for :person#, :reject_if => proc { |attrs| attrs['first_name'].blank? && attrs['last_name'].blank? }
 end
