@@ -15,8 +15,9 @@ class RegistrationsController < ApplicationController
     season_id = params[:season]
     season = season_id.to_i.is_a?(Numeric) ? (@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil? ? nil : Season.find_by_id(@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)) : nil
     if season.present?
-      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Cheque', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :registrations_people_attributes => [{:person_attributes => @person_defaults, :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true},{:person_attributes => @person_defaults, :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false}]
-      )
+      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Cheque', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults})
+      @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true)
+      @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)
     else
       redirect_to club_url(@club.subdomain)
     end
@@ -60,7 +61,7 @@ class RegistrationsController < ApplicationController
         else
           @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
           @registration.payment_method = "Credit Card" 
-          @registration_questions = @registration.registration_questions
+          @registration_question_responses = @registration.registration_questions
           render :action => :step2
         end
       end
@@ -92,13 +93,7 @@ class RegistrationsController < ApplicationController
   
   def delete_reg
     reg_id = params[:reg]
-
-    Rails::logger.info "\n\n#{'x'*50}\n\n"
-    Rails::logger.info "\n\nrequest to delete registration #{reg_id} received!\n\n"
-  
     reg = @club.registrations.find(reg_id)
-
-    Rails::logger.info "\n\nregistration #{reg.id} found, so let's destroy it and all associated person records.\n\n"
 
     reg.parent_guardian1.destroy unless reg.parent_guardian1.nil?
     reg.parent_guardian2.destroy unless reg.parent_guardian2.nil?
@@ -129,7 +124,7 @@ class RegistrationsController < ApplicationController
   def form_vars
     @cities = ["Anmore","Burnaby","Coquitlam","Delta","Langley","Maple Ridge","New Westminster","North Vancouver","Pitt Meadows","Port Coquitlam","Port Moody","Richmond","Surrey","Vancouver","West Vancouver","White Rock","Other"]
     @provinces = %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
-    @person_defaults = {:city => "New Westminster", :province => "BC", :country => "Canada"}
+    @person_defaults = {:city => @club.city, :province => @club.province, :country => @club.country}
     @player_person_defaults = @person_defaults.merge({:phone_type => "Home"})
   
     @schools = ["Connaught Heights Elementary", "F.W. Howay Elementary", "Glenbrook Middle School", "Herbert Spencer Elementary", "Hume Park Elementary", "John Robson Elementary", "Lord Kelvin Elementary", "Lord Tweedsmuir Elementary", "Queen Elizabeth Elementary", "Queensborough Middle School", "Richard McBride Elementary", "New Westminster Secondary", "Community Education", "Home Learners Program", "Other - Preschool", "Other - Private", "Other - Public"]

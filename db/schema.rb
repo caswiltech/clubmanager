@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110614211741) do
+ActiveRecord::Schema.define(:version => 20110621005501) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(:version => 20110614211741) do
     t.integer "registration_question_id"
     t.string  "response_value"
     t.boolean "adminonly"
+    t.boolean "default",                  :default => false
   end
 
   create_table "registration_question_responses", :force => true do |t|

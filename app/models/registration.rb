@@ -11,7 +11,7 @@ class Registration < ActiveRecord::Base
   accepts_nested_attributes_for :parent_guardian1
   accepts_nested_attributes_for :parent_guardian2
 
-  accepts_nested_attributes_for :registrations_people
+  accepts_nested_attributes_for :registrations_people, :allow_destroy => true#, :reject_if => proc { |attrs| attrs['person']['first_name'].blank? && attrs['person']['last_name'].blank? }
   accepts_nested_attributes_for :player
   # accepts_nested_attributes_for :parent_guardian2, :reject_if => proc { |attrs| attrs['first_name'].blank? && attrs['last_name'].blank? }
   
