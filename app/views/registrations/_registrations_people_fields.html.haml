@@ -1,0 +1,22 @@
+= reg.semantic_fields_for :registrations_people do |rp|
+  = rp.inputs "#{rp.object.primary? ? 'Primary' : 'Secondary'} #{rp.object.person_role.role_name} Information" do
+    %hr
+    -#= remove_child_link("Remove", rp) unless (rp.object.person_role.role_abbreviation == 'PG' && rp.object.primary?)
+    = rp.input :person_role_id, :as => :hidden
+    = rp.input :primary, :as => :hidden
+    = rp.semantic_fields_for :person do |person|
+      = person.input :first_name, :label => "First Name", :required => true
+      = person.input :last_name, :label => "Last Name", :required => true
+      = person.input :street1, :label => "Address"
+      = person.input :city, :as => :select, :include_blank => false, :collection => @cities
+      = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
+      = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }
+      = person.input :postal_code, :label => "Postal Code"
+      = person.input :phone, :as => :phone
+      = person.input :phone_type, :as => :select, :collection => @phone_types, :include_blank => false, :label => "Phone Type"
+      = person.input :alt_phone, :as => :phone, :label => "Alternate Phone"
+      = person.input :alt_phone_type, :as => :select, :collection => @phone_types, :include_blank => false, :label => "Alternate Phone Type"
+      = person.input :email, :as => :email
+      = person.input :email_type, :as => :select, :collection => @email_types, :include_blank => false, :label => "Email Type"
+      = person.input :alt_email, :as => :email, :label => "Alternate Email"
+      = person.input :alt_email_type, :as => :select, :collection => @email_types, :include_blank => false, :label => "Alternate Email Type"
