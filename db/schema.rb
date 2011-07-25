@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110621005501) do
+ActiveRecord::Schema.define(:version => 20110724051505) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -120,15 +120,13 @@ ActiveRecord::Schema.define(:version => 20110621005501) do
   end
 
   create_table "registration_question_response_options", :force => true do |t|
-    t.integer "club_id"
     t.integer "registration_question_id"
     t.string  "response_value"
-    t.boolean "adminonly"
-    t.boolean "default",                  :default => false
+    t.boolean "defaultresponse",          :default => false
+    t.boolean "adminonly",                :default => false
   end
 
   create_table "registration_question_responses", :force => true do |t|
-    t.integer "club_id"
     t.integer "registration_id"
     t.integer "registration_question_id"
     t.integer "registration_question_response_option_id"
@@ -143,7 +141,9 @@ ActiveRecord::Schema.define(:version => 20110621005501) do
     t.string  "page_label"
     t.string  "report_label"
     t.string  "questiontext"
-    t.integer "editable_by",  :default => 0
+    t.integer "editable_by",       :default => 0
+    t.boolean "response_optional", :default => false
+    t.boolean "player_field",      :default => false
   end
 
   create_table "registrations", :force => true do |t|
@@ -154,12 +154,6 @@ ActiveRecord::Schema.define(:version => 20110621005501) do
     t.integer  "player_id"
     t.integer  "parent_guardian1_id"
     t.integer  "parent_guardian2_id"
-    t.string   "player_school"
-    t.text     "player_previous_sports_experience"
-    t.string   "payment_method"
-    t.string   "promotion_source"
-    t.text     "comments"
-    t.boolean  "medical_form_received"
     t.boolean  "deleted"
     t.datetime "created_at"
     t.datetime "updated_at"

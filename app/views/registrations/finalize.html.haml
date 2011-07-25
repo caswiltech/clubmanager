@@ -2,10 +2,10 @@
 %p Thanks for registering #{@registration.player.person.first_name} to participate in our #{@registration.division.name} division. Please carefully read and follow the directions below on completing the registration process:
 
 
-- if @registration.payment_method == "Financial Assistance"
+- if @payment_method == "Financial Assistance"
   %p
     We will be in contact with you shortly to start the process of arranging for financial assistance to help cover the cost of this registration.
-- elsif @registration.payment_method == "Credit Card"
+- elsif @payment_method == "Credit Card"
   - paypal_button_id = ""
   - case @registration.season.name
   - when "2011 Spring Flag"

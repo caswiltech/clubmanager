@@ -1,7 +1,8 @@
 %h1 #{@club.short_name} Registration for #{@registration.season.name} 
 = semantic_form_for @registration, :url => registration_create_path(@club.subdomain) do |reg|
   %hr
-  = reg.inputs "Player Information" do
+  -#= reg.inputs "Player Information" do
+  = reg.inputs "Information" do
     %hr
     = reg.semantic_fields_for :player do |player|
       = player.semantic_fields_for :person do |person|
@@ -17,13 +18,26 @@
       = player.input :carecard, :label => "CareCard #", :required => true
       = player.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(20).year, :end_year => Date.today.years_ago(5).year, :required => true
       = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }, :required => true
-    = reg.input :player_school, :label => "School",:collection => @schools, :include_blank => false
-    = reg.input :player_previous_sports_experience, :as => :text, :label => "Other Sports Experience", :input_html => {:rows => 6, :cols => 50}
-    = reg.input :season_id, :as => :hidden#, :input_html => {:value => @registration.season_id}
-    = reg.input :payment_method, :as => :hidden
+    = reg.semantic_fields_for :registration_question_responses do |rqr|
+      - next if !rqr.object.registration_question.player_field
+      = rqr.input :registration_question_id, :as => :hidden, :input_html => {:value => rqr.object.registration_question.id}
+      - if rqr.object.registration_question.questiontype == "text"
+        = rqr.input :textresponse, :as => :string, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
+      - elsif rqr.object.registration_question.questiontype == "textarea"
+        = rqr.input :textresponse, :as => :text, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
+      - else
+        = rqr.input :registration_question_response_option, :as => :select, :include_blank => rqr.object.registration_question.response_optional, :collection => question_response_options(rqr.object.registration_question, @registration), :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
+    = reg.input :season_id, :as => :hidden
   %hr
-  = reg.semantic_fields_for :registrations_people do |rp|
-    = render 'registrations_people_fields', :rp => rp
+  - if @registration.registrations_people.empty?
+    - @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true)
+    = render :partial => 'registrations_people_fields', :locals => {:reg => reg}
+  - else
+    = render :partial => 'registrations_people_fields', :locals => {:reg => reg}#, :object => @registration.registrations_people
   %hr
   = reg.buttons do
     = reg.commit_button :label => "Proceed to Step 2"
+  -#= new_child_fields_template(:registrations_people) do
+    -#= render 'registrations_people_fields', :object => @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false), :locals => {:reg => reg}
+
+-#= yield :registrations_people_fields_template

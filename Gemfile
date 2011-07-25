@@ -9,6 +9,7 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'fastercsv', '1.5.3'
 gem 'formtastic', "1.2.1"
 gem 'haml', '>= 3.0.25'
+gem 'jquery-rails'
 gem 'mimetype-fu', :require => 'mimetype_fu'
 gem "paperclip", "~> 2.3.8"
 gem 'rake', ">= 0.8.7"
