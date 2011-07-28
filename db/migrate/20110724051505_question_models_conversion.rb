@@ -15,8 +15,16 @@ class QuestionModelsConversion < ActiveRecord::Migration
     end
     player_school_options = player_school.registration_question_response_options.to_ary
     
+    transfer = RegistrationQuestion.create(:club => club, :questiontype => "select", :page_label => "Was this player registered with another football club for this season or last year?", :report_label => "Transfer", :questiontext => "Players transferring from other clubs in our league need to have a release form from their previous club.", :editable_by => 0, :response_optional => false, :player_field => true)
+    transfer_default = RegistrationQuestionResponseOption.create(:registration_question => transfer, :response_value => "No", :defaultresponse => true, :adminonly => false)
+    RegistrationQuestionResponseOption.create(:registration_question => transfer, :response_value => "Yes", :defaultresponse => false, :adminonly => false)
+    
+    photo = RegistrationQuestion.create(:club => club, :questiontype => "select", :page_label => "I grant permission for photos of the person being registered to be published by the RCHFC:", :report_label => "Photos", :questiontext => nil, :editable_by => 0, :response_optional => false, :player_field => true)
+    photo_default = RegistrationQuestionResponseOption.create(:registration_question => photo, :response_value => "Yes", :defaultresponse => true, :adminonly => false)
+    RegistrationQuestionResponseOption.create(:registration_question => photo, :response_value => "No", :defaultresponse => false, :adminonly => false)
+    
     # registration.player_previous_sports_experience
-    player_previous_sports_experience = RegistrationQuestion.create(:club => club, :questiontype => "textarea", :page_label => "Other Sports Experience", :report_label => "Other Sports", :response_optional => true, :questiontext => nil, :editable_by => 0, :player_field => true)
+    player_previous_sports_experience = RegistrationQuestion.create(:club => club, :questiontype => "text", :page_label => "Other Sports Experience", :report_label => "Other Sports", :response_optional => true, :questiontext => nil, :editable_by => 0, :player_field => true)
     
     # registration.payment_method
     payment_method = RegistrationQuestion.create(:club => club, :questiontype => "select", :page_label => "The registration fee for [division] is [payment_amount_for_registration]. Please choose a payment option from the following:", :report_label => "Payment Method", :questiontext => nil, :editable_by => 0, :response_optional => false, :player_field => false)
@@ -33,13 +41,10 @@ class QuestionModelsConversion < ActiveRecord::Migration
       RegistrationQuestionResponseOption.create(:registration_question => promotion_source, :response_value => source, :defaultresponse => false, :adminonly => false)
     end
     promotion_source_options = promotion_source.registration_question_response_options.to_ary
-    
+
     # registration.comments
-    comments = RegistrationQuestion.create(:club => club, :questiontype => "textarea", :page_label => "Comments", :report_label => "Comments", :response_optional => true, :questiontext => nil, :editable_by => 0, :player_field => false)
+    comments = RegistrationQuestion.create(:club => club, :questiontype => "text", :page_label => "Comments", :report_label => "Comments", :response_optional => true, :questiontext => nil, :editable_by => 0, :player_field => false)
     
-    transfer = RegistrationQuestion.create(:club => club, :questiontype => "select", :page_label => "Was this player registered with another football club for this season or last year?", :report_label => "Transfer", :questiontext => "Players transferring from other clubs in our league need to have a release form from their previous club.", :editable_by => 0, :response_optional => false, :player_field => true)
-    transfer_default = RegistrationQuestionResponseOption.create(:registration_question => transfer, :response_value => "No", :defaultresponse => true, :adminonly => false)
-    RegistrationQuestionResponseOption.create(:registration_question => transfer, :response_value => "Yes", :defaultresponse => false, :adminonly => false)
 
 
     medical_form_received = RegistrationQuestion.create(:club => club, :questiontype => "select", :page_label => "Medical Form Received?", :report_label => "Med Form", :questiontext => nil, :editable_by => 1, :response_optional => false, :player_field => false)
@@ -65,6 +70,11 @@ class QuestionModelsConversion < ActiveRecord::Migration
     concussion = RegistrationQuestion.create(:club => club, :questiontype => "select", :page_label => "Concussion Form Received?", :report_label => "Conc Form", :questiontext => nil, :editable_by => 1, :response_optional => false, :player_field => false)
     concussion_default = RegistrationQuestionResponseOption.create(:registration_question => concussion, :response_value => "No", :defaultresponse => true, :adminonly => false)
     RegistrationQuestionResponseOption.create(:registration_question => concussion, :response_value => "Yes", :defaultresponse => false, :adminonly => true)
+    
+    game_jersey = RegistrationQuestion.create(:club => club, :questiontype => "string", :page_label => "Game Jersey", :report_label => "GJ\#", :response_optional => true, :questiontext => nil, :editable_by => 1, :player_field => false)
+    
+    alt_game_jersey = RegistrationQuestion.create(:club => club, :questiontype => "string", :page_label => "Alternate Jersey", :report_label => "Alt\#", :response_optional => true, :questiontext => nil, :editable_by => 1, :player_field => false)
+    
     
     Registration.all.each do |reg|
       if reg.promotion_source =~ /was a member/
@@ -92,8 +102,8 @@ class QuestionModelsConversion < ActiveRecord::Migration
       payment_method_option = payment_method_options.find{|s| s.response_value == reg.payment_method}
       payment_method_option_id = payment_method_option.present? ? payment_method_option.id : (payment_method.response_optional? ? nil : (payment_method_options.find{|s| s.defaultresponse} || payment_method_options.first).id)
       reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => payment_method, :registration_question_response_option_id => payment_method_option_id) unless payment_method_option_id.nil?
-    
       reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => transfer, :registration_question_response_option => transfer_default)
+      reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => photo, :registration_question_response_option => photo_default)
       reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => medical_form_received, :registration_question_response_option => med_default)
       reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => document, :registration_question_response_option => document_default)
       reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => equipment, :registration_question_response_option => equipment_default)

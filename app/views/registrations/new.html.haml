@@ -21,9 +21,9 @@
     = reg.semantic_fields_for :registration_question_responses do |rqr|
       - next if !rqr.object.registration_question.player_field
       = rqr.input :registration_question_id, :as => :hidden, :input_html => {:value => rqr.object.registration_question.id}
-      - if rqr.object.registration_question.questiontype == "text"
+      - if rqr.object.registration_question.questiontype == "string"
         = rqr.input :textresponse, :as => :string, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
-      - elsif rqr.object.registration_question.questiontype == "textarea"
+      - elsif rqr.object.registration_question.questiontype == "text"
         = rqr.input :textresponse, :as => :text, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
       - else
         = rqr.input :registration_question_response_option, :as => :select, :include_blank => rqr.object.registration_question.response_optional, :collection => question_response_options(rqr.object.registration_question, @registration), :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
