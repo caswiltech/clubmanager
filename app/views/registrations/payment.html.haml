@@ -1,9 +1,0 @@
-
-= semantic_form_for :credit_card do |credit_card|
-  = credit_card.inputs do
-    = credit_card.input :registration_id, :as => :hidden, :input_html => {:value => @registration.id}
-    = credit_card.input :number, :as => :string
-    = credit_card.input :expiry_month, :as => :select, :collection => ["01","02","03","04","05","06","07","08","09","10","11","12"]
-    = credit_card.input :expiry_year, :as => :select, :collection => @cc_years
-    = credit_card.input :name, :as => :string
-    = credit_card.input :cvv, :as => :string

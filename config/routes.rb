@@ -1,11 +1,16 @@
 Cmg::Application.routes.draw do
   
-  # resources :samples
+  get "sessions/new"
+
+  get "sessions/create"
+
+  get "sessions/destroy"
 
   match 'clubs' => 'registrations#index', :as => :clubs, :via => :get
   match 'clubs/:club_id' => 'registrations#show', :as => :club, :via => :get
   match 'clubs/:club_id/new' => 'registrations#new', :as => :registration, :via => :get
   match 'clubs/:club_id' => 'registrations#create', :as => :registration_create, :via => :post
+  match 'clubs/:club_id/show_reg_data' => 'registrations#show_reg_data', :as => :show_reg_data, :via => :get
   match 'clubs/:club_id/payment' => 'registrations#payment', :as => :registration_payment, :via => :get
   match 'clubs/:club_id/finalize' => 'registrations#finalize', :as => :registration_finalize, :via => :put
   match 'clubs/:club_id/regreport' => 'registrations#regreport', :as => :regreport, :via => :get
@@ -13,7 +18,13 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id/delete_reg' => 'registrations#delete_reg', :as => :delete_reg, :via => :get
   match 'clubs/:club_id/mail_list' => 'registrations#mail_list', :as => :mail_list, :via => :get
   
-  # namespace :clubs, :controller => :registrations do
+  namespace :admin do
+    resources :users
+    resources :registrations
+    resources :seasons
+    resources :divisions
+    resources :teams
+  end
   #   match 'new' => :new, :as => :registration
   #   match 'create' => :create, :as => :registration_create
   #   match 'success' => :success, :as => :registration_success

@@ -4,11 +4,17 @@
 = semantic_form_for @registration, :url => registration_finalize_path(@club.subdomain) do |reg|
   = reg.inputs do
     = reg.input :id, :as => :hidden
-    = reg.input :payment_method, :as => :radio, :collection => ["Cheque","Financial Assistance","Credit Card"], :label => "The registration fee for #{@registration.division.name} is #{number_to_currency(@pp.amount)}. Please choose a payment option from the following:"
-    = reg.input :promotion_source, :as => :select, :collection => ["#{@registration.player.person.first_name} was a member of the Hyacks Football Family last season","Active Living Guide Ad","Community Event","Newspaper Ad","Newspaper Article","Poster","Recommendation","School","Sign","Website","Word of mouth","Other"], :label => "How did you hear about Hyacks Football?", :include_blank => true
+    = reg.semantic_fields_for :registration_question_responses do |rqr|
+      - next if rqr.object.registration_question.editable_by > 0 || rqr.object.registration_question.player_field
+      = rqr.input :registration_question_id, :as => :hidden, :input_html => {:value => rqr.object.registration_question.id}
+      - if rqr.object.registration_question.questiontype == "string"
+        = rqr.input :textresponse, :as => :string, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
+      - elsif rqr.object.registration_question.questiontype == "text"
+        = rqr.input :textresponse, :as => :text, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
+      - else
+        = rqr.input :registration_question_response_option, :as => :select, :include_blank => rqr.object.registration_question.response_optional, :collection => question_response_options(rqr.object.registration_question, @registration), :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
     = reg.input :waiver, :as => :boolean, :label => "Please read the following waiver statement and indicate your acceptance of it by checking the box to the left:",:hint => "I/We hereby approve and consent to the person being registered to participate in this Royal City Hyacks Football Club program and absolve and release the Royal City Hyacks Football Club, the City of New Westminster, School District No. 40 (New Westminster), Football BC and any of their affiliate associations, members or volunteers from any and all liability arising from any act or omission on their part resulting in injury, fatality or illness occurring as a consequence of said participation. I/We agree to abide by the Policies, Procedures and By-Laws of the Royal City Hyacks Football Club."
     %br/
-    = reg.input :comments, :as => :text, :label => "Feel free to provide us with any comments that you have about the upcoming season."
   = reg.buttons do
     = reg.commit_button :label => "Create Registration"
   

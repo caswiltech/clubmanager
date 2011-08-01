@@ -18,6 +18,10 @@
   - divisions = Array.new(@club.divisions.count,0)
   - @registrations.each do |r|
     - divisions[r.division.id.to_i - 1] = divisions[r.division.id.to_i - 1] + 1
+    - emails = []
+    - r.registrations_people.each do |p|
+      - emails.push p.person.email unless p.person.email.nil?
+      - emails.push p.person.alt_email unless p.person.alt_email.nil?
     %tr
       %td= "#{r.player.person.first_name} #{r.player.person.last_name}"
       %td= r.division.name
@@ -28,7 +32,7 @@
       %td= r.player.person.street1
       %td= r.player.person.city
       %td= r.player.person.phone
-      %td= (r.parent_guardian1.nil? ? "" : r.parent_guardian1.email)
+      %td= emails.uniq.join(', ')
       %td= link_to("Delete", delete_reg_path(@club.subdomain, :reg => r.id), :confirm => "Are you sure you want to permanently delete this registration? (ID: #{r.id}, Name: #{r.player.person.first_name} #{r.player.person.last_name})")
       
 %hr

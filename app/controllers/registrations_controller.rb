@@ -15,8 +15,10 @@ class RegistrationsController < ApplicationController
     season_id = params[:season]
     season = season_id.to_i.is_a?(Numeric) ? (@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil? ? nil : Season.find_by_id(@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)) : nil
     if season.present?
-      @registration = Registration.new(:club => @club, :season => season, :payment_method => 'Credit Card', :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults}, :parent_guardian1_attributes => @person_defaults)
-      @registration.parent_guardian2 = Person.new(@person_defaults)
+      @registration = Registration.new(:club => @club, :season => season, :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults})
+      RegistrationQuestionResponse.populate_responses_for_registration(@registration, true)
+      @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true)
+      @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)
     else
       redirect_to club_url(@club.subdomain)
     end
@@ -25,43 +27,55 @@ class RegistrationsController < ApplicationController
   def create    
     reg_params = params[:registration]
     
+    # clean out parent/guardian 2 if they are empty
+    if reg_params[:registrations_people_attributes]["1"][:first_name].blank? && reg_params[:registrations_people_attributes]["1"][:last_name].blank?
+      reg_params[:registrations_people_attributes].delete("1")
+    end
+      
     @registration = @club.registrations.new(reg_params)
-    division = Division.for_season_and_birthdate(@registration.season, @registration.player.birthdate)
-    unless division.present?
-      @registration.parent_guardian2 = Person.new(reg_params[:parent_guardian2_attributes])
-      form_vars
-      @message = "Unfortunately no team was found matching this player's age for the desired season. If necessary, please correct the player's birthdate."
-      flash.now[:error] = @message
-      render :action => "new"
+    season = @club.seasons.accepting_registrations_now.where(:id => @registration.season_id).first
+    unless season.present?
+      redirect_to club_url(@club.subdomain)
     else
-      @registration.division = division
-      layer = Layers::PublicRegistration.new(@registration)
-      unless layer.save
-        @registration.parent_guardian2 = Person.new(reg_params[:parent_guardian2_attributes])
-        Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
+      division = Division.for_season_and_birthdate(@registration.season, @registration.player.birthdate)
+      unless division.present?
+        if @registration.registrations_people.size < 2
+          @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)
+        end
         form_vars
-        @message = "Unfortunately some errors occurred. Please see the form below, correct the errors and re-submit the information."
+        @message = "Unfortunately no team was found matching this player's age for the desired season. If necessary, please correct the player's birthdate."
         flash.now[:error] = @message
-        render :action => "new"      
+        render :action => "new"
       else
-        @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)    
-        render :action => :step2
+        @registration.division = division
+        layer = Layers::PublicRegistration.new(@registration)
+        unless layer.save
+          Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
+          form_vars
+          @message = "Unfortunately some errors occurred. Please see the form below, correct the errors and re-submit the information."
+          flash.now[:error] = @message
+          render :action => "new"      
+        else
+          @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
+          RegistrationQuestionResponse.populate_responses_for_registration(@registration, false)
+          RegistrationQuestionResponse.create_default_responses_for_protected_questions(@registration)
+          render :action => :step2
+        end
       end
     end
   end
 
   def finalize
     reg_params = params[:registration]
-    comments = reg_params[:comments]
-    reg_params.delete(:comments) if comments.blank?  
     @registration = @club.registrations.find_by_id(reg_params[:id])
     @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
     if @registration.update_attributes(reg_params)
       begin
-        RegistrationMailer.deliver_public_registration(@registration)
+        RegistrationMailer.public_registration(@registration).deliver
       rescue
         # not going to do anything right now - we'll just log errors
       end
+      @payment_method = @registration.registration_question_responses.where(:registration_question_id => @registration.registration_questions.where(:report_label => "Payment Method").first.id).last.registration_question_response_option.response_value
       render :action => :finalize
     else
       Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
@@ -75,17 +89,9 @@ class RegistrationsController < ApplicationController
   
   def delete_reg
     reg_id = params[:reg]
-
-    Rails::logger.info "\n\n#{'x'*50}\n\n"
-    Rails::logger.info "\n\nrequest to delete registration #{reg_id} received!\n\n"
-  
     reg = @club.registrations.find(reg_id)
 
-    Rails::logger.info "\n\nregistration #{reg.id} found, so let's destroy it and all associated person records.\n\n"
-
-    reg.parent_guardian1.destroy unless reg.parent_guardian1.nil?
-    reg.parent_guardian2.destroy unless reg.parent_guardian2.nil?
-    #reg.registration_people.destroy_all
+    reg.registration_people.destroy_all
     reg.player.person.destroy
     reg.player.destroy
     reg.destroy
@@ -112,10 +118,9 @@ class RegistrationsController < ApplicationController
   def form_vars
     @cities = ["Anmore","Burnaby","Coquitlam","Delta","Langley","Maple Ridge","New Westminster","North Vancouver","Pitt Meadows","Port Coquitlam","Port Moody","Richmond","Surrey","Vancouver","West Vancouver","White Rock","Other"]
     @provinces = %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
-    @person_defaults = {:city => "New Westminster", :province => "BC", :country => "Canada"}
+    @person_defaults = {:city => @club.city, :province => @club.province, :country => @club.country}
     @player_person_defaults = @person_defaults.merge({:phone_type => "Home"})
   
-    @schools = ["Connaught Heights Elementary", "F.W. Howay Elementary", "Glenbrook Middle School", "Herbert Spencer Elementary", "Hume Park Elementary", "John Robson Elementary", "Lord Kelvin Elementary", "Lord Tweedsmuir Elementary", "Queen Elizabeth Elementary", "Queensborough Middle School", "Richard McBride Elementary", "New Westminster Secondary", "Community Education", "Home Learners Program", "Other - Preschool", "Other - Private", "Other - Public"]
     @phone_types = ["Home", "Work", "Cell", "Other"]
     @email_types = ["Home", "Work", "Personal", "Other"]
   end

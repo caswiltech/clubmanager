@@ -1,24 +1,10 @@
 %h1= "#{@registrations.first.division.name} Mailing List Addresses"
 
 - @registrations.each do |r|
-  - unless r.parent_guardian1.nil?
-    - unless r.parent_guardian1.email.blank?
-      = r.parent_guardian1.email
+  - r.registrations_people.each do |p|
+    - unless p.person.email.blank?
+      = p.person.email
       %br/
-    - unless r.parent_guardian1.alt_email.blank?
-      = r.parent_guardian1.alt_email
+    - unless p.person.alt_email.blank?
+      = p.person.alt_email
       %br/
-  - unless r.parent_guardian2.nil?
-    - unless r.parent_guardian2.email.blank?
-      = r.parent_guardian2.email
-      %br/
-    - unless r.parent_guardian2.alt_email.blank?
-      = r.parent_guardian2.alt_email
-      %br/
-  -# r.registration_people.each do |p|
-    -# unless.p.email.blank?
-      -#= p.email
-      -#%br/
-    -# unless p.alt_email.blank?
-      -#= p.alt_email
-      -#%br/

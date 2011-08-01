@@ -4,3 +4,5 @@ db/*.sqlite3
 log/*.log
 tmp/**/*
 cmg_dev
+cmg_test
+db/schema.rb

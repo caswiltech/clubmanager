@@ -1,18 +1,27 @@
-= "Reg.ID,Season,Division,Reg.Date,CareCard,Gender,Birthdate,Player.FirstName,Player.LastName,Player.Address,Player.City,Player.PostalCode,Player.Phone,Player.PhoneType,Player.AltPhone,Player.AltPhoneType,Player.Email,Player.EmailType,Player.AltEmail,Player.AltEmailType,PG1.FirstName,PG1.LastName,PG1.Address,PG1.City,PG1.PostalCode,PG1.Phone,PG1.PhoneType,PG1.AltPhone,PG1.AltPhoneType,PG1.Email,PG1.EmailType,PG1.AltEmail,PG1.AltEmailType,PG2.FirstName,PG2.LastName,PG2.Address,PG2.City,PG2.PostalCode,PG2.Phone,PG2.PhoneType,PG2.AltPhone,PG2.AltPhoneType,PG2.Email,PG2.EmailType,PG2.AltEmail,PG2.AltEmailType,School,Experience,PromotionSource,PaymentMethod,Comments"
+- questions = @club.registration_questions.order("editable_by DESC")
+- question_fields = questions.collect{|q|q.report_label}.join(",")
+- question_indices = questions.collect{|q|q.id}
+= "Reg.ID,Season,Division,Reg.Date,CareCard,Gender,Birthdate,Player.FirstName,Player.LastName,Player.Address,Player.City,Player.PostalCode,Player.Phone,PG1.FirstName,PG1.LastName,PG1.Address,PG1.City,PG1.PostalCode,PG1.Phone,PG1.PhoneType,PG1.AltPhone,PG1.AltPhoneType,PG1.Email,PG1.EmailType,PG1.AltEmail,PG1.AltEmailType,PG2.FirstName,PG2.LastName,PG2.Address,PG2.City,PG2.PostalCode,PG2.Phone,PG2.PhoneType,PG2.AltPhone,PG2.AltPhoneType,PG2.Email,PG2.EmailType,PG2.AltEmail,PG2.AltEmailType,#{question_fields}"
 - contents = FasterCSV.generate do |csv|
   - @csv_registrations.each do |r|
     - row = [ r.id, r.season.name, r.division.name, r.created_at.strftime("%Y-%m-%d"), r.player.carecard, r.player.gender, r.player.birthdate.strftime("%Y-%m-%d") ]
     - unless r.player.person.nil?
-      - row.concat [ r.player.person.first_name, r.player.person.last_name, r.player.person.street1, r.player.person.city, r.player.person.postal_code, r.player.person.phone, r.player.person.phone_type, r.player.person.alt_phone, r.player.person.alt_phone_type, r.player.person.email, r.player.person.email_type, r.player.person.alt_email, r.player.person.alt_email_type ]
+      - row.concat [ r.player.person.first_name, r.player.person.last_name, r.player.person.street1, r.player.person.city, r.player.person.postal_code, r.player.person.phone ]
+    - else
+      - row.concat [" "," "," "," "," "," "]
+    - if r.registrations_people.parent_guardians.count >= 2
+      - r.registrations_people.parent_guardians.first(2).each do |p|
+        - row.concat [ p.person.first_name, p.person.last_name, p.person.street1, p.person.city, p.person.postal_code, p.person.phone, p.person.phone_type, p.person.alt_phone, p.person.alt_phone_type, p.person.email, p.person.email_type, p.person.alt_email, p.person.alt_email_type ]
+    - elsif r.registrations_people.parent_guardians.count == 1
+      - p = r.registrations_people.parent_guardians.first
+      - row.concat [ p.person.first_name, p.person.last_name, p.person.street1, p.person.city, p.person.postal_code, p.person.phone, p.person.phone_type, p.person.alt_phone, p.person.alt_phone_type, p.person.email, p.person.email_type, p.person.alt_email, p.person.alt_email_type ]
+      - row.concat [" "," "," "," "," "," "," "," "," "," "," "," "," "]
     - else
       - row.concat [" "," "," "," "," "," "," "," "," "," "," "," "," "]
-    - unless r.parent_guardian1.nil?
-      - row.concat [ r.parent_guardian1.first_name, r.parent_guardian1.last_name, r.parent_guardian1.street1, r.parent_guardian1.city, r.parent_guardian1.postal_code, r.parent_guardian1.phone, r.parent_guardian1.phone_type, r.parent_guardian1.alt_phone, r.parent_guardian1.alt_phone_type, r.parent_guardian1.email, r.parent_guardian1.email_type, r.parent_guardian1.alt_email, r.parent_guardian1.alt_email_type ]
-    - else
       - row.concat [" "," "," "," "," "," "," "," "," "," "," "," "," "]
-    - unless r.parent_guardian2.nil?
-      - row.concat [ r.parent_guardian2.first_name, r.parent_guardian2.last_name, r.parent_guardian2.street1, r.parent_guardian2.city, r.parent_guardian2.postal_code, r.parent_guardian2.phone, r.parent_guardian2.phone_type, r.parent_guardian2.alt_phone, r.parent_guardian2.alt_phone_type, r.parent_guardian2.email, r.parent_guardian2.email_type, r.parent_guardian2.alt_email, r.parent_guardian2.alt_email_type ]
-    - else
-      - row.concat [" "," "," "," "," "," "," "," "," "," "," "," "," "]
-    - row.concat ["#{r.player_school}", "#{r.player_previous_sports_experience}", "#{r.promotion_source}", "#{r.payment_method}", "#{r.comments}"]
+    - question_responses = r.registration_question_responses.collect{|response|{:question => response.registration_question.id, :response_value => (response.registration_question_response_option.present? ? response.registration_question_response_option.response_value : response.textresponse)}}
+    - question_indices.each do |q_id|
+      - response_value = question_responses.select{|n|n[:question] == q_id}.first
+      - response_value = response_value.nil? ? " " : response_value[:response_value]
+      - row.concat [ response_value ]
     - csv << row

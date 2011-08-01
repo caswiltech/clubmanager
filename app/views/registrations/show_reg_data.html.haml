@@ -1,0 +1,43 @@
+%h1 #{@club.short_name} Registration for #{@registration.season.name} for #{@registration.player.person.first_name} #{@registration.player.person.last_name}
+%h2 Personal Information
+
+
+
+%table
+  %tr
+    %th Name
+    %th Address
+    %th City
+    %th Parent/Guardian(s)
+    %th Age Right Now
+    %th Birthdate
+    %th Age for Season
+    %th Legal Name
+    %th Gender
+    %th Carecard
+    
+  %tr
+    %td #{@registration.player.person.first_name} #{@registration.player.person.last_name}
+    %td
+      = @registration.player.person.street1
+      - if @registration.player.person.street2.present?
+        %br/
+        = @registration.player.person.street2
+    %td #{@registration.player.person.city}
+    %td
+      - @registration.registrations_people.parent_guardians.each do |pg|
+        - full_name = "#{pg.person.first_name} #{pg.person.last_name}"
+        - if pg.email.present?
+          = mail_to(pg.email, full_name)
+        - else
+          = full_name
+
+%h2 Questions
+%ul
+  - @registration.registration_question_responses.each do |qr|
+    %li
+      %strong #{qr.registration_question.report_label}
+      %br/
+      = qr.registration_question_response_option.present? ? qr.registration_question_response_option.response_value : qr.textresponse
+      
+

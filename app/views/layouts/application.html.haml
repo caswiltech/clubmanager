@@ -3,6 +3,7 @@
     %title ClubManager
     = stylesheet_link_tag 'formtastic', 'formtastic_changes'
     = csrf_meta_tag
+    = javascript_include_tag :defaults
   %body
     - if flash[:notice]
       %div.notice= flash[:notice]

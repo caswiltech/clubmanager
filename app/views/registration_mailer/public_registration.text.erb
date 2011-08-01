@@ -5,20 +5,17 @@ Here's a few details of the information that you entered for <%= @registration.p
 Birthdate:
 <%= @registration.player.birthdate %>
 
-School:
-<%= @registration.player_school %>
-
-<%= @registration.player.person.first_name %>'s previous sports experience:
-<%= @registration.player_previous_sports_experience %>
-
-How you heard about this <%= @registration.club.short_name %> program:
-<%= @registration.promotion_source %>
-
-Payment Method:
-<%= @registration.payment_method %>
-
-Comments:
-<%= @registration.comments %>
+<% @registration.registration_questions.each do |q| -%>
+  <%= q.page_label%>:
+  <% response = @registration.registration_question_responses.where(:registration_question_id => q.id).last
+    unless response.nil? -%>
+      <% if q.questiontype == "select" -%>
+<%= replace_placeholder(response.registration_question_response_option.response_value, @registration) %>    
+      <% else -%>
+<%= response.textresponse %>
+      <% end -%>
+    <% end 
+  end -%>
 
 Please note that you will be added to our mailing list and will receive updates as the season approaches.
 
