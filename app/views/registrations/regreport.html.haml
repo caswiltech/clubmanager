@@ -6,7 +6,6 @@
   %tr
     %th Name
     %th Division
-    %th Payment Method
     %th Date
     %th ID
     %th Birthdate
@@ -25,7 +24,6 @@
     %tr
       %td= "#{r.player.person.first_name} #{r.player.person.last_name}"
       %td= r.division.name
-      %td= r.payment_method
       %td= r.created_at
       %td= r.id
       %td= r.player.birthdate
