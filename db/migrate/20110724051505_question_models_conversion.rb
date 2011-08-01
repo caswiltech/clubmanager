@@ -87,11 +87,19 @@ class QuestionModelsConversion < ActiveRecord::Migration
       reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => promotion_source, :registration_question_response_option_id => promotion_source_option_id) unless promotion_source_option_id.nil?
     
       if reg.player_previous_sports_experience.present?
-        reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => player_previous_sports_experience, :textresponse => reg.player_previous_sports_experience)
+        text = reg.player_previous_sports_experience
+        if text.length > 255
+          text = text[0..250] << "..."
+        end
+        reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => player_previous_sports_experience, :textresponse => text)
       end
     
       if reg.comments.present?
-        reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => comments, :textresponse => reg.comments)
+        text = reg.comments
+        if text.length > 255
+          text = text[0..250] << "..."
+        end
+        reg.registration_question_responses << RegistrationQuestionResponse.create(:registration_question => comments, :textresponse => text)
       end
     
       # find response option for this field
