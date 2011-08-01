@@ -10,6 +10,7 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id' => 'registrations#show', :as => :club, :via => :get
   match 'clubs/:club_id/new' => 'registrations#new', :as => :registration, :via => :get
   match 'clubs/:club_id' => 'registrations#create', :as => :registration_create, :via => :post
+  match 'clubs/:club_id/show_reg_data' => 'registrations#show_reg_data', :as => :show_reg_data, :via => :get
   match 'clubs/:club_id/payment' => 'registrations#payment', :as => :registration_payment, :via => :get
   match 'clubs/:club_id/finalize' => 'registrations#finalize', :as => :registration_finalize, :via => :put
   match 'clubs/:club_id/regreport' => 'registrations#regreport', :as => :regreport, :via => :get
