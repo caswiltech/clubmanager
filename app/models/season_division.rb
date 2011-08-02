@@ -2,6 +2,7 @@ class SeasonDivision < ActiveRecord::Base
   belongs_to :season
   belongs_to :division
   has_many :payment_packages, :dependent => :destroy
+  has_many :teams, :dependent => :destroy
 
   scope :for_season_and_birthdate, lambda {|season, birthdate|
     player_age = Player.get_age_as_of_date(birthdate, season.end_season_on)
@@ -10,5 +11,9 @@ class SeasonDivision < ActiveRecord::Base
   }
   
   scope :publicly_visible, where(:hidden => false)
+  
+  def registrations
+    Registration.where(:season_id => self.season_id, :division_id => self.division_id)
+  end
 
 end

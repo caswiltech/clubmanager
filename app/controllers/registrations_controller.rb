@@ -48,6 +48,8 @@ class RegistrationsController < ApplicationController
         render :action => "new"
       else
         @registration.division = division
+        sd = SeasonDivision.find_by_season_id_and_division_id(season.id, division.id)
+        @registration.team = sd.teams.first unless sd.nil?
         layer = Layers::PublicRegistration.new(@registration)
         unless layer.save
           Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"

@@ -1,0 +1,30 @@
+%h1= @club.short_name
+
+%h2 Recent Registrations
+
+- unless @current_seasons.empty?
+  %h2 Current Seasons (Click to Manage)
+  %ul
+    - @current_seasons.each do |season|
+      %li
+        = season.name
+        - unless season.season_divisions.empty?
+          - if season.season_divisions.count == 1
+            = ": #{Registration.where(:season_id => season.season_divisions.first.season_id, :division_id => season.season_divisions.first.division_id).size}"
+          - else
+            %ul
+              - season.season_divisions.each do |sd|
+                %li
+                  = "#{sd.division.name} : #{Registration.where(:season_id => sd.season_id, :division_id => sd.division_id).size}"
+                  - if sd.teams.count > 1
+                    %ul
+                      - sd.teams.each do |team|
+                        %li
+                          = "#{team.name} : #{team.registrations.size}"
+
+- unless @past_seasons.empty?
+  %h2 Past Seasons
+  %ul
+    - @past_seasons.each do |season|
+      %li
+        = season.name

@@ -24,7 +24,26 @@ Cmg::Application.routes.draw do
     resources :seasons
     resources :divisions
     resources :teams
+    
+    # resources :forums do
+    #   collection do
+    #     post :update_sort_order
+    #   end
+    #   member do
+    #     put :toggle_locked
+    #     put :move
+    #     post :add_moderator
+    #     delete :remove_moderator
+    #     get :moderators_for_lookup
+    #   end
+    # end
   end
+  scope :module => 'admin' do
+    #lowest route... put all others before this one, this is the route of last resort...
+    resources :admin, :controller => 'admin', :only => :index
+  end
+
+
   #   match 'new' => :new, :as => :registration
   #   match 'create' => :create, :as => :registration_create
   #   match 'success' => :success, :as => :registration_success

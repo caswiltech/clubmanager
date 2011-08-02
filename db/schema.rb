@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110614211741) do
+ActiveRecord::Schema.define(:version => 20110802224203) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -196,13 +196,12 @@ ActiveRecord::Schema.define(:version => 20110614211741) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "teams", :force => true do |t|
-    t.integer   "club_id"
-    t.integer   "season_division_id"
-    t.string    "name"
-    t.text      "description"
-    t.boolean   "deleted"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
+    t.integer  "season_division_id"
+    t.string   "name"
+    t.text     "description"
+    t.boolean  "deleted"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "user_roles", :force => true do |t|

@@ -11,5 +11,13 @@ class Season < ActiveRecord::Base
     where("seasons.start_reg_on <= current_date AND seasons.end_reg_on > current_date").
     order("seasons.end_reg_on, seasons.id").
     readonly(false)
+    
+  scope :current,
+    where("seasons.end_reg_on >= current_date").
+    order("seasons.end_season_on DESC, seasons.end_reg_on DESC, seasons.name")
+  
+  scope :past,
+    where("seasons.end_reg_on < current_date").
+    order("seasons.end_reg_on, seasons.name")
   
 end
