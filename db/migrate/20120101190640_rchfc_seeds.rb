@@ -1,4 +1,4 @@
-class 2012RchfcSeeds < ActiveRecord::Migration
+class RchfcSeeds < ActiveRecord::Migration
   def self.up
     rchfc = Club.first
     spring = Season.last
