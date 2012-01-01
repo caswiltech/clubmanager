@@ -16,8 +16,25 @@ class Registration < ActiveRecord::Base
   attr_accessor :waiver
   validates :waiver, :acceptance => {:message => "This waiver must be accepted in order to finalize the registration"}, :on => :update
   
+  scope :by_player_name,
+    select("registrations.*, people.first_name, people.last_name, players.birthdate").
+    joins("inner join players on registrations.player_id = players.id").
+    joins("inner join people on players.person_id = people.id").
+    order("people.last_name, people.first_name")
+  
+  scope :by_reg_date,
+    select("registrations.*, people.first_name, people.last_name, players.birthdate").
+    joins("inner join players on registrations.player_id = players.id").
+    joins("inner join people on players.person_id = people.id").
+    order("registrations.created_at")
+  
+  
   def registration_questions#=
     RegistrationQuestionResponse.questions_for_registration(self)
+  end
+  
+  def player_name
+    "#{self.player.person.first_name} #{self.player.person.last_name}"
   end
     
 end

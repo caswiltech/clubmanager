@@ -1,0 +1,4 @@
+%h3= "Number of Registrations is #{@registrations.count}"
+- @registrations.each do |reg|
+  = link_to("#{reg.first_name} #{reg.last_name}", admin_registration_path(reg))
+  %br/

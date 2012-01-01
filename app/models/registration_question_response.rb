@@ -4,9 +4,9 @@ class RegistrationQuestionResponse < ActiveRecord::Base
   belongs_to :registration_question_response_option
   
   
-  def self.questions_for_registration(registration, admin_only = false)
+  def self.questions_for_registration(registration, admin_mode = false)
     questions = registration.club.registration_questions
-    if admin_only
+    if admin_mode
       questions = questions.where('editable_by > 0')
     else
       questions = questions.where('editable_by = 0')

@@ -13,5 +13,21 @@ class Player < ActiveRecord::Base
 	  end
 		as_of_date.year - dob.year - ((as_of_date.month > dob.month || (as_of_date.month == dob.month && as_of_date.day >= dob_day)) ? 0 : 1)
 	end
+	
+	def legal_fname
+	  self.legal_first_name.blank? ? self.person.first_name : self.legal_first_name
+  end
+
+	def legal_lname
+	  self.legal_last_name.blank? ? self.person.last_name : self.legal_last_name
+  end
+  
+  def legal_name
+    "#{legal_fname} #{legal_lname}"
+  end
+  
+  def float_age_today
+    ((Date.today - self.birthdate) / 365.25).round(2)
+  end
   
 end
