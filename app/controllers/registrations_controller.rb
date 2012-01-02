@@ -93,7 +93,10 @@ class RegistrationsController < ApplicationController
     reg_id = params[:reg]
     reg = @club.registrations.find(reg_id)
 
-    reg.registration_people.destroy_all
+    reg.registrations_people.each do |p|
+      p.person.destroy
+      p.destroy
+    end
     reg.player.person.destroy
     reg.player.destroy
     reg.destroy

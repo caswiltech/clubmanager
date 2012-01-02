@@ -10,7 +10,7 @@ Birthdate:
   <% response = @registration.registration_question_responses.where(:registration_question_id => q.id).last
     unless response.nil? -%>
       <% if q.questiontype == "select" -%>
-<%= replace_placeholder(response.registration_question_response_option.response_value, @registration) %>    
+<%= replace_placeholders(response.registration_question_response_option.response_value, @registration) %>    
       <% else -%>
 <%= response.textresponse %>
       <% end -%>
