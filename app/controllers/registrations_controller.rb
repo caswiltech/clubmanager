@@ -73,7 +73,7 @@ class RegistrationsController < ApplicationController
     @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
     if @registration.update_attributes(reg_params)
       begin
-        RegistrationMailer.public_registration(@registration).deliver
+        RegistrationMailer.deliver_public_registration(@registration)
       rescue
         # not going to do anything right now - we'll just log errors
       end
