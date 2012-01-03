@@ -76,6 +76,9 @@ class RegistrationsController < ApplicationController
         RegistrationMailer.deliver_public_registration(@registration)
       rescue
         # not going to do anything right now - we'll just log errors
+        Rails::logger.info "\n\n#{'x'*50}\n\n"
+        Rails::logger.info "looks like there was an error with the mailer\n\n"
+        
       end
       @payment_method = @registration.registration_question_responses.where(:registration_question_id => @registration.registration_questions.where(:report_label => "Payment Method").first.id).last.registration_question_response_option.response_value
       render :action => :finalize
