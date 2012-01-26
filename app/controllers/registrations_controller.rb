@@ -74,6 +74,7 @@ class RegistrationsController < ApplicationController
     if @registration.update_attributes(reg_params)
       begin
         RegistrationMailer.deliver_public_registration(@registration)
+        RegistrationMailer.deliver_club_reg_notification(@registration)
       rescue
         # not going to do anything right now - we'll just log errors
         Rails::logger.info "\n\n#{'x'*50}\n\n"
@@ -114,6 +115,23 @@ class RegistrationsController < ApplicationController
   
   def mail_list
     @registrations = @club.registrations.where("division_id = ?", params[:division].to_i)
+  end
+  
+  def send_email
+    reg_id = params[:reg]
+    @registration = @club.registrations.find(reg_id)
+    
+    begin
+      @email_result = []
+      @email_result << RegistrationMailer.deliver_public_registration(@registration)
+      @email_result << RegistrationMailer.deliver_club_reg_notification(@registration)
+    rescue
+      # not going to do anything right now - we'll just log errors
+      Rails::logger.info "\n\n#{'x'*50}\n\n"
+      Rails::logger.info "looks like there was an error with the mailer\n\n"
+      
+    end
+    
   end
 
   private

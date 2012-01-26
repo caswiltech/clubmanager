@@ -1,0 +1,29 @@
+<%= @registration.season.name %> > <%= @registration.division.name %>
+
+<%= @registration.player.person.first_name %> <%= @registration.player.person.last_name %>
+<%= @registration.player.person.street1 %>
+<%= @registration.player.person.city %>
+<%= @registration.player.person.phone %>
+<%- emails = []
+@registration.registrations_people.each do |p|
+  emails.push p.person.email unless p.person.email.nil?
+  emails.push p.person.alt_email unless p.person.alt_email.nil?
+end -%>
+Email: <%= emails.uniq.join(', ') %>
+
+Birthdate:
+<%= @registration.player.birthdate %>
+
+<% @registration.registration_questions.each do |q| -%>
+<%= replace_placeholders(q.page_label, @registration) %>:
+<% response = @registration.registration_question_responses.where(:registration_question_id => q.id).last
+    unless response.nil? -%>
+      <% if q.questiontype == "select" -%>
+<%= replace_placeholders(response.registration_question_response_option.response_value, @registration) %>
+
+<% else -%>
+<%= response.textresponse %>
+
+<% end -%>
+<% end 
+end -%>

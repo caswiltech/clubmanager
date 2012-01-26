@@ -17,6 +17,7 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id/regreport_csv' => 'registrations#regreport_csv', :as => :regreport_csv, :via => :get
   match 'clubs/:club_id/delete_reg' => 'registrations#delete_reg', :as => :delete_reg, :via => :get
   match 'clubs/:club_id/mail_list' => 'registrations#mail_list', :as => :mail_list, :via => :get
+  match 'clubs/:club_id/send_email' => 'registrations#send_email', :as => :send_email, :via => :get
   
   namespace :admin do
     resources :users

@@ -1,22 +1,5 @@
 Thanks for registering <%= @registration.player.person.first_name %> <%= @registration.player.person.last_name %> to participate in the <%= @registration.division.name %> division for the <%= @registration.season.name %> season.
 
-Here's a few details of the information that you entered for <%= @registration.player.person.first_name %>:
-
-Birthdate:
-<%= @registration.player.birthdate %>
-
-<% @registration.registration_questions.each do |q| -%>
-  <%= q.page_label%>:
-  <% response = @registration.registration_question_responses.where(:registration_question_id => q.id).last
-    unless response.nil? -%>
-      <% if q.questiontype == "select" -%>
-<%= replace_placeholders(response.registration_question_response_option.response_value, @registration) %>    
-      <% else -%>
-<%= response.textresponse %>
-      <% end -%>
-    <% end 
-  end -%>
-
 Please note that you will be added to our mailing list and will receive updates as the season approaches.
 
 Feel free to contact us with any questions or comments that you might have.
@@ -28,7 +11,7 @@ Regards,
 Email: <%= @registration.club.contact_email %>
 <%- unless @registration.club.phone.nil? -%>Phone: <%= @registration.club.phone %><%- end -%>
 <%- unless @registration.club.homepage_url.nil? -%>Website: <%= @registration.club.homepage_url %><%- end -%>
-
+Mailing Address:
 <%= @registration.club.street1 %>
 <%= @registration.club.city %>, <%= @registration.club.province %>  <%= @registration.club.postal_code %>
 
