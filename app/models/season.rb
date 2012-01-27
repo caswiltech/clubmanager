@@ -15,9 +15,16 @@ class Season < ActiveRecord::Base
   scope :current,
     where("seasons.end_reg_on >= current_date").
     order("seasons.end_season_on DESC, seasons.end_reg_on DESC, seasons.name")
-  
+      
   scope :past,
     where("seasons.end_reg_on < current_date").
     order("seasons.end_reg_on, seasons.name")
   
+  def taxreceipt_spantext
+    if self.end_season_on.year == self.start_season_on.year
+      "#{Date::MONTHNAMES[self.start_season_on.month]} to #{Date::MONTHNAMES[self.end_season_on.month]} #{self.start_season_on.year}"
+    else
+      "#{Date::MONTHNAMES[self.start_season_on.month]}  #{self.start_season_on.year} to #{Date::MONTHNAMES[self.end_season_on.month]} #{self.end_season_on.year}"
+    end
+  end
 end

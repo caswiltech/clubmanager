@@ -9,6 +9,10 @@ class Person < ActiveRecord::Base
   
   before_create :cleanup_names
   before_save :cleanup_fields
+  
+  def full_name
+    "#{self.first_name} #{self.last_name}"
+  end
 
   def cleanup_names
     self.first_name = self.first_name.split('-').map{|x| x.split.map{|x| x.titleize.gsub(/ /,'').split('\'').map{|x| x.titleize.gsub(/ /,'')}.join('\'')}.join(' ')}.join('-') unless self.first_name.blank?

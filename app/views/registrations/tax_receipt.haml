@@ -1,0 +1,37 @@
+%b= @registration.club.long_name
+%br/
+=@registration.club.street1
+%br/
+= "#{@registration.club.city}, #{@registration.club.province}  #{@registration.club.postal_code}"
+
+%hr/
+
+%h1
+  RECEIPT
+
+%b
+  Program:
+= "#{@registration.division.name} (#{@registration.season.taxreceipt_spantext})"
+%br/
+%b
+  Amount Received:
+= "$#{@registration.payment_total}"
+%br/
+%b
+  Date Received:
+= "#{@registration.payment_date}"
+%br/
+%b
+  Eligible Amount:
+= "$#{@registration.payment_total}"
+%br/
+%b
+  Payer:
+= "#{@registration.registrations_people.parent_guardians.where(:primary => true).first.person.full_name}"
+%br/
+%b
+  Participant:
+= "#{@registration.player.legal_name} (#{@registration.player.birthdate.year})"
+%br/
+%br/
+%hr/

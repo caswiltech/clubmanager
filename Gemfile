@@ -20,6 +20,7 @@ gem 'ssl_requirement', '~> 0.1.0'
 # gem 'validates_timeliness', '~> 3.0.2'
 # gem 'validates_as_phone_number', '>=0.7.5'
 gem 'validation_reflection', :git => "git://github.com/redinger/validation_reflection.git"
+gem 'wicked_pdf'
 # gem 'will_paginate', :git => 'git://github.com/mislav/will_paginate.git', :branch => 'rails3'
 
 # Bundle gems for the local environment. Make sure to

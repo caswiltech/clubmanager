@@ -90,7 +90,7 @@ class RegistrationsController < ApplicationController
   end
   
   def regreport
-    @registrations = @club.registrations.order("id desc")
+    @registrations = @club.registrations.thisyear.order("id desc")
   end
   
   def delete_reg
@@ -109,29 +109,22 @@ class RegistrationsController < ApplicationController
   end
   
   def regreport_csv
-    @csv_registrations = @club.registrations.order("id asc")
+    @csv_registrations = @club.registrations.thisyear.order("id asc")
     render_csv("#{@club.subdomain}-regreport-#{Time.now.strftime("%Y%m%d")}")
   end
   
   def mail_list
-    @registrations = @club.registrations.where("division_id = ?", params[:division].to_i)
+    @registrations = @club.registrations.thisyear.where("division_id = ?", params[:division].to_i)
   end
   
-  def send_email
+  def tax_receipt
     reg_id = params[:reg]
     @registration = @club.registrations.find(reg_id)
     
-    begin
-      @email_result = []
-      @email_result << RegistrationMailer.deliver_public_registration(@registration)
-      @email_result << RegistrationMailer.deliver_club_reg_notification(@registration)
-    rescue
-      # not going to do anything right now - we'll just log errors
-      Rails::logger.info "\n\n#{'x'*50}\n\n"
-      Rails::logger.info "looks like there was an error with the mailer\n\n"
-      
+    respond_to do |format|
+      format.html { render :layout => false }
+      format.pdf { render(:pdf => "tax_receipt", :layout => false) }
     end
-    
   end
 
   private
