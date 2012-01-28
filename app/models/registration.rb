@@ -31,6 +31,11 @@ class Registration < ActiveRecord::Base
   scope :thisyear,
     joins("inner join seasons on registrations.season_id = seasons.id").
     where("seasons.end_season_on >= current_date")
+    
+  scope :receipt_eligible,
+    joins("inner join registration_question_responses on registrations.id = registration_question_responses.registration_id").
+    joins("inner join registration_question_response_options on registration_question_responses.registration_question_response_option_id = registration_question_response_options.id").
+    where("registration_question_response_options.response_value = 'Cheque' or registration_question_response_options.response_value = 'Credit Card'")
   
   def registration_questions#=
     RegistrationQuestionResponse.questions_for_registration(self)

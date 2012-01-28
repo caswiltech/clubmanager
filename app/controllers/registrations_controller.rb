@@ -90,7 +90,8 @@ class RegistrationsController < ApplicationController
   end
   
   def regreport
-    @registrations = @club.registrations.thisyear.order("id desc")
+    # @registrations = @club.registrations.thisyear.order("id desc")
+    @registrations = @club.registrations.order("id desc")
   end
   
   def delete_reg
@@ -109,7 +110,7 @@ class RegistrationsController < ApplicationController
   end
   
   def regreport_csv
-    @csv_registrations = @club.registrations.thisyear.order("id asc")
+    @csv_registrations = @club.registrations.order("id asc")
     render_csv("#{@club.subdomain}-regreport-#{Time.now.strftime("%Y%m%d")}")
   end
   
@@ -122,8 +123,35 @@ class RegistrationsController < ApplicationController
     @registration = @club.registrations.find(reg_id)
     
     respond_to do |format|
-      format.html { render :layout => false }
+      format.html { render :layout => false  }
       format.pdf { render(:pdf => "tax_receipt", :layout => false) }
+    end
+  end
+
+  def tax_receipts
+    season_id = params[:season]
+    season = @club.seasons.find(season_id)
+    @count = [0,0,0]
+    @count[0] = season.registrations.count
+    @count[1] = season.registrations.receipt_eligible.count
+    
+    season.registrations.receipt_eligible.last(4).each do |r|
+      if r.registrations_people.parent_guardians.present?
+        @registration = r
+        receipt_file = render_to_string :pdf => "tax_receipt",
+                                  :template => 'registrations/tax_receipt',
+                                  :layout => false,
+                                  :page_size => 'Letter'
+
+        begin
+          RegistrationMailer.deliver_taxreceipt(@registration, receipt_file)
+        rescue
+          # not going to do anything right now - we'll just log errors
+          Rails::logger.info "\n\n#{'x'*50}\n\n"
+          Rails::logger.info "looks like there was an error with the mailer\n\n"
+        end
+        @count[2] += 1
+      end
     end
   end
 

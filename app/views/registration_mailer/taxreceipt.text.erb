@@ -1,0 +1,16 @@
+Should go to <%= @registration.registrations_people.parent_guardians.first.person.email %>
+
+Attached is the tax receipt for <%= @registration.player.legal_name %> for the <%= @registration.season.name %> season.
+
+If you have any questions, please contact us by replying to this email.
+
+Regards,
+
+<%= @registration.club.long_name %>
+
+Email: <%= @registration.club.contact_email %>
+<%- unless @registration.club.phone.nil? -%>Phone: <%= @registration.club.phone %><%- end -%>
+<%- unless @registration.club.homepage_url.nil? -%>Website: <%= @registration.club.homepage_url %><%- end -%>
+Mailing Address:
+<%= @registration.club.street1 %>
+<%= @registration.club.city %>, <%= @registration.club.province %>  <%= @registration.club.postal_code %>

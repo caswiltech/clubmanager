@@ -39,5 +39,18 @@ class RegistrationMailer < ActionMailer::Base
       :subject => mail_subject
     )
   end
+  
+  def taxreceipt(registration, receipt_file)
+    @registration = registration
+    mail_to = "#{registration.club.reg_notify_email}"
+    mail_from = mail_to
+    mail_subject = "#{registration.season.name} Tax Receipt for #{registration.player.legal_name}"
+    attachments['taxreceipt.pdf'] = receipt_file
+    mail(
+      :to => mail_to,
+      :from => mail_from,
+      :subject => mail_subject
+    )
+  end
 
 end
