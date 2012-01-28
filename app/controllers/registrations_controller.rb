@@ -135,7 +135,7 @@ class RegistrationsController < ApplicationController
     @count[0] = season.registrations.count
     @count[1] = season.registrations.receipt_eligible.count
     
-    season.registrations.receipt_eligible.last(14).each do |r|
+    season.registrations.receipt_eligible.last(5).each do |r|
       if r.registrations_people.parent_guardians.present?
         @registration = r
         receipt_file = render_to_string :pdf => "tax_receipt",
