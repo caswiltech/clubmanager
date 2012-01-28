@@ -50,7 +50,11 @@ class Registration < ActiveRecord::Base
     # are there multiple payment packages for this SD?
     pp = nil
     if season_division.payment_packages.count > 1
-      pp = season_division.payment_packages.where(:default => false).first
+      if self.created_at > Date.new(2011,7,13)
+        pp = season_division.payment_packages.where(:default => true).first
+      else
+        pp = season_division.payment_packages.where(:default => false).first
+      end
     else
       pp = season_division.payment_packages.first
     end
