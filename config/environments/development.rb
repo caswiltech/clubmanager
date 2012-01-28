@@ -24,7 +24,10 @@ Cmg::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
   
   config.after_initialize do
-    WICKED_PDF[:exe_path] = "/usr/local/bin/wkhtmltopdf"
+    # WICKED_PDF[:exe_path] = "/usr/local/bin/wkhtmltopdf"
+	  WickedPdf.config = {
+	  	:exe_path => "/usr/local/bin/wkhtmltopdf"
+	  	}
   end
 end
 
