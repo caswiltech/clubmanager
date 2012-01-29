@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120101190640) do
+ActiveRecord::Schema.define(:version => 20120128074809) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(:version => 20120101190640) do
     t.string    "gender"
     t.timestamp "created_at"
     t.timestamp "updated_at"
+    t.string    "extid"
   end
 
   create_table "registration_datums", :force => true do |t|
