@@ -42,7 +42,12 @@ class RegistrationMailer < ActionMailer::Base
   
   def taxreceipt(registration, receipt_file)
     @registration = registration
+
     mail_to = ""
+    mail_from = "#{registration.club.short_name} <#{registration.club.reg_notify_email}>"
+    mail_subject = "#{registration.season.name} Tax Receipt for #{registration.player.legal_name}"
+    mail_bcc = mail_from
+    
     registration.registrations_people.parent_guardians.each do |rp|
       unless rp.person.email.blank? && mail_to.blank?
         mail_to = "#{rp.person.first_name} #{rp.person.last_name} <#{rp.person.email}>"
@@ -50,12 +55,10 @@ class RegistrationMailer < ActionMailer::Base
     end    
     if mail_to.blank?
       mail_to = "EMAIL NOT PROVIDED <#{registration.club.reg_notify_email}>"
+      mail_subject = "EMAIL NOT PROVIDED " << mail_subject
+      mail_bcc = nil
     end
-    
-    mail_from = "#{registration.club.short_name} <#{registration.club.reg_notify_email}>"
-    mail_subject = "#{registration.season.name} Tax Receipt for #{registration.player.legal_name}"
     attachments["rchfc_taxreceipt_2011.pdf"] = receipt_file
-    mail_bcc = mail_from
     mail(
       :to => mail_to,
       :bcc => mail_bcc,
