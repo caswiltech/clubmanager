@@ -7,6 +7,14 @@ class Player < ActiveRecord::Base
   
   after_create :generate_extid
   
+  def club
+    self.registrations.last.club
+  end
+  
+  def club_id
+    club.id
+  end
+  
   def generate_extid
     self.update_attribute(:extid, (Digest::SHA2.new << "#{self.id}#{self.created_at.to_s}").to_s)
   end

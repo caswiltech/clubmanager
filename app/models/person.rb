@@ -2,18 +2,11 @@ class Person < ActiveRecord::Base
   has_one :player
   belongs_to :club
   has_many :registrations_people
+  has_many :registrations, :through => :registrations_people
   
   before_create :cleanup_names
   before_save :cleanup_fields
-  
-  def registrations
-    registrations = []
-    self.registrations_people.each do |rp|
-      registrations << rp.registration
-    end
-    registrations
-  end
-  
+    
   def full_name
     "#{self.first_name} #{self.last_name}"
   end
