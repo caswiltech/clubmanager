@@ -1,7 +1,23 @@
+require 'digest/sha2'
+
 class Player < ActiveRecord::Base
   belongs_to :person
   has_many :registrations
   accepts_nested_attributes_for :person
+  
+  after_create :generate_extid
+  
+  def club
+    self.registrations.last.club
+  end
+  
+  def club_id
+    club.id
+  end
+  
+  def generate_extid
+    self.update_attribute(:extid, (Digest::SHA2.new << "#{self.id}#{self.created_at.to_s}").to_s)
+  end
   
   def self.get_age_as_of_date(dob, as_of_date)
 		# the following handles situations where the dob is Feb 29 and the as_of_date is not a leap year

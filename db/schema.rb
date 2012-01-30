@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120101190640) do
+ActiveRecord::Schema.define(:version => 20120129031826) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(:version => 20120101190640) do
     t.string    "gender"
     t.timestamp "created_at"
     t.timestamp "updated_at"
+    t.string    "extid"
   end
 
   create_table "registration_datums", :force => true do |t|
@@ -146,6 +147,13 @@ ActiveRecord::Schema.define(:version => 20120101190640) do
     t.boolean "player_field",      :default => false
   end
 
+  create_table "registration_tokens", :force => true do |t|
+    t.integer  "club_id",    :null => false
+    t.integer  "person_id"
+    t.string   "token"
+    t.datetime "expires_at"
+  end
+
   create_table "registrations", :force => true do |t|
     t.integer  "club_id"
     t.integer  "season_id"
@@ -157,6 +165,7 @@ ActiveRecord::Schema.define(:version => 20120101190640) do
     t.boolean  "deleted"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "registration_token_id"
   end
 
   create_table "registrations_people", :force => true do |t|

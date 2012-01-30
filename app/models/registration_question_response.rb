@@ -2,8 +2,7 @@ class RegistrationQuestionResponse < ActiveRecord::Base
   belongs_to :registration
   belongs_to :registration_question
   belongs_to :registration_question_response_option
-  
-  
+    
   def self.questions_for_registration(registration, admin_mode = false)
     questions = registration.club.registration_questions
     if admin_mode

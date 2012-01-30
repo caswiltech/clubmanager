@@ -1,4 +1,4 @@
-require 'digest/sha1'
+require 'digest/sha2'
 
 class User < ActiveRecord::Base
   has_many :user_roles
@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
     end
     
     def encrypt_password(password, salt)
-      Digest::SHA1.hexdigest(password + "hyacks" + salt)
+      Digest::SHA2.hexdigest(password + "hyacks" + salt)
     end
   end
   

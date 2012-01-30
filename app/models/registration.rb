@@ -6,6 +6,9 @@ class Registration < ActiveRecord::Base
   belongs_to :team
   has_many :registrations_people
   has_many :registration_question_responses, :dependent => :destroy
+  belongs_to :registration_token
+  
+  # legacu and should be refactored out in the future
   belongs_to :parent_guardian1, :class_name => "Person"
   belongs_to :parent_guardian2, :class_name => "Person"
 

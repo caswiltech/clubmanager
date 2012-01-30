@@ -14,15 +14,15 @@ class RegistrationMailer < ActionMailer::Base
       end
     end
     
+    mail_subject = ""
     if mail_to.blank?
       mail_to << "EMAIL NOT PROVIDED <#{registration.club.reg_notify_email}>"
+      mail_subject << "EMAIL NOT PROVIDED "
     end
     mail_from = "#{registration.club.reg_notify_email}"
-    mail_bcc = mail_from
-    mail_subject = "#{registration.club.short_name} #{registration.division.name} Registration for #{registration.player.person.first_name} #{registration.player.person.last_name}"
+    mail_subject << "#{registration.club.short_name} #{registration.division.name} Registration for #{registration.player.person.first_name} #{registration.player.person.last_name}"
     mail(
       :to => mail_to,
-      :bcc => mail_bcc,
       :from => mail_from,
       :subject => mail_subject
     )
@@ -44,24 +44,25 @@ class RegistrationMailer < ActionMailer::Base
     @registration = registration
 
     mail_to = ""
-    mail_from = "#{registration.club.short_name} <#{registration.club.reg_notify_email}>"
-    mail_subject = "#{registration.season.name} Tax Receipt for #{registration.player.legal_name}"
-    mail_bcc = mail_from
-    
-    registration.registrations_people.parent_guardians.each do |rp|
+    rp = registration.registrations_people.parent_guardians.first
+    if rp.present? && rp.person.present?
       unless rp.person.email.blank? && mail_to.blank?
         mail_to = "#{rp.person.first_name} #{rp.person.last_name} <#{rp.person.email}>"
       end
-    end    
+    end
+    
+    mail_subject = ""
     if mail_to.blank?
       mail_to = "EMAIL NOT PROVIDED <#{registration.club.reg_notify_email}>"
-      mail_subject = "EMAIL NOT PROVIDED " << mail_subject
-      mail_bcc = nil
+      mail_subject << "EMAIL NOT PROVIDED "
     end
+    
+    mail_from = "#{registration.club.short_name} <#{registration.club.reg_notify_email}>"
+    mail_subject << "#{registration.season.name} Tax Receipt for #{registration.player.legal_name}"
     attachments["rchfc_taxreceipt_2011.pdf"] = receipt_file
     mail(
       :to => mail_to,
-      :bcc => mail_bcc,
+      # :bcc => mail_bcc,
       :from => mail_from,
       :subject => mail_subject
     )

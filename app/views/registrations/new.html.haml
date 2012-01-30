@@ -2,7 +2,7 @@
 = semantic_form_for @registration, :url => registration_create_path(@club.subdomain) do |reg|
   %hr
   -#= reg.inputs "Player Information" do
-  = reg.inputs "Information" do
+  = reg.inputs "Participant Information" do
     %hr
     = reg.semantic_fields_for :player do |player|
       = player.semantic_fields_for :person do |person|

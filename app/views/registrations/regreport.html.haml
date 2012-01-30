@@ -16,6 +16,7 @@
     %th Actions
   - divisions = Array.new(@club.divisions.count,0)
   - @registrations.each do |r|
+    - next if r.player.blank?
     - divisions[r.division.id.to_i - 1] = divisions[r.division.id.to_i - 1] + 1
     -# emails = []
     -# r.registrations_people.each do |p|

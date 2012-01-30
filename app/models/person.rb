@@ -2,14 +2,11 @@ class Person < ActiveRecord::Base
   has_one :player
   belongs_to :club
   has_many :registrations_people
-  has_many :registrations, :class_name => 'Registration', :foreign_key => 'parent_guardian1_id'
-  has_many :registrations, :class_name => 'Registration', :foreign_key => 'parent_guardian2_id'
-  
-  # validates :first_name, :last_name, :presence => true
+  has_many :registrations, :through => :registrations_people
   
   before_create :cleanup_names
   before_save :cleanup_fields
-  
+    
   def full_name
     "#{self.first_name} #{self.last_name}"
   end
