@@ -28,7 +28,7 @@
       - else
         = rqr.input :registration_question_response_option, :as => :select, :include_blank => rqr.object.registration_question.response_optional, :collection => question_response_options(rqr.object.registration_question, @registration), :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
     = reg.input :season_id, :as => :hidden
-    - if @registration.registration_token_id.present?
+    - if @registration.registration_token.present?
       = reg.input :registration_token_id, :as => :hidden
   %hr
   - if @registration.registrations_people.empty?
