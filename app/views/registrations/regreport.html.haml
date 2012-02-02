@@ -4,13 +4,14 @@
 
 %table
   %tr
+    %th ID
     %th Name
     %th Division
-    %th Date
-    %th ID
-    %th Birthdate
-    %th Address
-    %th City
+    -#%th Date
+    %th Age
+    %th Player Token
+    -# %th Address
+    -# %th City
     -# %th Phone
     -# %th Email
     %th Actions
@@ -23,19 +24,20 @@
       -# emails.push p.person.email unless p.person.email.nil?
       -# emails.push p.person.alt_email unless p.person.alt_email.nil?
     %tr
+      %td= r.id
       %td= "#{r.player.person.first_name} #{r.player.person.last_name}"
       %td= r.division.name
-      %td= r.created_at
-      %td= r.id
-      %td= r.player.birthdate
-      %td= r.player.person.street1
-      %td= r.player.person.city
+      -# %td= r.created_at
+      %td= (2012 - r.player.birthdate.year)
+      -#%td= r.player.person.street1
+      -#%td= r.player.person.city
       -# %td= r.player.person.phone
       -# %td= emails.uniq.join(', ')
+      %td= r.player.extid
       %td
         = link_to("Delete", delete_reg_path(@club.subdomain, :reg => r.id), :confirm => "Are you sure you want to permanently delete this registration? (ID: #{r.id}, Name: #{r.player.person.first_name} #{r.player.person.last_name})")
-        %br/
-        %nobr= link_to("Tax Receipt", tax_receipt_path(@club.subdomain, :reg => r.id))
+        -# %br/
+        -# %nobr= link_to("Tax Receipt", tax_receipt_path(@club.subdomain, :reg => r.id))
       
 %hr
 - total = 0
