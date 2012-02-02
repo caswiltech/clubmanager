@@ -22,8 +22,12 @@ class RegistrationQuestionResponse < ActiveRecord::Base
     responses = []
     questions.each do |q|
       # get those response options that are not admin-only, and that are default (or first in the list of non-defaults)
-      options = q.registration_question_response_options.publicly_visible
-      responses << registration.registration_question_responses.build(:registration_question => q, :registration_question_response_option_id => (options.empty? ? nil : options.first.id))
+      if q.response_optional
+        responses << registration.registration_question_responses.build(:registration_question => q)
+      else
+        options = q.registration_question_response_options.publicly_visible.order("defaultresponse DESC")
+        responses << registration.registration_question_responses.build(:registration_question => q, :registration_question_response_option_id => (options.empty? ? nil : options.first.id))
+      end
     end
     responses
   end
