@@ -1,4 +1,10 @@
 module FormHelper
+  
+  def append_to_label(labeltext, appendtext, remove_trailing_whitespace = false)
+    labeltext.rstrip! if remove_trailing_whitespace
+    labeltext.chomp(appendtext) << appendtext
+  end
+  
   def remove_child_link(name, f, options = {})
     options[:class] ||= ""
     options[:class] << " remove_child"

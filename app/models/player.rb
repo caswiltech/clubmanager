@@ -16,7 +16,7 @@ class Player < ActiveRecord::Base
   end
   
   def generate_extid
-    self.update_attribute(:extid, (Digest::SHA2.new << "#{self.id}#{self.created_at.to_s}").to_s)
+    self.update_attribute(:extid, (Digest::SHA2.new << "#{self.id}--#{self.created_at.to_s}").to_s)
   end
   
   def self.get_age_as_of_date(dob, as_of_date)

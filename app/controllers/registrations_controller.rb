@@ -17,11 +17,14 @@ class RegistrationsController < ApplicationController
     if season.present?
       @registration = nil
       player_extid = params[:player]
+      reg_token = params[:auth]
       # is there a player param, and does it return a valid player for this club?
-      if player_extid.present? && Player.find_by_extid(player_extid).present?
+      if player_extid.present? && Player.find_by_extid(player_extid).present? && reg_token.present? && RegistrationToken.find_by_token(reg_token).present? && RegistrationToken.find_by_token(reg_token).valid_for_player?(player_extid)
+        
         player = Player.find_by_extid(player_extid)
+        reg_token = RegistrationToken.find_by_token(reg_token)
     
-        @registration = Registration.new(:club => @club, :season => season, :player => player)
+        @registration = Registration.new(:club => @club, :season => season, :player => player, :registration_token_id => reg_token.id)
           RegistrationQuestionResponse.populate_responses_for_registration(@registration, true)
 
         prev_pg = player.registrations.last.registrations_people.parent_guardians
