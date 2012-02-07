@@ -143,7 +143,7 @@ class RegistrationsController < ApplicationController
         Rails::logger.info "looks like there was an error with the mailer\n\n"
         
       end
-      @payment_method = @registration.registration_question_responses.where(:registration_question_id => @registration.registration_questions.where(:report_label => "Payment Method").first.id).last.registration_question_response_option.response_value
+      @payment_method = @registration.payment_option.name
       render :action => :finalize
     else
       Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"

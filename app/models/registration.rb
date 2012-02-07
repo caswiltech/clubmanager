@@ -7,6 +7,7 @@ class Registration < ActiveRecord::Base
   has_many :registrations_people
   has_many :registration_question_responses, :dependent => :destroy
   belongs_to :registration_token
+  belongs_to :payment_option
   
   # legacu and should be refactored out in the future
   belongs_to :parent_guardian1, :class_name => "Person"

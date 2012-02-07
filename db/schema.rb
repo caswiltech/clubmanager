@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120129031826) do
+ActiveRecord::Schema.define(:version => 20120202045437) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -59,6 +59,12 @@ ActiveRecord::Schema.define(:version => 20120129031826) do
     t.integer   "maximum_age", :null => false
     t.timestamp "created_at"
     t.timestamp "updated_at"
+  end
+
+  create_table "payment_options", :force => true do |t|
+    t.string  "name",                               :null => false
+    t.boolean "adminonly",       :default => false
+    t.boolean "defaultresponse", :default => false
   end
 
   create_table "payment_packages", :force => true do |t|
@@ -166,6 +172,7 @@ ActiveRecord::Schema.define(:version => 20120129031826) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "registration_token_id"
+    t.integer  "payment_option_id"
   end
 
   create_table "registrations_people", :force => true do |t|

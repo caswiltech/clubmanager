@@ -4,6 +4,7 @@
 = semantic_form_for @registration, :url => registration_finalize_path(@club.subdomain) do |reg|
   = reg.inputs do
     = reg.input :id, :as => :hidden
+    = reg.input :payment_option_id, :as => :select, :include_blank => false, :collection => PaymentOption.publicly_visible, :label => "Payment Method", :hint => "The registration fee for #{@registration.division.name} is #{number_to_currency(PaymentPackage.for_season_and_division(@registration.season, @registration.division).amount)}."
     = reg.semantic_fields_for :registration_question_responses do |rqr|
       - next if rqr.object.registration_question.editable_by > 0 || rqr.object.registration_question.player_field
       = rqr.input :registration_question_id, :as => :hidden, :input_html => {:value => rqr.object.registration_question.id}
