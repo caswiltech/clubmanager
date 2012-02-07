@@ -153,7 +153,12 @@ class RegistrationsController < ApplicationController
   
   def regreport
     # @registrations = @club.registrations.thisyear.order("id desc")
-    @registrations = @club.registrations.order("id desc")
+    season_id = params[:season]
+    if season_id.present?
+      @registrations = @club.registrations.where(:season_id => season_id).order("id desc")
+    else
+      @registrations = @club.registrations.order("id desc")
+    end
   end
   
   def delete_reg
@@ -176,7 +181,12 @@ class RegistrationsController < ApplicationController
   end
   
   def regreport_csv
-    @csv_registrations = @club.registrations.order("id asc")
+    season_id = params[:season]
+    if season_id.present?
+      @csv_registrations = @club.registrations.where(:season_id => season_id).order("id desc")
+    else
+      @csv_registrations = @club.registrations.order("id asc")
+    end
     render_csv("#{@club.subdomain}-regreport-#{Time.now.strftime("%Y%m%d")}")
   end
   
