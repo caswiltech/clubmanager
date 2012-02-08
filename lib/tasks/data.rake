@@ -50,7 +50,7 @@ namespace :data do
       next if reg.player.person.last_name == "Kleefman"
       next if reg.registrations_people.empty? || reg.registrations_people.first.person.blank? || reg.registrations_people.first.person.email.blank?
       peopleids << reg.registrations_people.first.person.id
-      inspector << [reg.id, reg.player.birthdate, reg.player.legal_name, reg.registrations_people.first.person.id, reg.registrations_people.first.person.last_name]
+      inspector << [reg.id, reg.player.birthdate, "#{reg.player.person.first_name} #{reg.player.person.last_name}", reg.registrations_people.first.person.id, reg.registrations_people.first.person.last_name]
     end
     peopleids = peopleids.compact.uniq
     puts "peopleids(#{peopleids.count})\n\n#{peopleids.inspect}\n\n#{inspector.inspect}\n\n"
