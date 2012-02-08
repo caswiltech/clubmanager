@@ -57,3 +57,9 @@
     %hr
     Are you a parent/guardian of a participant from a past season or program? Enter your email below and we'll send you a message with a link to quickly and securely re-register.
     %p
+    - form_tag(send_rereg_details_path(@club.subdomain, :method => :post)) do
+      .field
+        = label_tag :email, 'Email Address'
+        = email_field_tag :email
+      .buttons
+        = submit_tag 'Send Re-Registration Email'
