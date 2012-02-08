@@ -40,7 +40,7 @@ class RegistrationsController < ApplicationController
     @message = ""
     if person.present?
       begin
-        RegistrationMailer.rereg(person, {:email => email, :bulk => true}).deliver
+        RegistrationMailer.rereg(person, {:email => email}).deliver
         @message = "An email has been sent to #{email} with a secure link for re-registering participants."
       rescue
         # not going to do anything right now - we'll just log errors
