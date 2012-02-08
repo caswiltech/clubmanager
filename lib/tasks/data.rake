@@ -41,6 +41,7 @@ namespace :data do
     # puts "regs size is #{regs.count}\n\n"
     # puts "first reg: #{regs.first.ai}\n\n"
     # puts "first reg registrations_people: #{regs.first.registrations_people.ai}\n\n"
+    inspector = []
     
     regs.each do |reg|
       # has this associated player already re-registered for 2012?
@@ -48,11 +49,11 @@ namespace :data do
       # skip the Kleefmans
       next if reg.player.person.last_name == "Kleefman"
       next if reg.registrations_people.empty? || reg.registrations_people.first.person.blank? || reg.registrations_people.first.person.email.blank?
-      # peopleids << reg.registrations_people.first.person.id
-      peopleids << [reg.id, reg.player.birthdate, reg.player.legal_name, reg.registrations_people.first.person.last_name]
+      peopleids << reg.registrations_people.first.person.id
+      inspector << [reg.id, reg.player.birthdate, reg.player.legal_name, reg.registrations_people.first.person.id, reg.registrations_people.first.person.last_name]
     end
     peopleids = peopleids.compact.uniq
-    puts "peopleids(#{peopleids.count}) = #{peopleids.inspect}\n\n"
+    puts "peopleids(#{peopleids.count})\n\n#{peopleids.inspect}\n\n#{inspector.inspect}\n\n"
     
     # peopleids.each do |person|
     #   person = Person.find(person)
