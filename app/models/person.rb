@@ -10,6 +10,29 @@ class Person < ActiveRecord::Base
   def full_name
     "#{self.first_name} #{self.last_name}"
   end
+  
+  def players
+    players = []
+    self.registrations.each do |reg|
+      players.push(reg.player_id)
+    end
+    Player.find(players.compact.uniq) unless players.empty?
+    # self.registrations.first.player_id
+  end
+  
+  def players_seasondivisions_eligible_for_registration_now
+    regops = []
+    seasons = Season.accepting_registrations_now
+    self.players.each do |player|
+      sds = []
+      seasons.each do |season|
+        sd = SeasonDivision.for_season_and_birthdate(season, player.birthdate)
+        sds.push(sd.first) if sd.present?
+      end
+      regops.push([player, sds]) unless sds.empty?
+    end
+    regops
+  end
 
   def cleanup_names
     self.first_name = self.first_name.split('-').map{|x| x.split.map{|x| x.titleize.gsub(/ /,'').split('\'').map{|x| x.titleize.gsub(/ /,'')}.join('\'')}.join(' ')}.join('-') unless self.first_name.blank?

@@ -67,5 +67,28 @@ class RegistrationMailer < ActionMailer::Base
       :subject => mail_subject
     )
   end
+  
+  def rereg(person, options = {})
+    email = options[:email].present? ? options[:email] : nil
+    @bulk = options[:bulk].present? ? options[:bulk] : nil
+    @auth_token = RegistrationToken.create(:club => person.club, :person => person).token
+    @club = person.club    
+    
+    mail_to = []
+    if email.present? && (person.email == email || person.alt_email == email)
+      mail_to << "#{person.first_name} #{person.last_name} <#{email}>"
+    else
+      mail_to << "#{person.first_name} #{person.last_name} <#{person.email}>" unless person.email.blank?
+      mail_to << "#{person.first_name} #{person.last_name} <#{person.alt_email}>" unless person.alt_email.blank? || person.alt_email == person.email
+    end
+    mail_from = "#{person.club.short_name} <#{person.club.reg_notify_email}>"
+    mail_subject = "#{person.club.short_name} Re-Registration Link"
+    
+    mail(
+      :to => mail_to,
+      :from => mail_from,
+      :subject => mail_subject
+    )
+  end
 
 end

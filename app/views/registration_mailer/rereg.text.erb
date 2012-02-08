@@ -1,0 +1,36 @@
+<% if @bulk -%>The 2012 spring football season is quickly approaching, and before you know it the summer season will also be upon us.
+
+At the end of this email is a link to a customized page for you where you can securely and quickly re-register players and cheerleaders for any of the 2012 seasons that they qualify for:
+- spring flag football (runs from late March to early June, teams for ages 8 to 13 (atom to junior bantam), limited team size so register)
+- summer/fall football (flag, atom, peewee and junior bantam)
+- cheerleading (runs from late June to late November, now up to age 13)
+
+Some important news for 2012
+- We are now taking registrations for atom spring flag football (players born in 2003/2004), in addition to the peewee and junior bantam spring flag teams that were launched last year. Spring flag is non-contact 5-on-5 flag football played on a smaller field that emphasizes passing skill development. The registration fee for all levels of spring flag is $100.00, and includes a "keeper" jersey. Both the peewee and junior bantam teams are already over 60% full.
+- For summer/fall flag football for ages 5-7 (born 2005 to 2007) the registration fee has been reduced to $50 and the equipment deposit has been eliminated. We're really trying to grow at this introductory level, so get the word out to your neighbours and friends about this fun, affordable program.
+- All other registration fees are the same as from 2011 (for spring flag, tackle football and cheerleading). For summer/fall football, returning players who register by April 1 are guaranteed a spot on a 2012 roster. Last year, flag, peewee and junior bantam were over 85% full, and atom is expected to see even higher numbers than in 2011 but multiple atom teams are not guaranteed.
+- The beloved volunteer bond has been eliminated. Parents are still expected to volunteer a minimum of six hours for their child's team during the course of the season. Those parent/guardians or family members who volunteer above the six hour minimum will get entries (one for each complete hour of extra volunteering) into a major prize draw.
+- We are looking for parents to be involved in our off-season promotions in New Westminster schools and the local community. If you're willing to be involved in this, please reply to this email.
+- If you're wanting some brochures to distribute to your neighbours or your child's friends, please reply to this email. Brochures will be ready at the end of February.
+
+RE-REGISTRATION LINK
+Here is a secure URL where you can quickly re-register participants for the upcoming seasons.
+
+<%= club_url(@club.subdomain, :auth => @auth_token) %>
+<% else -%>Here is a secure URL where you can quickly re-register participants for our upcoming and current programs.
+
+<%= club_url(@club.subdomain, :auth => @auth_token) %>
+<% end -%>
+
+Regards,
+
+<%= @club.long_name %>
+
+Email: <%= @club.contact_email %>
+<%- unless @club.phone.nil? -%>Phone: <%= @club.phone %><%- end -%>
+<%- unless @club.homepage_url.nil? -%>Website: <%= @club.homepage_url %><%- end -%>
+Mailing Address:
+<%= @club.street1 %>
+<%= @club.city %>, <%= @club.province %>  <%= @club.postal_code %>
+
+

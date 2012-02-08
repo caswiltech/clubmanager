@@ -5,6 +5,7 @@
     = rp.input :person_role_id, :as => :hidden
     = rp.input :primary, :as => :hidden
     = rp.semantic_fields_for :person do |person|
+      = person.input :club_id, :as => :hidden
       = person.input :first_name, :label => "First Name", :required => true
       = person.input :last_name, :label => "Last Name", :required => true
       = person.input :street1, :label => "Address"

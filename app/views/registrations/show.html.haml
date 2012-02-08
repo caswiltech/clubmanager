@@ -1,15 +1,59 @@
 %h1= link_to @club.long_name, @club.homepage_url
 %hr
 
-- seasons = @club.seasons.accepting_registrations_now
-- if seasons.empty?
+- if @seasons.empty?
   = "#{@club.short_name} is not accepting any registrations at this time."
 - else
-  Registrations are currently being accepted for the following seasons:
-  %ul
-    - seasons.each do |season|
-      %li
-        %strong= link_to season.name, registration_path(@club.subdomain, :season => season.id)
-        - unless season.description.blank?
-          %br/
-          = season.description
+  - if @person.present?
+    = "Welcome, #{@person.first_name}. "
+    - if @players.present?
+      - if @players.count > 1
+        You can re-register these participants for:
+        %ul
+          - @players.each do |player, sds|
+            %li
+              = player.person.full_name
+              %ul
+                - sds.each do |sd|
+                  - sd_text = "#{sd.season.name} - #{sd.division.name}"
+                  - reg_fee = PaymentPackage.for_season_and_division(sd.season, sd.division).amount
+                  - sd_text << " (#{number_to_currency(reg_fee)})" if reg_fee > 0
+                  %li= link_to sd_text, registration_path(@club.subdomain, :season => sd.season.id, :auth => @reg_token, :player => player.extid)
+      - else
+        - player = @players.first[0]
+        - sds = @players.first[1]
+        - if sds.count > 1
+          = "You can re-register #{player.person.first_name} for any of the following programs:"
+          %ul
+            - sds.each do |sd|
+              - sd_text = "#{sd.season.name} - #{sd.division.name}"
+              - reg_fee = PaymentPackage.for_season_and_division(sd.season, sd.division).amount
+              - sd_text << " (#{number_to_currency(reg_fee)})" if reg_fee > 0
+              %li= link_to sd_text, registration_path(@club.subdomain, :season => sd.season.id, :auth => @reg_token, :player => player.extid)
+        - else
+          - sd = sds.first
+          - sd_text = "Click here to register #{player.person.first_name} for #{sd.season.name} - #{sd.division.name}"
+          - reg_fee = PaymentPackage.for_season_and_division(sd.season, sd.division).amount
+          - sd_text << " (#{number_to_currency(reg_fee)})" if reg_fee > 0
+          = link_to sd_text, registration_path(@club.subdomain, :season => sd.season.id, :auth => @reg_token, :player => player.extid)
+    - else
+      Unfortunately, it appears that there are no programs open for registration right now for any of the participants you have registered in the past. You can still register new participants for any of the programs below:
+      %ul
+        - @seasons.each do |season|
+          %li
+            %strong= link_to season.name, registration_path(@club.subdomain, :season => season.id)
+            - unless season.description.blank?
+              %br/
+              = season.description
+  - else
+    Registrations are currently being accepted for the following seasons:
+    %ul
+      - @seasons.each do |season|
+        %li
+          %strong= link_to season.name, registration_path(@club.subdomain, :season => season.id)
+          - unless season.description.blank?
+            %br/
+            = season.description
+    %hr
+    Are you a parent/guardian of a participant from a past season or program? Enter your email below and we'll send you a message with a link to quickly and securely re-register.
+    %p

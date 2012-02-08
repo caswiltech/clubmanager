@@ -8,7 +8,49 @@ class RegistrationsController < ApplicationController
   end
 
   def show
+    @seasons = @club.seasons.accepting_registrations_now
+    @reg_token = params[:auth]
+    # is there a player param, and does it return a valid player for this club?
+    @person = nil
+    if @reg_token.present? && RegistrationToken.find_by_token(@reg_token).present?
+      token = RegistrationToken.find_by_token(@reg_token)
+      if token.expired?
+        begin
+          RegistrationMailer.rereg(token.person).deliver
+        rescue
+          # not going to do anything right now - we'll just log errors
+          Rails::logger.info "\n\n#{'x'*50}\n\n"
+          Rails::logger.info "looks like there was an error with the rereg mailer\n\n"  
+        end        
+        @message = "Unfortunately, the authorization token you presented has expired. An email with a link with a new, valid authorization token has been sent to you."
+        flash.now[:error] = @message
+      else
+        @person = token.person
+        @players = nil
+        if @person.present?
+          @players = @person.players_seasondivisions_eligible_for_registration_now
+        end
+      end
+    end
+  end
   
+  def send_rereg_details
+    email = params[:email]
+    person = @club.people.where("email = ? or alt_email = ?", email, email).order("id DESC").first
+    @message = ""
+    if person.present?
+      begin
+        RegistrationMailer.rereg(person, {:email => email, :bulk => true}).deliver
+        @message = "An email has been sent to #{email} with a secure link for re-registering participants."
+      rescue
+        # not going to do anything right now - we'll just log errors
+        Rails::logger.info "\n\n#{'x'*50}\n\n"
+        Rails::logger.info "looks like there was an error with the rereg mailer\n\n"  
+        @message = "An error occurred when trying to send an email to #{email}. We're looking into this error now. Thanks for your patience."
+      end
+    else
+      @message = "Unfortunately we can't find a previous registration matching the email address you provided (#{email}). Please return to the previous page to try again or to start a new registration."
+    end
   end
 
   def new
@@ -53,6 +95,11 @@ class RegistrationsController < ApplicationController
 
   def create    
     reg_params = params[:registration]
+    
+    # don't allow the person-to-club relationship to be hacked
+    reg_params[:player_attributes][:person_attributes][:club_id] = @club.id
+    reg_params[:registrations_people_attributes]["0"][:person_attributes][:club_id] = @club.id if reg_params[:registrations_people_attributes]["0"].present?
+    reg_params[:registrations_people_attributes]["1"][:person_attributes][:club_id] = @club.id if reg_params[:registrations_people_attributes]["1"].present?
 
     # clean out parent/guardian 2 if they are empty
     if reg_params[:registrations_people_attributes]["1"].present? && reg_params[:registrations_people_attributes]["1"][:person_attributes][:first_name].blank? && reg_params[:registrations_people_attributes]["1"][:person_attributes][:last_name].blank?
@@ -241,7 +288,7 @@ class RegistrationsController < ApplicationController
   def form_vars
     @cities = ["Anmore","Burnaby","Coquitlam","Delta","Langley","Maple Ridge","New Westminster","North Vancouver","Pitt Meadows","Port Coquitlam","Port Moody","Richmond","Surrey","Vancouver","West Vancouver","White Rock","Other"]
     @provinces = %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }
-    @person_defaults = {:city => @club.city, :province => @club.province, :country => @club.country}
+    @person_defaults = {:club => @club, :city => @club.city, :province => @club.province, :country => @club.country}
     @player_person_defaults = @person_defaults.merge({:phone_type => "Home"})
   
     @phone_types = ["Home", "Work", "Cell", "Other"]
