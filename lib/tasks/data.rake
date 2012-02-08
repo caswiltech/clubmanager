@@ -49,7 +49,7 @@ namespace :data do
       # skip the Kleefmans
       next if reg.player.person.last_name == "Kleefman"
       next if reg.registrations_people.empty? || reg.registrations_people.first.person.blank? || reg.registrations_people.first.person.email.blank?
-      peopleids << reg.registrations_people.first.person.id
+      peopleids << reg.registrations_people.first.person_id
       # inspector << [reg.id, reg.player.birthdate, "#{reg.player.person.first_name} #{reg.player.person.last_name}", reg.registrations_people.first.person.id, reg.registrations_people.first.person.last_name]
       reg = nil
     end
