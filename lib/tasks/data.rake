@@ -23,16 +23,16 @@ namespace :data do
     question.update_attribute(:editable_by, 1)
   end
     
-  task :remove_payment_question => :environment do
-    question = RegistrationQuestion.where(:report_label => "Payment Method").first.destroy
-  end
+  # task :remove_payment_question => :environment do
+  #   question = RegistrationQuestion.where(:report_label => "Payment Method").first.destroy
+  # end
   
-  task :fix_person_club => :environment do
-    club_id = Club.first.id
-    Person.all.each do |p|
-      p.update_attribute(:club_id, club_id)
-    end
-  end
+  # task :fix_person_club => :environment do
+  #   club_id = Club.first.id
+  #   Person.all.each do |p|
+  #     p.update_attribute(:club_id, club_id)
+  #   end
+  # end
   
   task :email_rereg_links => :environment do
     peopleids = []
@@ -49,7 +49,7 @@ namespace :data do
       next if reg.player.person.last_name == "Kleefman"
       next if reg.registrations_people.empty? || reg.registrations_people.first.person.blank? || reg.registrations_people.first.person.email.blank?
       # peopleids << reg.registrations_people.first.person.id
-      peopleids << reg.registrations_people.first.person.last_name
+      peopleids << [reg.registrations_people.first.person.last_name, reg.player.birthdate]
     end
     peopleids = peopleids.compact.uniq
     puts "peopleids(#{peopleids.count}) = #{peopleids.inspect}\n\n"
