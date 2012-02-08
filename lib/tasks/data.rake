@@ -35,24 +35,28 @@ namespace :data do
   end
   
   task :email_rereg_links => :environment do
-    regids = []
-    Club.first.registrations.where("(season_id = 2 OR season_id = 3) AND division_id <> 7").each do |reg|
-      reg.registrations_people.parent_guardians.each do |rp|
-        regids.push(rp.person.id) if rp.person.email.present?
-      end 
+    peopleids = []
+    
+    regs = Club.first.registrations.select("registrations.*, players.*").joins("inner join players on registrations.player_id = players.id").where("(registrations.season_id = 2 OR registrations.season_id = 3) AND players.birthdate > '1998-12-31'")    
+    # puts "regs size is #{regs.count}\n\n"
+    # puts "first reg: #{regs.first.ai}\n\n"
+    # puts "first reg registrations_people: #{regs.first.registrations_people.ai}\n\n"
+    
+    regs.each do |reg|
+      # has this associated player already re-registered for 2012?
+      next unless Club.first.registrations.where("season_id > 3 AND id < 240 AND player_id = ?", reg.player_id).empty?
+      # skip the Kleefmans
+      next if reg.player.person.last_name == "Kleefman"
+      next if reg.registrations_people.empty? || reg.registrations_people.first.person.blank? || reg.registrations_people.first.person.email.blank?
+      # peopleids << reg.registrations_people.first.person.id
+      peopleids << reg.registrations_people.first.person.last_name
     end
-    regids = regids.compact.uniq
-    puts "regids(#{regids.count}) = #{regids.inspect}"
-    regids.each do |person|
-      person = Person.find(person)
-      psds = person.players_seasondivisions_eligible_for_registration_now
-      players = []
-      psds.each do |psd|
-        players.push(psd[0].person.first_name)
-      end
-      unless players.empty?
-        puts "Send #{person.first_name} an email to register #{players.to_sentence}\n"
-      end
-    end
+    peopleids = peopleids.compact.uniq
+    puts "peopleids(#{peopleids.count}) = #{peopleids.inspect}\n\n"
+    
+    # peopleids.each do |person|
+    #   person = Person.find(person)
+    #   RegistrationMailer.rereg(person, {:bulk => true}).deliver
+    # end
   end
 end
