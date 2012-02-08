@@ -37,7 +37,9 @@ namespace :data do
   task :email_rereg_links => :environment do
     peopleids = []
     
-    regs = Club.first.registrations.select("registrations.*, players.*").joins("inner join players on registrations.player_id = players.id").where("(registrations.season_id = 2 OR registrations.season_id = 3) AND players.birthdate > '1998-12-31'")    
+    # players = Player.where("birtdate > '1998-12-31' AND created_at < '2012-01-01'")
+    
+    regs = Club.first.registrations.joins("inner join players on registrations.player_id = players.id").where("(registrations.season_id = 2 OR registrations.season_id = 3) AND players.birthdate > '1998-12-31'")    
     # puts "regs size is #{regs.count}\n\n"
     # puts "first reg: #{regs.first.ai}\n\n"
     # puts "first reg registrations_people: #{regs.first.registrations_people.ai}\n\n"
@@ -48,19 +50,18 @@ namespace :data do
       next unless Club.first.registrations.where("season_id > 3 AND id < 240 AND player_id = ?", reg.player_id).empty?
       # skip the Kleefmans
       next if reg.player.person.last_name == "Kleefman"
+      pg = RegistrationsPerson.where(:registration_id => reg.id)
       next if reg.registrations_people.empty? || reg.registrations_people.first.person.blank? || reg.registrations_people.first.person.email.blank?
       peopleids << reg.registrations_people.first.person_id
-      # inspector << [reg.id, reg.player.birthdate, "#{reg.player.person.first_name} #{reg.player.person.last_name}", reg.registrations_people.first.person.id, reg.registrations_people.first.person.last_name]
-      reg = nil
+      inspector << [reg.id, reg.player.birthdate, "#{reg.player.person.first_name} #{reg.player.person.last_name}", reg.registrations_people.first.person.id, reg.registrations_people.first.person.last_name]
     end
     peopleids = peopleids.compact.uniq
-    peopleids.each do |person|
-      person = Person.find(person)
-      puts "#{person.first_name} #{person.last_name}\n"
-      person = nil
-      
-    end
-    # puts "peopleids(#{peopleids.count})\n\n#{peopleids.inspect}\n\n#{inspector.inspect}\n\n"
+    # peopleids.each do |person|
+    #   person = Person.find(person)
+    #   puts "#{person.first_name} #{person.last_name}\n"
+    #   
+    # end
+    puts "peopleids(#{peopleids.count})\n\n#{peopleids.inspect}\n\n#{inspector.inspect}\n\n"
     
     # peopleids.each do |person|
     #   person = Person.find(person)
