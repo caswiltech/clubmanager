@@ -34,6 +34,19 @@ namespace :data do
   #   end
   # end
   
+  task :dedupe => :environment do
+    Registration.all.each do |reg|
+      puts "reg.id,season.id,player.name,player.birthdate,pg1.id,pg1.name,pg1.email,pg1.alt_email,pg2.id,pg2.name,pg2.email,pg2.alt_email\n"
+      
+      reg_people = ",#{reg.registrations_people.first.person.id},#{reg.registrations_people.first.person.first_name} #{reg.registrations_people.first.person.last_name},#{reg.registrations_people.first.person.email},#{reg.registrations_people.first.person.alt_email}"
+      if reg.registrations_people.count > 1
+        reg_people << ",#{reg.registrations_people[1].person.id},#{reg.registrations_people[1].person.first_name} #{reg.registrations_people[1].person.last_name},#{reg.registrations_people[1].person.email},#{reg.registrations_people[1].person.alt_email}"
+      end
+      puts "#{reg.id},#{reg.season_id},#{reg.player.id},#{reg.player.person.first_name} #{reg.player.person.last_name},#{reg.player.birthdate},#{reg_people}\n"
+    end
+    
+  wns
+  
   task :email_rereg_links => :environment do
     peopleids = []
     
