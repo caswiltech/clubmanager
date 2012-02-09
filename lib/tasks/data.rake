@@ -38,7 +38,7 @@ namespace :data do
     puts "reg.id,season.id,player.name,player.birthdate,pg1.id,pg1.name,pg1.email,pg1.alt_email,pg2.id,pg2.name,pg2.email,pg2.alt_email\n"
     
     Registration.all.each do |reg|
-      next if reg.player.nil? || reg.player.person.nil? || reg.registrations_people.nil? || reg.registrations_people.first.person.nil?
+      next if reg.player.nil? || reg.player.person.nil? || reg.registrations_people.empty? || reg.registrations_people.first.person.nil?
       reg_people = ",#{reg.registrations_people.first.person.id},#{reg.registrations_people.first.person.first_name} #{reg.registrations_people.first.person.last_name},#{reg.registrations_people.first.person.email},#{reg.registrations_people.first.person.alt_email}"
       if reg.registrations_people.count > 1 && reg.registrations_people[1].present? && reg.registrations_people[1].person.present?
         reg_people << ",#{reg.registrations_people[1].person.id},#{reg.registrations_people[1].person.first_name} #{reg.registrations_people[1].person.last_name},#{reg.registrations_people[1].person.email},#{reg.registrations_people[1].person.alt_email}"
