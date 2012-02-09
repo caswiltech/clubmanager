@@ -45,7 +45,7 @@ namespace :data do
       puts "#{reg.id},#{reg.season_id},#{reg.player.id},#{reg.player.person.first_name} #{reg.player.person.last_name},#{reg.player.birthdate},#{reg_people}\n"
     end
     
-  wns
+  end
   
   task :email_rereg_links => :environment do
     peopleids = []
