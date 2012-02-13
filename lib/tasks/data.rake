@@ -1,5 +1,5 @@
 namespace :data do
-  # desc "Refresh the data and deploy on the new cloud environment"
+
   task :convert_payment_options => :environment do
     creditcard = PaymentOption.create(:name => "Credit Card", :defaultresponse => true)
     cheque = PaymentOption.create(:name => "Cheque")
@@ -34,65 +34,59 @@ namespace :data do
   #   end
   # end
   
-  task :dedupe_data => :environment do
-    puts "reg.id,season.id,player.name,player.birthdate,pg1.id,pg1.name,pg1.email,pg1.alt_email,pg2.id,pg2.name,pg2.email,pg2.alt_email\n"
-    
-    Registration.all.each do |reg|
-      next if reg.player.nil? || reg.player.person.nil? || reg.registrations_people.empty? || reg.registrations_people.first.person.nil?
-      reg_people = ",#{reg.registrations_people.first.person.id},#{reg.registrations_people.first.person.first_name} #{reg.registrations_people.first.person.last_name},#{reg.registrations_people.first.person.email},#{reg.registrations_people.first.person.alt_email}"
-      if reg.registrations_people.count > 1 && reg.registrations_people[1].present? && reg.registrations_people[1].person.present?
-        reg_people << ",#{reg.registrations_people[1].person.id},#{reg.registrations_people[1].person.first_name} #{reg.registrations_people[1].person.last_name},#{reg.registrations_people[1].person.email},#{reg.registrations_people[1].person.alt_email}"
-      end
-      puts "#{reg.id},#{reg.season_id},#{reg.player.id},#{reg.player.person.first_name} #{reg.player.person.last_name},#{reg.player.birthdate},#{reg_people}\n"
-    end
-    
-  end
-  
-  task :exec_dedupe => :environment do
-    regs = [
-      # [r1, r2, consolidate_player, consolidate_pgs]
-      [166,171,false,true],
-      [20,62,false,true],
-      [43,136,true,true],
-      [210,211,true,true],
-      [53,169,false,true],
-      [98,99,false,true],
-      [66,181,false,true],
-      [66,226,true,true],
-      [66,227,true,true],
-      [7,9,true,true],
-      [134,193,false,true],
-      [39,40,true,true],
-      [39,228,true,true],
-      [161,164,false,true],
-      [110,111,false,true],
-      [203,222,true,true],
-      [89,90,false,true],
-      [122,194,false,true],
-      [38,221,true,true],
-      [45,47,true,true],
-      [100,101,false,true],
-      [108,67,true,true]
-      ]
-    regs.each do |reg|
-      r1 = Registration.find reg[0]
-      r2 = Registration.find reg[1]
-      puts "r1.id = #{r1.id}, r2.id = #{r2.id}\n"
-      next if r1.blank? || r2.blank?
-      puts "line 81\n"
-      r2.update_attribute(:player_id, r1.player_id) if reg[2]
-      next if !reg[3] || r1.registrations_people.empty?
-      puts "line 84\n"
-      r2.registrations_people.destroy_all
-      RegistrationsPerson.create(:registration_id => r2.id, :person_id => r1.registrations_people[0].person_id, :person_role_id => 1, :primary => true)
-      if r1.registrations_people.count > 1
-        RegistrationsPerson.create(:registration_id => r2.id, :person_id => r1.registrations_people[1].person_id, :person_role_id => 1, :primary => false)
-      end
-      
-    end
-  end
-  
-  
+  # task :dedupe_data => :environment do
+  #   puts "reg.id,season.id,player.name,player.birthdate,pg1.id,pg1.name,pg1.email,pg1.alt_email,pg2.id,pg2.name,pg2.email,pg2.alt_email\n"
+  #   
+  #   Registration.all.each do |reg|
+  #     next if reg.player.nil? || reg.player.person.nil? || reg.registrations_people.empty? || reg.registrations_people.first.person.nil?
+  #     reg_people = ",#{reg.registrations_people.first.person.id},#{reg.registrations_people.first.person.first_name} #{reg.registrations_people.first.person.last_name},#{reg.registrations_people.first.person.email},#{reg.registrations_people.first.person.alt_email}"
+  #     if reg.registrations_people.count > 1 && reg.registrations_people[1].present? && reg.registrations_people[1].person.present?
+  #       reg_people << ",#{reg.registrations_people[1].person.id},#{reg.registrations_people[1].person.first_name} #{reg.registrations_people[1].person.last_name},#{reg.registrations_people[1].person.email},#{reg.registrations_people[1].person.alt_email}"
+  #     end
+  #     puts "#{reg.id},#{reg.season_id},#{reg.player.id},#{reg.player.person.first_name} #{reg.player.person.last_name},#{reg.player.birthdate},#{reg_people}\n"
+  #   end
+  # end  
+  # task :exec_dedupe => :environment do
+  #   regs = [
+  #     # [r1, r2, consolidate_player, consolidate_pgs]
+  #     [166,171,false,true],
+  #     [20,62,false,true],
+  #     [43,136,true,true],
+  #     [210,211,true,true],
+  #     [53,169,false,true],
+  #     [98,99,false,true],
+  #     [66,181,false,true],
+  #     [66,226,true,true],
+  #     [66,227,true,true],
+  #     [7,9,true,true],
+  #     [134,193,false,true],
+  #     [39,40,true,true],
+  #     [39,228,true,true],
+  #     [161,164,false,true],
+  #     [110,111,false,true],
+  #     [203,222,true,true],
+  #     [89,90,false,true],
+  #     [122,194,false,true],
+  #     [38,221,true,true],
+  #     [45,47,true,true],
+  #     [100,101,false,true],
+  #     [108,67,true,true]
+  #     ]
+  #   regs.each do |reg|
+  #     r1 = Registration.find reg[0]
+  #     r2 = Registration.find reg[1]
+  #     next if r1.blank? || r2.blank?
+  #     r2.update_attribute(:player_id, r1.player_id) if reg[2]
+  #     next if !reg[3] || r1.registrations_people.empty?
+  #     r2.registrations_people.destroy_all
+  #     RegistrationsPerson.create(:registration_id => r2.id, :person_id => r1.registrations_people[0].person_id, :person_role_id => 1, :primary => true)
+  #     if r1.registrations_people.count > 1
+  #       RegistrationsPerson.create(:registration_id => r2.id, :person_id => r1.registrations_people[1].person_id, :person_role_id => 1, :primary => false)
+  #     end
+  #     
+  #   end
+  # end
+
   task :email_rereg_links => :environment do
     peopleids = []
     
@@ -107,14 +101,13 @@ namespace :data do
       peopleids << reg.registrations_people.first.person_id
     end
     peopleids = peopleids.compact.uniq
-    peopleids.each do |person|
-      person = Person.find(person)
-      puts "#{person.first_name} #{person.last_name}\n"
-    end
-    
     # peopleids.each do |person|
     #   person = Person.find(person)
-    #   RegistrationMailer.rereg(person, {:bulk => true}).deliver
+    #   puts "#{person.first_name} #{person.last_name}\n"
     # end
+    peopleids.each do |person|
+      person = Person.find(person)
+      RegistrationMailer.rereg(person, {:bulk => true}).deliver
+    end
   end
 end
