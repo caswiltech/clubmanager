@@ -19,7 +19,8 @@
     - else
       - row.concat [" "," "," "," "," "," "," "," "," "," "," "," "," "]
       - row.concat [" "," "," "," "," "," "," "," "," "," "," "," "," "]
-    - row.concat [r.payment_option.name]
+    - payment_option = r.payment_option.present? ? r.payment_option.name : ""
+    - row.concat [payment_option]
     - question_responses = r.registration_question_responses.collect{|response|{:question => response.registration_question.id, :response_value => (response.registration_question_response_option.present? ? response.registration_question_response_option.response_value : response.textresponse)}}
     - question_indices.each do |q_id|
       - response_value = question_responses.select{|n|n[:question] == q_id}.first
