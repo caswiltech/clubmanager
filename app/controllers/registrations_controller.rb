@@ -32,26 +32,7 @@ class RegistrationsController < ApplicationController
         end
       end
     end
-  end
-  
-  def send_rereg_details
-    email = params[:email]
-    person = @club.people.where("email = ? or alt_email = ?", email, email).order("id DESC").first
-    @message = ""
-    if person.present?
-      begin
-        RegistrationMailer.rereg(person, {:email => email}).deliver
-        @message = "An email has been sent to #{email} with a secure link for re-registering participants."
-      rescue
-        # not going to do anything right now - we'll just log errors
-        Rails::logger.info "\n\n#{'x'*50}\n\n"
-        Rails::logger.info "looks like there was an error with the rereg mailer\n\n"  
-        @message = "An error occurred when trying to send an email to #{email}. We're looking into this error now. Thanks for your patience."
-      end
-    else
-      @message = "Unfortunately we can't find a previous registration matching the email address you provided (#{email}). Please return to the previous page to try again or to start a new registration."
-    end
-  end
+  end  
 
   def new
     season_id = params[:season]
@@ -67,7 +48,7 @@ class RegistrationsController < ApplicationController
         reg_token = RegistrationToken.find_by_token(reg_token)
     
         @registration = Registration.new(:club => @club, :season => season, :player => player, :registration_token_id => reg_token.id)
-          RegistrationQuestionResponse.populate_responses_for_registration(@registration, true)
+          RegistrationQuestionResponse.populate_responses_for_registration(@registration)
 
         prev_pg = player.registrations.last.registrations_people.parent_guardians
         
@@ -84,7 +65,7 @@ class RegistrationsController < ApplicationController
         
       else
         @registration = Registration.new(:club => @club, :season => season, :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults})
-        RegistrationQuestionResponse.populate_responses_for_registration(@registration, true)
+        RegistrationQuestionResponse.populate_responses_for_registration(@registration)
         @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true)
         @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)
       end
@@ -144,7 +125,7 @@ class RegistrationsController < ApplicationController
     unless season.present?
       redirect_to club_url(@club.subdomain)
     else
-      division = Division.for_season_and_birthdate(@registration.season, @registration.player.birthdate)
+      division = Division.for_season_and_birthdate(@registration.season, @registration.player.birthdate, true)
       unless division.present?
         if @registration.registrations_people.size < 2
           @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)
@@ -168,7 +149,7 @@ class RegistrationsController < ApplicationController
           # don't want someone to try and hack this registration into a different club, now do we!
           @registration.update_attribute(:club_id, @club.id)
           @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
-          RegistrationQuestionResponse.populate_responses_for_registration(@registration, false)
+          RegistrationQuestionResponse.populate_responses_for_registration(@registration)
           RegistrationQuestionResponse.create_default_responses_for_protected_questions(@registration)
           render :action => :step2
         end
@@ -187,8 +168,7 @@ class RegistrationsController < ApplicationController
       rescue
         # not going to do anything right now - we'll just log errors
         Rails::logger.info "\n\n#{'x'*50}\n\n"
-        Rails::logger.info "looks like there was an error with the mailer\n\n"
-        
+        Rails::logger.info "looks like there was an error with the mailer\n\n"      
       end
       @payment_method = @registration.payment_option.name
       render :action => :finalize
@@ -197,6 +177,33 @@ class RegistrationsController < ApplicationController
       render :action => :step2
     end
   end
+
+  def send_rereg_details
+    email = params[:email]
+    people = @club.people.where("email = ? or alt_email = ?", email, email).order("id DESC").first
+    @message = ""
+    person = nil
+    people.each do |p|
+      if p.registrations.present?
+        person = p
+        break
+      end
+    end
+    if person.present?
+      begin
+        RegistrationMailer.rereg(person, {:email => email}).deliver
+        @message = "An email has been sent to #{email} with a secure link for re-registering participants."
+      rescue
+        # not going to do anything right now - we'll just log errors
+        Rails::logger.info "\n\n#{'x'*50}\n\n"
+        Rails::logger.info "looks like there was an error with the rereg mailer\n\n"  
+        @message = "An error occurred when trying to send an email to #{email}. We're looking into this error now. Thanks for your patience."
+      end
+    else
+      @message = "Unfortunately we can't find a previous registration matching the email address you provided (#{email}). Please return to the previous page to try again or to start a new registration."
+    end
+  end
+
   
   def regreport
     # @registrations = @club.registrations.thisyear.order("id desc")

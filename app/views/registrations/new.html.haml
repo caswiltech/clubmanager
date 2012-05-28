@@ -7,8 +7,12 @@
     = reg.semantic_fields_for :player do |player|
       = player.semantic_fields_for :person do |person|
         = person.input :club_id, :as => :hidden
-        = person.input :first_name, :label => "First Name", :required => true
-        = person.input :last_name, :label => "Last Name", :required => true
+        - if person.object.new_record?
+          = person.input :first_name, :label => "First Name", :required => true
+          = person.input :last_name, :label => "Last Name", :required => true
+        - else
+          = person.input :first_name, :label => "First Name", :required => true, :input_html => {:disabled => true}
+          = person.input :last_name, :label => "Last Name", :required => true, :input_html => {:disabled => true}
         = person.input :street1, :label => "Address", :required => true
         = person.input :city, :as => :select, :include_blank => false, :collection => @cities, :required => true
         = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }, :required => true
@@ -20,7 +24,7 @@
       = player.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(20).year, :end_year => Date.today.years_ago(5).year, :required => true
       = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }, :required => true
     = reg.semantic_fields_for :registration_question_responses do |rqr|
-      - next if !rqr.object.registration_question.player_field
+      -# next if !rqr.object.registration_question.player_field
       = rqr.input :registration_question_id, :as => :hidden, :input_html => {:value => rqr.object.registration_question.id}
       - if rqr.object.registration_question.questiontype == "string"
         = rqr.input :textresponse, :as => :string, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
@@ -37,6 +41,8 @@
     = render :partial => 'registrations_people_fields', :locals => {:reg => reg}
   - else
     = render :partial => 'registrations_people_fields', :locals => {:reg => reg}#, :object => @registration.registrations_people
+  = reg.input :waiver, :as => :boolean, :label => "Please read the following waiver statement and indicate your acceptance of it by checking the box to the left:",:hint => "I/We hereby approve and consent to the person being registered to participate in this Royal City Hyacks Football Club program and absolve and release the Royal City Hyacks Football Club, the City of New Westminster, School District No. 40 (New Westminster), Football BC and any of their affiliate associations, members or volunteers from any and all liability arising from any act or omission on their part resulting in injury, fatality or illness occurring as a consequence of said participation. I/We agree to abide by the Policies, Procedures and By-Laws of the Royal City Hyacks Football Club."
+  
   %hr
   = reg.buttons do
     = reg.commit_button :label => "Proceed to Step 2"

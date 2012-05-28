@@ -3,6 +3,5 @@
 db/*.sqlite3
 log/*.log
 tmp/**/*
-cmg_dev
-cmg_test
+cmg_*
 db/schema.rb

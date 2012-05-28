@@ -6,8 +6,12 @@
     = rp.input :primary, :as => :hidden
     = rp.semantic_fields_for :person do |person|
       = person.input :club_id, :as => :hidden
-      = person.input :first_name, :label => "First Name", :required => true
-      = person.input :last_name, :label => "Last Name", :required => true
+      - if person.object.new_record? || !(rp.object.primary?)
+        = person.input :first_name, :label => "First Name", :required => true
+        = person.input :last_name, :label => "Last Name", :required => true
+      - else
+        = person.input :first_name, :label => "First Name", :required => true, :input_html => {:disabled => true}
+        = person.input :last_name, :label => "Last Name", :required => true, :input_html => {:disabled => true}
       = person.input :street1, :label => "Address"
       = person.input :city, :as => :select, :include_blank => false, :collection => @cities
       = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }

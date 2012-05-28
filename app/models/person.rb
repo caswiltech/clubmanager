@@ -20,6 +20,21 @@ class Person < ActiveRecord::Base
     # self.registrations.first.player_id
   end
   
+  def find_existing(fname, lname, email, options = {})
+    retval = nil
+    if fname.present? && lname.present?
+      whereval = {}
+      if options.present?
+        
+      end
+      if email.present?
+        
+      end
+      retval = Person.where(:first_name => fname, :last_name => lname)
+    end
+    retval
+  end
+  
   def players_seasondivisions_eligible_for_registration_now
     regops = []
     seasons = Season.accepting_registrations_now
