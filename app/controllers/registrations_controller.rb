@@ -180,9 +180,9 @@ class RegistrationsController < ApplicationController
 
   def send_rereg_details
     email = params[:email]
-    people = @club.people.where("email = ? or alt_email = ?", email, email).order("id DESC").first
+    people = @club.people.where("email = ? or alt_email = ?", email, email).order("id DESC")
     @message = ""
-    person = nil
+    person = nil    
     people.each do |p|
       if p.registrations.present?
         person = p
