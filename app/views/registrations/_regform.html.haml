@@ -1,8 +1,7 @@
 %h1 #{@club.short_name} Registration for #{@registration.season.name} 
-%h2 Division: #{@registration.division.name}
-
 = semantic_form_for @registration, :url => registration_create_path(@club.subdomain) do |reg|
   %hr
+  -#= reg.inputs "Player Information" do
   = reg.inputs "Participant Information" do
     %hr
     = reg.semantic_fields_for :player do |player|
@@ -22,8 +21,7 @@
         = person.input :phone, :as => :phone, :label => "Home Phone", :required => true
         = person.input :phone_type, :as => :hidden, :input_html => {:value => "Home"}
       = player.input :carecard, :label => "CareCard #", :required => true
-      = player.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(Division::OLDEST_AGE).year, :end_year => Date.today.years_ago(Division::YOUNGEST_AGE).year, :input_html => {:disabled => true}, :required => true
-      = player.input :birthdate, :as => :hidden
+      = player.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(20).year, :end_year => Date.today.years_ago(5).year, :required => true
       = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }, :required => true
     = reg.semantic_fields_for :registration_question_responses do |rqr|
       -# next if !rqr.object.registration_question.player_field
@@ -34,7 +32,6 @@
         = rqr.input :textresponse, :as => :text, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
       - else
         = rqr.input :registration_question_response_option, :as => :select, :include_blank => rqr.object.registration_question.response_optional, :collection => question_response_options(rqr.object.registration_question, @registration), :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
-    = reg.input :payment_option_id, :as => :select, :include_blank => false, :collection => PaymentOption.publicly_visible, :label => "Payment Method", :hint => "The registration fee for #{@registration.division.name} is #{number_to_currency(PaymentPackage.for_season_and_division(@registration.season, @registration.division).amount)}."
     = reg.input :season_id, :as => :hidden
     - if @registration.registration_token.present?
       = reg.input :registration_token_id, :as => :hidden
@@ -44,12 +41,11 @@
     = render :partial => 'registrations_people_fields', :locals => {:reg => reg}
   - else
     = render :partial => 'registrations_people_fields', :locals => {:reg => reg}#, :object => @registration.registrations_people
-  
   = reg.input :waiver, :as => :boolean, :label => "Please read the following waiver statement and indicate your acceptance of it by checking the box to the left:",:hint => "I/We hereby approve and consent to the person being registered to participate in this Royal City Hyacks Football Club program and absolve and release the Royal City Hyacks Football Club, the City of New Westminster, School District No. 40 (New Westminster), Football BC and any of their affiliate associations, members or volunteers from any and all liability arising from any act or omission on their part resulting in injury, fatality or illness occurring as a consequence of said participation. I/We agree to abide by the Policies, Procedures and By-Laws of the Royal City Hyacks Football Club."
   
   %hr
   = reg.buttons do
-    = reg.commit_button :label => "Register for #{@registration.division.name}"
+    = reg.commit_button :label => "Proceed to Step 2"
   -#= new_child_fields_template(:registrations_people) do
     -#= render 'registrations_people_fields', :object => @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false), :locals => {:reg => reg}
 

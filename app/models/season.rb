@@ -19,6 +19,16 @@ class Season < ActiveRecord::Base
   scope :past,
     where("seasons.end_reg_on < current_date").
     order("seasons.end_reg_on, seasons.name")
+    
+  def self.season_accepting_registrations(club, season_id)
+    season = nil
+    if season_id.to_i.is_a?(Numeric)
+      unless club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil?
+        season = Season.find_by_id(club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)
+      end
+    end
+    season
+  end
   
   def taxreceipt_spantext
     if self.end_season_on.year == self.start_season_on.year

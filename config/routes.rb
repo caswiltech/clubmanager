@@ -20,6 +20,7 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id/tax_receipt' => 'registrations#tax_receipt', :as => :tax_receipt, :via => :get
   match 'clubs/:club_id/tax_receipts' => 'registrations#tax_receipts', :as => :tax_receipts, :via => :get
   match 'clubs/:club_id/send_rereg_details' => 'registrations#send_rereg_details', :as => :send_rereg_details, :via => :post
+  match 'clubs/:club_id/reginit' => 'registrations#reginit', :as => :reginit, :via => :post
   
   namespace :admin do
     resources :users

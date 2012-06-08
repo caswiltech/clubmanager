@@ -32,45 +32,91 @@ class RegistrationsController < ApplicationController
         end
       end
     end
-  end  
+  end
+  
+  def reginit
+    @reginit = RegInit.new params[:reg_init]
+    @message = nil
+    # do we have a valid date for the birthdate
+    if @reginit.valid?
+      if Season.season_accepting_registrations(@club, @reginit.season_id).present?
+        if Division.for_season_and_birthdate(@reginit.season, @reginit.birthdate, true).present?
+          redirect_to registration_path(@club.subdomain, :season => @reginit.season.id, :birthdate => @reginit.birthdate.to_s)
+        else
+          @message = "Unfortunately no division was found matching this player's age for the desired season. If necessary, please correct the player's birthdate."    
+        end
+      else
+        @message = "Unfortunately registration is now closed for this season."
+      end
+    else
+      @message = "Invalid data has been specified. Please try again (or stop monkeying with the form inputs)."
+    end
+    if @message.present?
+      flash.now[:error] = @message
+      render 'registrations/reginit'      
+    end
+  end
 
   def new
     season_id = params[:season]
-    season = season_id.to_i.is_a?(Numeric) ? (@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.nil? ? nil : Season.find_by_id(@club.seasons.accepting_registrations_now.where(:id => season_id.to_i).first.id)) : nil
-    if season.present?
+    season = Season.season_accepting_registrations(@club, season_id)
+    unless season.present?
+      redirect_to club_url(@club.subdomain)
+    else      
       @registration = nil
       player_extid = params[:player]
       reg_token = params[:auth]
+      if params[:birthdate].present?
+        begin
+          birthdate = Date.parse(params[:birthdate])
+        rescue
+          flash.now[:error] = "Unfortunately the birthdate supplied is invalid."
+        end
+      end
       # is there a player param, and does it return a valid player for this club?
-      if player_extid.present? && Player.find_by_extid(player_extid).present? && reg_token.present? && RegistrationToken.find_by_token(reg_token).present? && RegistrationToken.find_by_token(reg_token).valid_for_player?(player_extid)
-        
+      unless player_extid.present? && Player.find_by_extid(player_extid).present? && reg_token.present? && RegistrationToken.find_by_token(reg_token).present? && RegistrationToken.find_by_token(reg_token).valid_for_player?(player_extid)
+        unless birthdate.present?
+          # birthdate not yet specified, so we need to render the birthdate selection view (RegInit object)
+          @reginit = RegInit.new(:season => season)
+          render 'registrations/reginit'
+        else
+          division = Division.for_season_and_birthdate(season, birthdate, true)
+          unless division.present?
+            flash.now[:error] = "Unfortunately no division was found matching this player's age for the desired season. If necessary, please correct the player's birthdate."
+            render 'registrations/reginit'      
+          else
+            @registration = Registration.new(:club => @club, :season => season, :division => division, :player_attributes => {:birthdate => birthdate, :person_attributes => @player_person_defaults})
+            RegistrationQuestionResponse.populate_responses_for_registration(@registration)
+            @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true)
+            @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)
+          end
+        end
+      else
         player = Player.find_by_extid(player_extid)
         reg_token = RegistrationToken.find_by_token(reg_token)
-    
-        @registration = Registration.new(:club => @club, :season => season, :player => player, :registration_token_id => reg_token.id)
-          RegistrationQuestionResponse.populate_responses_for_registration(@registration)
+        division = Division.for_season_and_birthdate(season, player.birthdate, true)
+        unless division.present?
+          flash.now[:error] = "Unfortunately no division was found matching this player's age for the desired season. If necessary, please correct the player's birthdate."
+          render 'registrations/reginit'      
+        else
+          @registration = Registration.new(:club => @club, :season => season, :division => division, :player => player, :registration_token_id => reg_token.id)
+            RegistrationQuestionResponse.populate_responses_for_registration(@registration)  
+          @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
 
-        prev_pg = player.registrations.last.registrations_people.parent_guardians
+          prev_pg = player.registrations.last.registrations_people.parent_guardians
         
-        prev_pg.each do |rp|
-          @registration.registrations_people.build(:person => rp.person, :person_role => rp.person_role, :primary => rp.primary)
-        end
+          prev_pg.each do |rp|
+            @registration.registrations_people.build(:person => rp.person, :person_role => rp.person_role, :primary => rp.primary)
+          end
         
-        if prev_pg.count == 0
-          @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true)
+          if prev_pg.count == 0
+            @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true)
+          end
+          if prev_pg.count < 2
+            @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)                    
+          end
         end
-        if prev_pg.count < 2
-          @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)                    
-        end
-        
-      else
-        @registration = Registration.new(:club => @club, :season => season, :player_attributes => {:birthdate => Date.civil(Date.today.years_ago(5).year, 1, 1), :person_attributes => @player_person_defaults})
-        RegistrationQuestionResponse.populate_responses_for_registration(@registration)
-        @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => true)
-        @registration.registrations_people.build(:person => Person.new(@person_defaults), :person_role => PersonRole.find_by_role_abbreviation('PG'), :primary => false)
       end
-    else
-      redirect_to club_url(@club.subdomain)
     end
   end
 
@@ -148,33 +194,21 @@ class RegistrationsController < ApplicationController
         else
           # don't want someone to try and hack this registration into a different club, now do we!
           @registration.update_attribute(:club_id, @club.id)
+            RegistrationQuestionResponse.create_default_responses_for_protected_questions(@registration)
           @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
-          RegistrationQuestionResponse.populate_responses_for_registration(@registration)
-          RegistrationQuestionResponse.create_default_responses_for_protected_questions(@registration)
-          render :action => :step2
+          begin
+            RegistrationMailer.deliver_public_registration(@registration)
+            RegistrationMailer.deliver_club_reg_notification(@registration)
+          rescue
+            # not going to do anything right now - we'll just log errors
+            Rails::logger.info "\n\n#{'x'*50}\n\n"
+            Rails::logger.info "looks like there was an error with the mailer\n\n"      
+          end
+          @payment_method = @registration.payment_option.name
+          
+          render :action => :finalize
         end
       end
-    end
-  end
-
-  def finalize
-    reg_params = params[:registration]
-    @registration = @club.registrations.find_by_id(reg_params[:id])
-    @pp = PaymentPackage.for_season_and_division(@registration.season, @registration.division)
-    if @registration.update_attributes(reg_params)
-      begin
-        RegistrationMailer.deliver_public_registration(@registration)
-        RegistrationMailer.deliver_club_reg_notification(@registration)
-      rescue
-        # not going to do anything right now - we'll just log errors
-        Rails::logger.info "\n\n#{'x'*50}\n\n"
-        Rails::logger.info "looks like there was an error with the mailer\n\n"      
-      end
-      @payment_method = @registration.payment_option.name
-      render :action => :finalize
-    else
-      Rails::logger.info "Errors: #{@registration.errors.ai}\n\n"
-      render :action => :step2
     end
   end
 

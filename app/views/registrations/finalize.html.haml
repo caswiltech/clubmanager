@@ -35,3 +35,5 @@
       #{@registration.club.street1}  
       %br/
       #{@registration.club.city}, #{@registration.club.province}  #{@registration.club.postal_code} 
+
+%p= link_to "Click here to return to the main registration page", club_path(@club.subdomain)

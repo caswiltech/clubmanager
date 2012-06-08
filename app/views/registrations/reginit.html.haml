@@ -1,0 +1,13 @@
+%h1 #{@club.short_name} Registration for #{@reginit.season.name} 
+%hr
+Please enter the birthdate of the participant below and submit the form. We'll then check to ensure this participant is eligible to participate in this season.
+
+= semantic_form_for @reginit, :url => reginit_path(@club.subdomain) do |reg|
+  
+  = reg.inputs do
+    %hr
+    = reg.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(Division::OLDEST_AGE).year, :end_year => Date.today.years_ago(Division::YOUNGEST_AGE).year, :required => true
+    = reg.input :season_id, :as => :hidden
+  = reg.buttons do
+    = reg.commit_button :label => "Submit"
+    

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120202045437) do
+ActiveRecord::Schema.define(:version => 20120604084932) do
 
   create_table "club_logos", :force => true do |t|
     t.integer   "club_id"
@@ -119,6 +119,11 @@ ActiveRecord::Schema.define(:version => 20120202045437) do
     t.string    "extid"
   end
 
+  create_table "reg_inits", :force => true do |t|
+    t.integer "season_id"
+    t.date    "birthdate"
+  end
+
   create_table "registration_datums", :force => true do |t|
     t.integer "season_division_id"
     t.string  "page_label"
@@ -154,25 +159,25 @@ ActiveRecord::Schema.define(:version => 20120202045437) do
   end
 
   create_table "registration_tokens", :force => true do |t|
-    t.integer  "club_id",    :null => false
-    t.integer  "person_id"
-    t.string   "token"
-    t.datetime "expires_at"
+    t.integer   "club_id",    :null => false
+    t.integer   "person_id"
+    t.string    "token"
+    t.timestamp "expires_at"
   end
 
   create_table "registrations", :force => true do |t|
-    t.integer  "club_id"
-    t.integer  "season_id"
-    t.integer  "division_id"
-    t.integer  "team_id"
-    t.integer  "player_id"
-    t.integer  "parent_guardian1_id"
-    t.integer  "parent_guardian2_id"
-    t.boolean  "deleted"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "registration_token_id"
-    t.integer  "payment_option_id"
+    t.integer   "club_id"
+    t.integer   "season_id"
+    t.integer   "division_id"
+    t.integer   "team_id"
+    t.integer   "player_id"
+    t.integer   "parent_guardian1_id"
+    t.integer   "parent_guardian2_id"
+    t.boolean   "deleted"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "registration_token_id"
+    t.integer   "payment_option_id"
   end
 
   create_table "registrations_people", :force => true do |t|
@@ -212,12 +217,12 @@ ActiveRecord::Schema.define(:version => 20120202045437) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "teams", :force => true do |t|
-    t.integer  "season_division_id"
-    t.string   "name"
-    t.text     "description"
-    t.boolean  "deleted"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "season_division_id"
+    t.string    "name"
+    t.text      "description"
+    t.boolean   "deleted"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "user_roles", :force => true do |t|
