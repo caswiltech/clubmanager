@@ -6,6 +6,7 @@ gem 'active_layer', :git => 'git://github.com/adamcooper/active_layer.git'
 gem 'attribute_normalizer'
 gem 'awesome_print', :git => 'git://github.com/danielb2/awesome_print.git', :require => 'ap'
 gem 'aws-s3', :require => 'aws/s3'
+gem 'exception_notification'
 gem 'fastercsv', '1.5.3'
 gem 'formtastic', "1.2.1"
 gem 'haml', '>= 3.0.25'
