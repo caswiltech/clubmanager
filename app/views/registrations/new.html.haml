@@ -31,7 +31,7 @@
       - if rqr.object.registration_question.questiontype == "string"
         = rqr.input :textresponse, :as => :string, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
       - elsif rqr.object.registration_question.questiontype == "text"
-        = rqr.input :textresponse, :as => :text, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
+        = rqr.input :textresponse, :as => :text, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration), :input_html => {:maxlength => 255, :rows => 5}
       - else
         = rqr.input :registration_question_response_option, :as => :select, :include_blank => rqr.object.registration_question.response_optional, :collection => question_response_options(rqr.object.registration_question, @registration), :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
     = reg.input :payment_option_id, :as => :select, :include_blank => false, :collection => PaymentOption.publicly_visible, :label => "Payment Method", :hint => "The registration fee for #{@registration.division.name} is #{number_to_currency(PaymentPackage.for_season_and_division(@registration.season, @registration.division).amount)}."
