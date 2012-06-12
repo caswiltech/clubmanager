@@ -19,10 +19,10 @@
   - @registrations.each do |r|
     - next if r.player.blank? || r.division.blank?
     - divisions[r.division.id.to_i - 1] = divisions[r.division.id.to_i - 1] + 1
-    -# emails = []
-    -# r.registrations_people.each do |p|
-      -# emails.push p.person.email unless p.person.email.nil?
-      -# emails.push p.person.alt_email unless p.person.alt_email.nil?
+    - emails = []
+    - r.registrations_people.each do |p|
+      - emails.push p.person.email unless p.person.email.nil?
+      - emails.push p.person.alt_email unless p.person.alt_email.nil?
     %tr
       %td= r.id
       %td= "#{r.player.person.first_name} #{r.player.person.last_name}"
