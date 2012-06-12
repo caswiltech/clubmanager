@@ -27,13 +27,12 @@
       %td= r.id
       %td= "#{r.player.person.first_name} #{r.player.person.last_name}"
       %td= r.division.name
-      -# %td= r.created_at
       %td= (2012 - r.player.birthdate.year)
-      -#%td= r.player.person.street1
-      -#%td= r.player.person.city
-      -# %td= r.player.person.phone
-      -# %td= emails.uniq.join(', ')
-      %td= r.player.extid
+      %td= r.created_at.to_s(:short)
+      %td= r.player.person.street1
+      %td= r.player.person.city
+      %td= r.player.person.phone
+      %td= emails.uniq.join(', ')
       %td
         = link_to("Delete", delete_reg_path(@club.subdomain, :reg => r.id), :confirm => "Are you sure you want to permanently delete this registration? (ID: #{r.id}, Name: #{r.player.person.first_name} #{r.player.person.last_name})")
         -# %br/

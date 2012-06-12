@@ -21,13 +21,8 @@ class RegistrationQuestionResponse < ActiveRecord::Base
     player_fields = options[:player_fields].present? ? options[:player_fields] : nil
     questions = nil
     if player_fields.nil?
-      Rails::logger.info "\n\n#{'x'*50}\n\n"
-      Rails::logger.info "\n\nplayer_fields is nil #{options.inspect}\n\n"
-      
       questions = questions_for_registration(registration).order("player_field DESC")
     else
-      Rails::logger.info "\n\n#{'x'*50}\n\n"
-      Rails::logger.info "\n\nplayer_fields is present #{options.inspect}\n\n"
       questions = questions_for_registration(registration).where(:player_field => player_fields)
     end
     responses = []
