@@ -12,6 +12,13 @@ Cmg::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_url_options = { :host => "clubmanager.heroku.com", :protocol => 'https' }
+  
+  
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "ERROR: ",
+    :sender_address => %{"Clubmanager Errors" <info@hyackfootball.com>},
+    :exception_recipients => %w{rleslie@hyackfootball.com}
+
 
   # Specifies the header that your server uses for sending files
   config.action_dispatch.x_sendfile_header = "X-Sendfile"
