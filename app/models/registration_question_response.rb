@@ -2,6 +2,8 @@ class RegistrationQuestionResponse < ActiveRecord::Base
   belongs_to :registration
   belongs_to :registration_question
   belongs_to :registration_question_response_option
+  
+  validates_length_of :textresponse, :maximum => 255, :allow_blank => true
     
   def self.questions_for_registration(registration, admin_mode = false)
     questions = registration.club.registration_questions

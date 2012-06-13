@@ -9,19 +9,19 @@
       = player.semantic_fields_for :person do |person|
         = person.input :club_id, :as => :hidden
         - if person.object.new_record?
-          = person.input :first_name, :label => "First Name", :required => true
-          = person.input :last_name, :label => "Last Name", :required => true
+          = person.input :first_name, :label => "First Name", :required => true, :input_html => {:maxlength => 100}
+          = person.input :last_name, :label => "Last Name", :required => true, :input_html => {:maxlength => 100}
         - else
           = person.input :first_name, :label => "First Name", :required => true, :input_html => {:disabled => true}
           = person.input :last_name, :label => "Last Name", :required => true, :input_html => {:disabled => true}
-        = person.input :street1, :label => "Address", :required => true
+        = person.input :street1, :label => "Address", :required => true, :input_html => {:maxlength => 100}
         = person.input :city, :as => :select, :include_blank => false, :collection => @cities, :required => true
         = person.input :province, :as => :select, :include_blank => false, :collection => %w{ BC AB SK MB ON QC NB PE NS NF YK NW NV }, :required => true
         = person.input :country, :as => :select, :include_blank => false, :collection => %w{ Canada USA }, :required => true
-        = person.input :postal_code, :label => "Postal Code", :required => true
-        = person.input :phone, :as => :phone, :label => "Home Phone", :required => true
+        = person.input :postal_code, :label => "Postal Code", :required => true, :input_html => {:maxlength => 100}
+        = person.input :phone, :as => :phone, :label => "Home Phone", :required => true, :input_html => {:maxlength => 100}
         = person.input :phone_type, :as => :hidden, :input_html => {:value => "Home"}
-      = player.input :carecard, :label => "CareCard #", :required => true
+      = player.input :carecard, :label => "CareCard #", :required => true, :input_html => {:maxlength => 100}
       = player.input :birthdate, :as => :date, :include_blank => false, :start_year => Date.today.years_ago(Division::OLDEST_AGE).year, :end_year => Date.today.years_ago(Division::YOUNGEST_AGE).year, :input_html => {:disabled => true}, :required => true
       = player.input :birthdate, :as => :hidden
       = player.input :gender, :as => :select, :include_blank => false, :collection => %w{ Male Female }, :required => true
@@ -29,7 +29,7 @@
       -# next if !rqr.object.registration_question.player_field
       = rqr.input :registration_question_id, :as => :hidden, :input_html => {:value => rqr.object.registration_question.id}
       - if rqr.object.registration_question.questiontype == "string"
-        = rqr.input :textresponse, :as => :string, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration)
+        = rqr.input :textresponse, :as => :string, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration), :input_html => {:maxlength => 100}
       - elsif rqr.object.registration_question.questiontype == "text"
         = rqr.input :textresponse, :as => :text, :label => replace_placeholders(rqr.object.registration_question.page_label, @registration), :hint => replace_placeholders(rqr.object.registration_question.questiontext, @registration), :input_html => {:maxlength => 255, :rows => 5}
       - else
