@@ -1,5 +1,9 @@
 Cmg::Application.routes.draw do
   
+  ActiveAdmin.routes(self)
+
+  devise_for :admin_users, ActiveAdmin::Devise.config
+
   get "sessions/new"
 
   get "sessions/create"
@@ -22,12 +26,12 @@ Cmg::Application.routes.draw do
   match 'clubs/:club_id/send_rereg_details' => 'registrations#send_rereg_details', :as => :send_rereg_details, :via => :post
   match 'clubs/:club_id/reginit' => 'registrations#reginit', :as => :reginit, :via => :post
   
-  namespace :admin do
-    resources :users
-    resources :registrations
-    resources :seasons
-    resources :divisions
-    resources :teams
+  # namespace :admin do
+  #     resources :users
+  #     resources :registrations
+  #     resources :seasons
+  #     resources :divisions
+  #     resources :teams
     
     # resources :forums do
     #   collection do
@@ -41,7 +45,7 @@ Cmg::Application.routes.draw do
     #     get :moderators_for_lookup
     #   end
     # end
-  end
+  # end
   scope :module => 'admin' do
     #lowest route... put all others before this one, this is the route of last resort...
     resources :admin, :controller => 'admin', :only => :index

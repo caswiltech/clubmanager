@@ -26,7 +26,7 @@
       %td= r.id
       %td= "#{r.player.person.first_name} #{r.player.person.last_name}"
       %td= r.division.name
-      %td= (2012 - r.player.birthdate.year)
+      %td= (Date.current.year - r.player.birthdate.year)
       %td= r.created_at.to_s(:short)
       %td= r.player.person.street1
       %td= r.player.person.city

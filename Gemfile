@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.4'
-
+gem 'activeadmin'
 gem 'active_layer', :git => 'git://github.com/adamcooper/active_layer.git'
 gem 'attribute_normalizer'
 gem 'awesome_print', :git => 'git://github.com/danielb2/awesome_print.git', :require => 'ap'
