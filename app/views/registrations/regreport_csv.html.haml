@@ -12,7 +12,7 @@
     - if r.registrations_people.parent_guardians.count >= 2
       - r.registrations_people.parent_guardians.first(2).each do |p|
         - row.concat [ p.person.first_name, p.person.last_name, p.person.street1, p.person.city, p.person.postal_code, p.person.phone, p.person.phone_type, p.person.alt_phone, p.person.alt_phone_type, p.person.email, p.person.email_type, p.person.alt_email, p.person.alt_email_type ]
-    - elsif r.registrations_people.parent_guardians.count == 1
+    - elsif r.registrations_people.parent_guardians.count == 1 && r.registrations_people.parent_guardians.first.person.present?
       - p = r.registrations_people.parent_guardians.first
       - row.concat [ p.person.first_name, p.person.last_name, p.person.street1, p.person.city, p.person.postal_code, p.person.phone, p.person.phone_type, p.person.alt_phone, p.person.alt_phone_type, p.person.email, p.person.email_type, p.person.alt_email, p.person.alt_email_type ]
       - row.concat [" "," "," "," "," "," "," "," "," "," "," "," "," "]
