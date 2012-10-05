@@ -1,4 +1,6 @@
 class Registration < ActiveRecord::Base
+  acts_as_paranoid
+
   belongs_to :club
   belongs_to :player
   belongs_to :season

@@ -1,5 +1,4 @@
 source 'http://rubygems.org'
-
 gem 'rails', '3.0.4'
 
 gem 'active_layer', :git => 'git://github.com/adamcooper/active_layer.git'
@@ -7,12 +6,13 @@ gem 'attribute_normalizer'
 gem 'awesome_print', :git => 'git://github.com/danielb2/awesome_print.git', :require => 'ap'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'exception_notification'
-gem 'fastercsv', '1.5.3'
 gem 'formtastic', "1.2.1"
 gem 'haml', '>= 3.0.25'
 gem 'jquery-rails'
 gem 'mimetype-fu', :require => 'mimetype_fu'
 gem "paperclip", "~> 2.3.8"
+gem 'pg'
+gem 'rails3_acts_as_paranoid'
 gem 'rake', ">= 0.8.7"
 gem 'sanitize', :git => 'git://github.com/rgrove/sanitize.git' # '~> 1.2.0'
 gem 'ssl_requirement', '~> 0.1.0'

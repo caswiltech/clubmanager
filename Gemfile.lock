@@ -1,10 +1,10 @@
 GIT
   remote: git://github.com/adamcooper/active_layer.git
-  revision: 1ec503eee927d8367cc7521b0f05453e92f318b1
+  revision: da230a7feeec11fb6ed5fd8f7b4ee53d437501ce
   specs:
     active_layer (0.0.10)
-      activemodel (~> 3.0.0)
-      activesupport (~> 3.0.0)
+      activemodel (> 3.0.0)
+      activesupport (> 3.0.0)
 
 GIT
   remote: git://github.com/danielb2/awesome_print.git
@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/rgrove/sanitize.git
-  revision: 4925ac8058320fa587b6bdd7556fdf76e2ad5d31
+  revision: c45162d8a012cac3362ade7fadc3737095cb1a50
   specs:
     sanitize (2.0.3)
       nokogiri (>= 1.4.4, < 1.6)
@@ -62,18 +62,17 @@ GEM
       mime-types
       xml-simple
     builder (2.1.2)
-    cocaine (0.2.1)
+    cocaine (0.4.0)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     exception_notification (2.6.1)
       actionmailer (>= 3.0.4)
-    fastercsv (1.5.3)
     formtastic (1.2.1)
       actionpack (>= 2.3.7)
       activesupport (>= 2.3.7)
       i18n (>= 0.4.0)
-    haml (3.1.6)
-    i18n (0.6.0)
+    haml (3.1.7)
+    i18n (0.6.1)
     jquery-rails (1.0.19)
       railties (~> 3.0)
       thor (~> 0.14)
@@ -82,14 +81,15 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    mime-types (1.18)
+    mime-types (1.19)
     mimetype-fu (0.1.2)
-    nokogiri (1.5.4)
+    nokogiri (1.5.5)
     paperclip (2.3.16)
       activerecord (>= 2.3.0)
       activesupport (>= 2.3.2)
       cocaine (>= 0.0.2)
       mime-types
+    pg (0.14.1)
     polyglot (0.3.3)
     rack (1.2.5)
     rack-mount (0.6.14)
@@ -104,6 +104,8 @@ GEM
       activesupport (= 3.0.4)
       bundler (~> 1.0)
       railties (= 3.0.4)
+    rails3_acts_as_paranoid (0.0.9)
+      activerecord (~> 3.0)
     railties (3.0.4)
       actionpack (= 3.0.4)
       activesupport (= 3.0.4)
@@ -115,12 +117,12 @@ GEM
       sqlite3 (>= 1.3.3)
     ssl_requirement (0.1.0)
     thor (0.14.6)
-    timeliness (0.3.6)
+    timeliness (0.3.7)
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.33)
-    validates_timeliness (3.0.11)
+    validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
     wicked_pdf (0.7.9)
     xml-simple (1.1.1)
@@ -134,13 +136,14 @@ DEPENDENCIES
   awesome_print!
   aws-s3
   exception_notification
-  fastercsv (= 1.5.3)
   formtastic (= 1.2.1)
   haml (>= 3.0.25)
   jquery-rails
   mimetype-fu
   paperclip (~> 2.3.8)
+  pg
   rails (= 3.0.4)
+  rails3_acts_as_paranoid
   rake (>= 0.8.7)
   sanitize!
   sqlite3-ruby
