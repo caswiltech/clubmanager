@@ -1,6 +1,7 @@
 class CreateListitems < ActiveRecord::Migration
   def self.up
     create_table :listitems do |t|
+      t.integer :club_id
       t.string :value
       t.string :type
       t.integer :position

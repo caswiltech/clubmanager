@@ -16,6 +16,7 @@ class Club < ActiveRecord::Base
   has_many :people, :dependent => :destroy
   has_many :person_roles, :dependent => :destroy
   has_many :roles, :as => :adminable, :dependent => :destroy
+  has_many :quit_reasons
   
   def self.find_clubs_for_sysadmin
     find(:all, :order => 'name')
@@ -24,4 +25,5 @@ class Club < ActiveRecord::Base
   def teams
     Team.where("season_division_id IN (?)", self.season_division_ids)
   end
+
 end
