@@ -1,10 +1,15 @@
 - questions = @club.registration_questions.order("editable_by DESC")
 - question_fields = questions.collect{|q|q.report_label}.join(",")
 - question_indices = questions.collect{|q|q.id}
-= "Reg.ID,Season,Division,Reg.Date,CareCard,Gender,Birthdate,Player.FirstName,Player.LastName,Player.Address,Player.City,Player.PostalCode,Player.Phone,PG1.FirstName,PG1.LastName,PG1.Address,PG1.City,PG1.PostalCode,PG1.Phone,PG1.PhoneType,PG1.AltPhone,PG1.AltPhoneType,PG1.Email,PG1.EmailType,PG1.AltEmail,PG1.AltEmailType,PG2.FirstName,PG2.LastName,PG2.Address,PG2.City,PG2.PostalCode,PG2.Phone,PG2.PhoneType,PG2.AltPhone,PG2.AltPhoneType,PG2.Email,PG2.EmailType,PG2.AltEmail,PG2.AltEmailType,PaymentMethod,#{question_fields}"
-- contents = FasterCSV.generate do |csv|
+= "Reg.ID,Season,Division,Reg.Date,Quit?,QuitDate,QuitReason,CareCard,Gender,Birthdate,Player.FirstName,Player.LastName,Player.Address,Player.City,Player.PostalCode,Player.Phone,PG1.FirstName,PG1.LastName,PG1.Address,PG1.City,PG1.PostalCode,PG1.Phone,PG1.PhoneType,PG1.AltPhone,PG1.AltPhoneType,PG1.Email,PG1.EmailType,PG1.AltEmail,PG1.AltEmailType,PG2.FirstName,PG2.LastName,PG2.Address,PG2.City,PG2.PostalCode,PG2.Phone,PG2.PhoneType,PG2.AltPhone,PG2.AltPhoneType,PG2.Email,PG2.EmailType,PG2.AltEmail,PG2.AltEmailType,PaymentMethod,#{question_fields}"
+- contents = CSV.generate do |csv|
   - @csv_registrations.each do |r|
-    - row = [ r.id, r.season.name, r.division.name, r.created_at.strftime("%Y-%m-%d"), r.player.carecard, r.player.gender, r.player.birthdate.strftime("%Y-%m-%d") ]
+    - row = [ r.id, r.season.name, r.division.name, r.created_at.strftime("%Y-%m-%d")]
+    - if r.quit.present?
+      - row.concat ["Yes",r.quit.created_at.strftime("%Y-%m-%d"),r.quit.quit_reason.value]
+    - else
+      - row.concat ["No"," "," "]
+    - row.concat [r.player.carecard, r.player.gender, r.player.birthdate.strftime("%Y-%m-%d") ]
     - unless r.player.person.nil?
       - row.concat [ r.player.person.first_name, r.player.person.last_name, r.player.person.street1, r.player.person.city, r.player.person.postal_code, r.player.person.phone ]
     - else
