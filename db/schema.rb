@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(:version => 20121005220650) do
   end
 
   create_table "listitems", :force => true do |t|
+    t.integer  "club_id"
     t.string   "value"
     t.string   "type"
     t.integer  "position"
