@@ -10,6 +10,7 @@ class Registration < ActiveRecord::Base
   has_many :registration_question_responses, :dependent => :destroy
   belongs_to :registration_token
   belongs_to :payment_option
+  belongs_to :quit
   
   # legacu and should be refactored out in the future
   belongs_to :parent_guardian1, :class_name => "Person"
@@ -21,6 +22,8 @@ class Registration < ActiveRecord::Base
   
   attr_accessor :waiver
   validates :waiver, :acceptance => {:message => "This waiver must be accepted in order to finalize the registration"}, :on => :update
+
+  scope :unquit, where("quit_id IS NULL")
   
   scope :by_player_name,
     select("registrations.*, people.first_name, people.last_name, players.birthdate").

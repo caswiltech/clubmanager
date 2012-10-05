@@ -243,9 +243,9 @@ class RegistrationsController < ApplicationController
     # @registrations = @club.registrations.thisyear.order("id desc")
     season_id = params[:season]
     if season_id.present?
-      @registrations = @club.registrations.where(:season_id => season_id).order("id desc")
+      @registrations = @club.registrations.unquit.where(:season_id => season_id).order("id desc")
     else
-      @registrations = @club.registrations.order("id desc")
+      @registrations = @club.registrations.unquit.order("id desc")
     end
   end
   
@@ -279,12 +279,12 @@ class RegistrationsController < ApplicationController
   end
   
   def mail_list
-    @registrations = @club.registrations.thisyear.where("division_id = ?", params[:division].to_i)
+    @registrations = @club.registrations.unquit.thisyear.where("division_id = ?", params[:division].to_i)
   end
   
   def tax_receipt
     reg_id = params[:reg]
-    @registration = @club.registrations.find(reg_id)
+    @registration = @club.registrations.unquit.find(reg_id)
     
     respond_to do |format|
       format.html { render :layout => false  }
@@ -296,8 +296,8 @@ class RegistrationsController < ApplicationController
     season_id = params[:season]
     season = @club.seasons.find(season_id)
     @count = [0,0,0]
-    @count[0] = season.registrations.count
-    @count[1] = season.registrations.receipt_eligible.count
+    @count[0] = season.registrations.unquit.count
+    @count[1] = season.registrations.unquit.receipt_eligible.count
     
     season.registrations.receipt_eligible.each do |r|
       if r.registrations_people.parent_guardians.present?
