@@ -1,4 +1,5 @@
 class RegistrationsController < ApplicationController
+  require 'csv'
 
   before_filter :find_club, :except => [:index]
   before_filter :form_vars, :only => [:new]
