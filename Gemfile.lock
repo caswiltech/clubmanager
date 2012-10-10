@@ -55,6 +55,8 @@ GEM
       activemodel (= 3.0.4)
       activesupport (= 3.0.4)
     activesupport (3.0.4)
+    acts_as_list_with_sti_support (1.0.3)
+      rails (>= 3.0.0)
     arel (2.0.10)
     attribute_normalizer (1.1.0)
     aws-s3 (0.6.3)
@@ -132,6 +134,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_layer!
+  acts_as_list_with_sti_support
   attribute_normalizer
   awesome_print!
   aws-s3
