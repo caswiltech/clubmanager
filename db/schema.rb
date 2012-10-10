@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121005220650) do
+ActiveRecord::Schema.define(:version => 20121010205601) do
 
   create_table "club_logos", :force => true do |t|
     t.integer  "club_id"
@@ -85,6 +85,18 @@ ActiveRecord::Schema.define(:version => 20121005220650) do
     t.decimal  "amount",             :precision => 8, :scale => 2, :default => 0.0
     t.boolean  "default",                                          :default => true
     t.boolean  "deleted"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "payments", :force => true do |t|
+    t.integer  "club_id"
+    t.integer  "registration_id"
+    t.integer  "payment_option_id"
+    t.integer  "user_id"
+    t.integer  "amount",            :default => 0
+    t.string   "paid_by"
+    t.string   "admin_note"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

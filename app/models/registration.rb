@@ -11,6 +11,7 @@ class Registration < ActiveRecord::Base
   belongs_to :registration_token
   belongs_to :payment_option
   belongs_to :quit
+  has_many :payments
   
   # legacu and should be refactored out in the future
   belongs_to :parent_guardian1, :class_name => "Person"
@@ -55,6 +56,14 @@ class Registration < ActiveRecord::Base
   end
   
   def payment_total
+    "#{sprintf('%01.2f', self.reg_fee)}"
+  end
+  
+  def payment_date
+    "#{self.created_at.strftime('%B %d, %Y')}"
+  end
+
+  def reg_fee
     season_division = SeasonDivision.where(:season_id => self.season.id, :division_id => self.division.id).first
     # are there multiple payment packages for this SD?
     pp = nil
@@ -67,11 +76,19 @@ class Registration < ActiveRecord::Base
     else
       pp = season_division.payment_packages.first
     end
-    "#{sprintf('%01.2f', pp.amount)}"
+    pp.amount
   end
-  
-  def payment_date
-    "#{self.created_at.strftime('%B %d, %Y')}"
+
+  def amount_paid
+    amount = 0.0
+    self.payments.each do |p|
+      amount += p.amount
+    end
+    amount
+  end
+
+  def amount_owing
+    reg_fee - amount_paid
   end
     
 end
