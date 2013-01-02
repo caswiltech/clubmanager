@@ -42,9 +42,7 @@ class Registration < ActiveRecord::Base
     where("seasons.end_season_on >= current_date")
     
   scope :receipt_eligible,
-    joins("inner join registration_question_responses on registrations.id = registration_question_responses.registration_id").
-    joins("inner join registration_question_response_options on registration_question_responses.registration_question_response_option_id = registration_question_response_options.id").
-    where("registration_question_response_options.response_value = 'Cheque' or registration_question_response_options.response_value = 'Credit Card'")
+    where("payment_option_id = 1 or payment_option_id = 2")
   
   def registration_questions#=
     RegistrationQuestionResponse.questions_for_registration(self)

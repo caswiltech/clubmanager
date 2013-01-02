@@ -59,7 +59,8 @@ class RegistrationMailer < ActionMailer::Base
     
     mail_from = "#{registration.club.short_name} <#{registration.club.reg_notify_email}>"
     mail_subject << "#{registration.season.name} Tax Receipt for #{registration.player.legal_name}"
-    attachments["rchfc_taxreceipt_2011.pdf"] = receipt_file
+    attachments["rchfc_taxreceipt_2012.pdf"] = receipt_file
+    mail_to = "info@hyackfootball.com"
     mail(
       :to => mail_to,
       # :bcc => mail_bcc,
@@ -68,6 +69,20 @@ class RegistrationMailer < ActionMailer::Base
     )
   end
   
+  # def taxreceiptcopies(receipt_files, receipt_files_names)
+  #   mail_to = "info@hyackfootball.com"
+  #   mail_from = "info@hyackfootball.com"
+  #   mail_subject << "2012 Tax Receipts"
+  #   for i in 0..receipt_files.count
+  #     attachments[receipt_files_names[i]] = receipt_files[i]
+  #   end
+  #   mail(
+  #     :to => mail_to,
+  #     :from => mail_from,
+  #     :subject => mail_subject
+  #   )
+  # end
+
   def rereg(person, options = {})
     email = options[:email].present? ? options[:email] : nil
     @bulk = options[:bulk].present? ? options[:bulk] : nil

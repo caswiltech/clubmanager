@@ -299,7 +299,10 @@ class RegistrationsController < ApplicationController
     @count = [0,0,0]
     @count[0] = season.registrations.unquit.count
     @count[1] = season.registrations.unquit.receipt_eligible.count
-    
+
+    receipt_files = []
+    receipt_files_names = []
+
     season.registrations.receipt_eligible.each do |r|
       if r.registrations_people.parent_guardians.present?
         @registration = r
@@ -307,6 +310,8 @@ class RegistrationsController < ApplicationController
                                   :template => 'registrations/tax_receipt',
                                   :layout => false,
                                   :page_size => 'Letter'
+        # receipt_files << receipt_file
+        # receipt_files_names << @registration.player.legal_name.downcase.gsub(/ +/,'_')
 
         begin
           RegistrationMailer.deliver_taxreceipt(@registration, receipt_file)
@@ -315,7 +320,22 @@ class RegistrationsController < ApplicationController
           Rails::logger.info "\n\n#{'x'*50}\n\n"
           Rails::logger.info "looks like there was an error with the mailer\n\n"
         end
+        # if receipt_files.count == 20 || r == season.registrations.receipt_eligible.last
+        #   logger.info "\n\nsending #{receipt_files.count} receipts to copy\n\n"
+        #   begin
+        #     RegistrationMailer.deliver_taxreceiptcopies(receipt_files, receipt_files_names)
+        #   rescue
+        #     # not going to do anything right now - we'll just log errors
+        #     Rails::logger.info "\n\n#{'x'*50}\n\n"
+        #     Rails::logger.info "looks like there was an error with the mailer for copies\n\n"
+        #   end
+
+        #   receipt_files = []
+        #   receipt_files_names = []
+        # end
+
         @count[2] += 1
+
       end
     end
   end
